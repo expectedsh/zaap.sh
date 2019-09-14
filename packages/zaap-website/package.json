@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@unexpected/dashboard",
+  "name": "@zaap/website",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }

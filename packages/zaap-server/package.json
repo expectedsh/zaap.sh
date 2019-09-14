@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@unexpected/server",
+  "name": "@zaap/server",
   "scripts": {
     "start": "babel-node ./src/start.js",
     "dev": "nodemon --exec 'babel-node' ./src/start.js"
