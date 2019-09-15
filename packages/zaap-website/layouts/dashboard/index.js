@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }) => (
   <GlobalLayout>
     <Head>
       <title>Zaap | Dashboard</title>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Montserrat:400,500,600,700&display=swap" />
     </Head>
     <Header></Header>
     {children}

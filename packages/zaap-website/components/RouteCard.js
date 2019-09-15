@@ -20,11 +20,12 @@ const ItemsContainer = styled.div`
 
 const Title = styled.div`
   font-size: 24px;
+  font-weight: ${props => props.theme.fontWeightSemiBold};
 `
 
 const CreatedAt = styled.div`
   font-size: 14px;
-  font-weight: ${props => props.theme.fontWeightBold};
+  font-weight: ${props => props.theme.fontWeightSemiBold};
   color: ${props => props.theme.colorTextSecondary};
   text-transform: uppercase;
 `
@@ -34,8 +35,23 @@ const Dot = styled.div`
   min-width: 16px;
   max-height: 16px;
   max-width: 16px;
+  margin-right: 12px;
   background: ${props => props.online ? props.theme.colorGreen : props.theme.colorRed};
   border-radius: 50%;
+`
+
+const ViewButton = styled.a`
+  display: flex;
+  padding: 6px 12px;
+  color: ${props => props.theme.colorPrimary} !important;
+  background: #FFF;
+  border-radius: .25rem;
+  & > .material-icons {
+    margin-left: 4px;
+  }
+  &:hover {
+    background: rgba(0, 105, 255, .1);
+  }
 `
 
 const RouteCard = ({ online }) => (
@@ -49,9 +65,9 @@ const RouteCard = ({ online }) => (
       <div>
         Path: GET Method: /articles
       </div>
-      <div>
-        View
-      </div>
+      <ViewButton>
+        View <i class="material-icons">arrow_forward</i>
+      </ViewButton>
     </ItemsContainer>
   </Wrapper>
 )

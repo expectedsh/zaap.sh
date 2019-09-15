@@ -7,6 +7,7 @@ const Wrapper = styled.div`
 
 const Title = styled.div`
   font-size: 28px;
+  font-weight: ${props => props.theme.fontWeightSemiBold};
   padding-bottom: 8px;
   border-bottom: 1px solid ${props => props.theme.colorGrey};
 `
