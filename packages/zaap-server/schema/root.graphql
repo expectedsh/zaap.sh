@@ -1,3 +1,36 @@
+directive @executeQuery(query: String!) on FIELD_DEFINITION
+directive @fromField(field: String!) on FIELD_DEFINITION
+directive @regex(regex: String!, message: String!) on ARGUMENT_DEFINITION
+
+type Article {
+  # Article ID.
+  id: ID!
+  # Article name.
+  name: String! @fromField(field: "title")
+  # Article content.
+  content: String!
+  # Article comments.
+  comments: [ArticleComments!]! @executeQuery(
+    query: "SELECT id, name, content FROM article_comments WHERE article_id = :article_id"
+  )
+}
+
+type ArticleComments {
+  id: ID!
+  name: String!
+  content: String!
+}
+
 type Query {
-  hello: String!
+  articles: [Article!]! @executeQuery(
+    query: "SELECT id, title, content FROM articles"
+  )
+  articleById(id: ID!): Article @executeQuery(
+    query: "SELECT id, title, content FROM articles WHERE id = :id"
+  )
+  articleBySlug(
+    slug: String! @regex(regex: "/[a-zA-Z0-9]+/", message: "Invalid article slug.")
+  ): Article @executeQuery(
+    query: "SELECT id, title, content FROM articles WHERE id = :id"
+  )
 }

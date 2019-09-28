@@ -1,10 +1,12 @@
+version: '1.0'
+type: query
 # your query
 query: SELECT id, title, content FROM articles WHERE slug = :slug
 #your input
-inputs:
+input:
   slug:
+    type: string
     description: The article slug.
-    # Blabla
     required:
       value: true
       message: Slug required.
@@ -12,14 +14,16 @@ inputs:
       value: /[a-zA-Z0-9]+/
       message: Invalid article slug.
 #your output
-outputs:
-  id:
-    type: string
-    description: Article ID.
-  title:
-    type: string
-    rename: name
-    description: Article name.
-  content:
-    type: string
-    description: Article content.
+output:
+  multiple: true
+  fields:
+    id:
+      type: string
+      description: Article ID.
+    title:
+      type: string
+      rename: name
+      description: Article name.
+    content:
+      type: string
+      description: Article content.
