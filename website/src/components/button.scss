@@ -1,0 +1,21 @@
+@import '~assets/styles/variables.scss';
+
+.root {
+  margin-top: 24px;
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.125rem;
+  font-weight: 500;
+  padding: 14px 0;
+  &.success {
+    color: $color-white;
+    background: #05c35d;
+    cursor: pointer;
+    &:hover {
+      background: $color-green;
+
+    }
+  }
+}

@@ -1,0 +1,14 @@
+@import '~assets/styles/variables.scss';
+
+.root {
+  width: 100%;
+  border: 2px solid $color-grey;
+  border-radius: 4px;
+  margin-top: 24px;
+  padding: 14px;
+  font-size: 18px;
+  background: $color-grey-light;
+  &:focus {
+    outline: none;
+  }
+}

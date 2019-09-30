@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "name": "zaap-website",
+  "scripts": {
+    "start": "next start",
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "@zeit/next-sass": "^1.0.1",
+    "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
+    "next": "^9.0.7",
+    "next-images": "^1.2.0",
+    "node-sass": "^4.12.0",
+    "normalize.css": "^8.0.1",
+    "react": "16.9.0",
+    "react-dom": "16.9.0"
+  }
+}
