@@ -8,7 +8,6 @@ import styles from '~/assets/styles/login.scss'
 import logo from '~/assets/images/logo.svg'
 import githubLogo from '~/assets/images/githubLogo.svg'
 import googleLogo from '~/assets/images/googleLogo.svg'
-import { createContext } from 'vm'
 
 const Login = () => {
   const [email, setEmail] = useState('')
