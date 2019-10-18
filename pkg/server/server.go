@@ -3,10 +3,10 @@ package server
 import (
   "context"
   "errors"
-  "github.com/gorilla/mux"
   "github.com/jinzhu/gorm"
   _ "github.com/jinzhu/gorm/dialects/postgres"
   "github.com/remicaumette/zaap.sh/pkg/models"
+  "github.com/remicaumette/zaap.sh/pkg/util/httpx"
   "golang.org/x/oauth2"
   "golang.org/x/oauth2/github"
   "golang.org/x/oauth2/google"
@@ -60,13 +60,16 @@ func (s *Server) Start() error {
     Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},
   }
 
-  router := mux.NewRouter()
-  router.HandleFunc("/oauth/github", s.OAuthGithubRoute)
-  router.HandleFunc("/oauth/github/callback", s.OAuthGithubCallbackRoute)
+  handler := httpx.NewHandler()
+
+  handler.Get("/oauth/github", s.OAuthGithubRoute)
+  handler.Post("/oauth/github/callback", s.OAuthGithubCallbackRoute)
+
+  //router.Use(s.logMiddleware)
 
   s.httpServer = &http.Server{
     Addr:    s.config.Addr,
-    Handler: router,
+    Handler: handler,
   }
   return s.httpServer.ListenAndServe()
 }
