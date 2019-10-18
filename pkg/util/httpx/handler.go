@@ -9,7 +9,7 @@ type Handler struct {
 func NewHandler() *Handler {
   return &Handler{
     Router: Router{
-      router: mux.NewRouter(),
+      Router: mux.NewRouter(),
     },
   }
 }
