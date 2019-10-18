@@ -2,10 +2,9 @@ package main
 
 import (
   "context"
-  _ "github.com/jinzhu/gorm/dialects/postgres"
-  _ "github.com/jinzhu/gorm/dialects/sqlite"
   "github.com/remicaumette/zaap.sh/pkg/server"
   "github.com/sirupsen/logrus"
+  "net/http"
   "os"
   "os/signal"
   "syscall"
@@ -24,7 +23,7 @@ func main()  {
   signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
   go func() {
-    if err := serv.Start(); err != nil {
+    if err := serv.Start(); err != nil && err != http.ErrServerClosed {
       logrus.WithError(err).Fatal("failed to start the server")
     }
   }()
