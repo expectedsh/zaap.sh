@@ -4,7 +4,6 @@ import (
   "github.com/remicaumette/zaap.sh/pkg/models"
   "github.com/remicaumette/zaap.sh/pkg/util/github"
   "github.com/remicaumette/zaap.sh/pkg/util/httpx"
-  "github.com/sirupsen/logrus"
   "golang.org/x/oauth2"
   "net/http"
 )
@@ -16,7 +15,7 @@ func (s *Server) OAuthGithubRoute(ctx *httpx.Context) {
 func (s *Server) OAuthGithubCallbackRoute(ctx *httpx.Context) {
   token, err := s.GithubOAuthConfig.Exchange(ctx.Context(), ctx.QueryParam("code"))
   if err != nil {
-    ctx.ErrorBadRequest("Invalid oauth code.", nil)
+    ctx.ErrorBadRequest("Invalid code.", nil)
     return
   }
   githubUser, err := github.GetUser(ctx.Context(), token)
@@ -35,8 +34,19 @@ func (s *Server) OAuthGithubCallbackRoute(ctx *httpx.Context) {
     Email:    githubEmail.Email,
     GithubID: githubUser.ID,
   }).Error; err != nil {
+    if err.Error() == "pq: duplicate key value violates unique constraint \"users_email_key\"" {
+      ctx.ErrorBadRequest("Existing account found for your email. Login with email and connect your Github account.", nil)
+    } else {
+      ctx.ErrorInternal(err)
+    }
+    return
+  }
+  jwt, err := user.NewToken()
+  if err != nil {
     ctx.ErrorInternal(err)
     return
   }
-  logrus.Info(user)
+  ctx.Json(http.StatusOK, map[string]interface{}{
+    "token": jwt,
+  })
 }

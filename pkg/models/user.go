@@ -1,6 +1,7 @@
 package models
 
 import (
+  "github.com/dgrijalva/jwt-go"
   "github.com/jinzhu/gorm"
   uuid "github.com/satori/go.uuid"
   "time"
@@ -16,6 +17,13 @@ type User struct {
   CreatedAt time.Time `gorm:"type:timestamptz;not null"`
 }
 
-func (base *User) BeforeCreate(scope *gorm.Scope) error {
+func (u *User) BeforeCreate(scope *gorm.Scope) error {
   return scope.SetColumn("ID", uuid.NewV4())
+}
+
+func (u *User) NewToken() (string, error) {
+  return jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
+    ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
+    Subject:   u.ID.String(),
+  }).SigningString()
 }

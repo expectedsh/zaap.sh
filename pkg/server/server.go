@@ -10,6 +10,7 @@ import (
 )
 
 type Server struct {
+  Secret            []byte
   HttpServer        *http.Server
   DB                *gorm.DB
   GoogleOAuthConfig *oauth2.Config
@@ -19,11 +20,10 @@ type Server struct {
 func (s *Server) Start() error {
   handler := httpx.NewHandler()
   handler.Get("/oauth/github", s.OAuthGithubRoute)
-  handler.Post("/oauth/github/callback", s.OAuthGithubCallbackRoute)
+  handler.Get("/oauth/github/callback", s.OAuthGithubCallbackRoute)
 
   s.HttpServer.Handler = handler
   return s.HttpServer.ListenAndServe()
-
 }
 
 func (s *Server) Stop(ctx context.Context) error {

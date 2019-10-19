@@ -11,8 +11,9 @@ import (
   "time"
 )
 
-type HttpConfig struct {
-  Addr string `envconfig:"ADDR" default:":3000"`
+type RootConfig struct {
+  Addr   string `envconfig:"ADDR" default:":3000"`
+  Secret string `envconfig:"SECRET" default:"wowthisissecret"`
 }
 
 type DBConfig struct {
@@ -36,19 +37,23 @@ func newDB() (*gorm.DB, error) {
   if err != nil {
     return nil, err
   }
+  db.LogMode(false)
   db.DB().SetMaxIdleConns(config.MaxIdleConns)
   db.DB().SetMaxOpenConns(config.MaxOpenConns)
   db.DB().SetConnMaxLifetime(config.ConnMaxLifetime)
   return db, nil
 }
 
-func newHttpServer() (*http.Server, error) {
-  config := &HttpConfig{}
-  if err := envconfig.Process("HTTP", config); err != nil {
+func newServer() (*server.Server, error) {
+  config := &RootConfig{}
+  if err := envconfig.Process("", config); err != nil {
     return nil, err
   }
-  return &http.Server{
-    Addr: config.Addr,
+  return &server.Server{
+    HttpServer: &http.Server{
+      Addr: config.Addr,
+    },
+    Secret: []byte(config.Secret),
   }, nil
 }
 
@@ -66,13 +71,10 @@ func newOAuthConfig(prefix string, endpoint oauth2.Endpoint, scopes []string) (*
 }
 
 func newServerFromEnv() (*server.Server, error) {
-  srv := &server.Server{}
-
-  httpServer, err := newHttpServer()
+  srv, err := newServer()
   if err != nil {
     return nil, err
   }
-  srv.HttpServer = httpServer
 
   db, err := newDB()
   if err != nil {
