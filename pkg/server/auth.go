@@ -10,11 +10,11 @@ import (
 )
 
 func (s *Server) OAuthGithubRoute(ctx *httpx.Context) {
-  ctx.Redirect(s.githubOAuthConfig.AuthCodeURL("", oauth2.AccessTypeOnline), http.StatusTemporaryRedirect)
+  ctx.Redirect(s.GithubOAuthConfig.AuthCodeURL("", oauth2.AccessTypeOnline), http.StatusTemporaryRedirect)
 }
 
 func (s *Server) OAuthGithubCallbackRoute(ctx *httpx.Context) {
-  token, err := s.githubOAuthConfig.Exchange(ctx.Context(), ctx.QueryParam("code"))
+  token, err := s.GithubOAuthConfig.Exchange(ctx.Context(), ctx.QueryParam("code"))
   if err != nil {
     ctx.ErrorBadRequest("Invalid oauth code.", nil)
     return
@@ -30,7 +30,7 @@ func (s *Server) OAuthGithubCallbackRoute(ctx *httpx.Context) {
     return
   }
   user := &models.User{}
-  if err := s.db.Where("github_id = ?", githubUser.ID).FirstOrCreate(user, models.User{
+  if err := s.DB.Where("github_id = ?", githubUser.ID).FirstOrCreate(user, models.User{
     Name:     githubUser.Name,
     Email:    githubEmail.Email,
     GithubID: githubUser.ID,
