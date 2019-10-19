@@ -14,17 +14,17 @@ func (s *Server) OAuthGithubRoute(ctx *httpx.Context) {
 }
 
 func (s *Server) OAuthGithubCallbackRoute(ctx *httpx.Context) {
-  token, err := s.githubOAuthConfig.Exchange(ctx.Request.Context(), ctx.Request.FormValue("code"))
+  token, err := s.githubOAuthConfig.Exchange(ctx.Context(), ctx.QueryParam("code"))
   if err != nil {
     ctx.ErrorBadRequest("Invalid oauth code.", nil)
     return
   }
-  githubUser, err := github.GetUser(ctx.Request.Context(), token)
+  githubUser, err := github.GetUser(ctx.Context(), token)
   if err != nil {
     ctx.ErrorInternal(err)
     return
   }
-  githubEmail, err := github.GetPrimaryEmail(ctx.Request.Context(), token)
+  githubEmail, err := github.GetPrimaryEmail(ctx.Context(), token)
   if err != nil {
     ctx.ErrorInternal(err)
     return

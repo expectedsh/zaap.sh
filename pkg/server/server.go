@@ -7,7 +7,6 @@ import (
   _ "github.com/jinzhu/gorm/dialects/postgres"
   "github.com/remicaumette/zaap.sh/pkg/models"
   "github.com/remicaumette/zaap.sh/pkg/util/httpx"
-  "github.com/remicaumette/zaap.sh/pkg/util/httpx/middleware"
   "golang.org/x/oauth2"
   "golang.org/x/oauth2/github"
   "golang.org/x/oauth2/google"
@@ -63,15 +62,8 @@ func (s *Server) Start() error {
   }
 
   handler := httpx.NewHandler()
-  handler.Use(middleware.CanonicalLog)
   handler.Get("/oauth/github", s.OAuthGithubRoute)
   handler.Post("/oauth/github/callback", s.OAuthGithubCallbackRoute)
-  v1 := handler.Group("/v1")
-  {
-    v1.Get("/", func(ctx *httpx.Context) {
-      ctx.Json(http.StatusOK, "ok")
-    })
-  }
 
   s.httpServer = &http.Server{
     Addr:    s.config.Addr,

@@ -1,6 +1,8 @@
 package httpx
 
-import "github.com/gorilla/mux"
+import (
+  "github.com/gorilla/mux"
+)
 
 type Handler struct {
   Router
