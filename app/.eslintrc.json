@@ -2,6 +2,10 @@
   "extends": "react-app",
   "rules": {
     "semi": ["error", "never"],
-    "object-curly-spacing": ["error", "always"]
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error", "double"],
+    "max-len": ["error", 100],
+    "comma-dangle": ["error", "always-multiline"],
+    "indent": ["error", 2]
   }
 }

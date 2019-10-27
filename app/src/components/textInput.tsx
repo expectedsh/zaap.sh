@@ -8,6 +8,7 @@ export default styled.input`
   padding: 14px;
   font-size: 18px;
   background: ${props => props.theme.color.greyLight};
+
   &:focus {
     outline: none;
   }

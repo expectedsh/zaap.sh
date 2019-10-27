@@ -3,3 +3,6 @@
 .DS_Store
 .env
 *.iml
+*.log
+/app/build
+/app/node_modules

@@ -93,5 +93,5 @@ export const theme: Theme = {
     fontWeightRegular: "400",
     fontWeightSemiBold: "500",
     fontWeightBold: "600",
-  }
+  },
 }

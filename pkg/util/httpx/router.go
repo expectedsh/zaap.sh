@@ -40,6 +40,10 @@ func (r *Router) Delete(path string, handler HandlerFunc) {
   r.Router.HandleFunc(path, WrapHandler(handler)).Methods("DELETE")
 }
 
+func (r *Router) Options(path string, handler HandlerFunc) {
+  r.Router.HandleFunc(path, WrapHandler(handler)).Methods("OPTIONS")
+}
+
 func (r *Router) Use(middleware MiddlewareFunc) {
   r.Router.Use(func(next http.Handler) http.Handler {
     return WrapHandler(func(ctx *Context) {

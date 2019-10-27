@@ -19,8 +19,12 @@ type Server struct {
 
 func (s *Server) Start() error {
   handler := httpx.NewHandler()
+  handler.Use(corsMiddleware())
   handler.Get("/oauth/github", s.OAuthGithubRoute)
-  handler.Get("/oauth/github/callback", s.OAuthGithubCallbackRoute)
+  handler.Options("/authenticate", func(ctx *httpx.Context) {
+    ctx.StatusCode(http.StatusOK)
+  })
+  handler.Post("/authenticate", s.AuthenticateRoute)
 
   s.HttpServer.Handler = handler
   return s.HttpServer.ListenAndServe()
