@@ -12,7 +12,7 @@ jobs:
       - name: yarn install, lint, and test
         working-directory: ./app
         run: |
-          yarn ci
+          yarn install
           yarn lint
           yarn test
         env:
