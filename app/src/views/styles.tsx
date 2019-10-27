@@ -5,6 +5,18 @@ export const Root = styled.div`
   flex-direction: row;
 `
 
+export const Test = styled.div`
+  background: ${props => props.theme.color.blueDark};
+  padding: 16px 24px;
+  line-height: 24px;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-content: space-between;
+  width: 100%;
+  color: ${props => props.theme.color.white};
+`
+
 export const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,13 +27,13 @@ export const Sidebar = styled.div`
 
 export const SidebarLogo = styled.img`
   display: flex;
-  align-self: flex-start;
+  align-self: center;
   margin: 24px;
 `
 
 export const SidebarLinkList = styled.ul`
   list-style: none;
-  margin: 0 0 24px 24px;
+  margin-bottom: 24px;
   padding: 0;
 
   a {
@@ -29,7 +41,7 @@ export const SidebarLinkList = styled.ul`
     flex-direction: row;
     align-self: center;
     text-decoration: none;
-    margin: 0 24px 8px 0;
+    margin: 0 24px 8px 16px;
     padding: 8px;
     font-size: ${props => props.theme.text.fontSizeLarge};
     line-height: 24px;

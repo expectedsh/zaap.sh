@@ -9,6 +9,10 @@ const Home = () => {
     <S.Root>
       <S.Sidebar>
         <S.SidebarLogo src={logo} title="Zaap" alt="Zaap" />
+        <S.Test>
+          my-project
+          <i className="material-icons">keyboard_arrow_down</i>
+        </S.Test>
         <S.SidebarLinkList>
           <Link to="/overview">
             <i className="material-icons">dashboard</i>
