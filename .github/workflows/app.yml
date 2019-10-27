@@ -10,6 +10,7 @@ jobs:
         with:
           node-version: 12.x
       - name: yarn install, lint, and test
+        working-directory: ./app
         run: |
           yarn ci
           yarn lint
