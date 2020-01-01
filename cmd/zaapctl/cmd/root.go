@@ -1,23 +1,17 @@
 package cmd
 
 import (
-  "github.com/remicaumette/zaap.sh/cmd/zaapctl/cmd/create"
-  apiclient "github.com/remicaumette/zaap.sh/pkg/client"
-  "github.com/sirupsen/logrus"
+  "github.com/remicaumette/zaap.sh/cmd/zaapctl/cmd/app"
+  "github.com/remicaumette/zaap.sh/pkg/api"
   "github.com/spf13/cobra"
 )
 
-func NewRootCmd(client *apiclient.Client) *cobra.Command {
+func NewRootCmd(client *api.Client) *cobra.Command {
   cmd := &cobra.Command{
     Use: "zaapctl",
-    Short: "zaapctl controls the Zaap server",
+    SilenceErrors: true,
     SilenceUsage: true,
-    Run: func(cmd *cobra.Command, args []string) {
-      if err := cmd.Help(); err != nil {
-        logrus.WithError(err).Fatal("failed to show help")
-      }
-    },
   }
-  cmd.AddCommand(create.NewCreateCmd(client))
+  cmd.AddCommand(app.NewCmd(client))
   return cmd
 }

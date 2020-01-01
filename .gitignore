@@ -4,5 +4,5 @@
 .env
 *.iml
 *.log
-/app/build
-/app/node_modules
+/web/build
+/web/node_modules
