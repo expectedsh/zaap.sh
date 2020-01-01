@@ -1,0 +1,2 @@
+zaapctl create app <name> --image httpd --port 80 --env hello=world -e world=hello --memory 15m --cpu 200
+

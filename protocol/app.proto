@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package protocol;
+
+import "google/api/annotations.proto";
+
+service AppService {
+  rpc ListApps(ListAppsRequest) returns (ListAppsResponse) {
+    option (google.api.http) = { get: "/v1/apps" };
+  }
+
+  rpc GetApp(GetAppRequest) returns (App) {
+    option (google.api.http) = { get: "/v1/apps/{id}" };
+  }
+}
+
+message App {
+  string name = 1;
+}
+
+message ListAppsRequest {
+
+}
+
+message ListAppsResponse {
+  repeated App apps = 1;
+}
+
+message GetAppRequest {
+  string id = 1;
+}

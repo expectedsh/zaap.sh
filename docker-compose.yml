@@ -1,15 +1,17 @@
 version: '3'
 services:
-  postgres:
-    image: postgres:alpine
-    restart: on-failure
-    environment:
-      - "POSTGRES_USER=zaap"
-      - "POSTGRES_PASSWORD=zaap"
-      - "TZ=Europe/Paris"
+  etcd:
+    image: quay.io/coreos/etcd
     ports:
-      - 5432:5432
+      - 2379:2379
+      - 2380:2380
+  proxy:
+    image: envoyproxy/envoy:latest
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - ./envoy:/etc/envoy
+      - ./protocol:/protocol
+    ports:
+      - 9000:9000
+      - 9001:9001
 volumes:
   postgres: {}
