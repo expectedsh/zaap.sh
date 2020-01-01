@@ -9,15 +9,17 @@ import (
 )
 
 func NewCreateCmd(client *api.Client) *cobra.Command {
-  opts := &protocol.CreateAppRequest{}
+  req := &protocol.CreateAppRequest{}
   cmd := &cobra.Command{
-    Use:   "create",
+    Use:   "create [name]",
     Short: "Create an app",
     Long: `
 This is the help create
 `,
+    Args: cobra.MinimumNArgs(1),
     RunE: func(cmd *cobra.Command, args []string) error {
-      app, err := client.AppService.CreateApp(context.Background(), opts)
+      req.Name = args[0]
+      app, err := client.AppService.CreateApp(context.Background(), req)
       if err != nil {
         return err
       }
@@ -26,9 +28,9 @@ This is the help create
     },
   }
   flags := cmd.Flags()
-  flags.StringSliceVar(&opts.Env, "env", []string{}, "Set environment variables")
-  flags.StringVar(&opts.Image, "image", "", "Set image")
-  flags.Int32Var(&opts.Memory, "memory", -1, "Memory limit")
-  flags.Int32Var(&opts.Cpu, "cpu", -1, "Number of CPUs")
+  flags.StringSliceVar(&req.Env, "env", []string{}, "Set environment variables")
+  flags.StringVar(&req.Image, "image", "", "Set image")
+  flags.Int32Var(&req.Memory, "memory", -1, "Memory limit")
+  flags.Int32Var(&req.Cpu, "cpu", -1, "Number of CPUs")
   return cmd
 }
