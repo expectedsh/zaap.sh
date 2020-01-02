@@ -2,8 +2,8 @@ package main
 
 import (
   "fmt"
-  "github.com/remicaumette/zaap.sh/cmd/zaapctl/cmd"
   "github.com/remicaumette/zaap.sh/pkg/api"
+  "github.com/remicaumette/zaap.sh/pkg/cmd"
   "github.com/sirupsen/logrus"
   "os"
 )

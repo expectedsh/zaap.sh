@@ -1,8 +1,8 @@
 package cmd
 
 import (
-  "github.com/remicaumette/zaap.sh/cmd/zaapctl/cmd/app"
   "github.com/remicaumette/zaap.sh/pkg/api"
+  "github.com/remicaumette/zaap.sh/pkg/cmd/app"
   "github.com/spf13/cobra"
 )
 
