@@ -1,8 +1,0 @@
-version: '3'
-services:
-  registry:
-    image: registry:latest
-    environment:
-      - "REGISTRY_NOTIFICATIONS_ENDPOINTS=- name: zaap-hook\n  url: ${REGISTRY_AUTH_SERVER:-http://host.docker.internal:8091/hook}\n  timeout: 10s\n  threshold: 8\n  backoff: 10s"
-    ports:
-      - 5000:5000
