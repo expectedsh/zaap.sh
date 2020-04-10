@@ -21,7 +21,7 @@ message GetTokenResponse {
 
 message DeploymentEventRequest {
   DeploymentEventRequestType type = 1;
-  oneof request_oneof {
+  oneof request {
     AppDeploymentRequest appDeploymentRequest = 2;
   }
 }

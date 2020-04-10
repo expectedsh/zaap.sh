@@ -38,7 +38,7 @@ func (s *Scheduler) RequestDeployment(token string, appName string, repository s
   }
   return conn.Send(&protocol.DeploymentEventRequest{
     Type: protocol.DeploymentEventRequestType_DEPLOY_APP,
-    RequestOneof: &protocol.DeploymentEventRequest_AppDeploymentRequest{
+    Request: &protocol.DeploymentEventRequest_AppDeploymentRequest{
       AppDeploymentRequest:&protocol.AppDeploymentRequest{
         AppName: appName,
         Repository: repository,
