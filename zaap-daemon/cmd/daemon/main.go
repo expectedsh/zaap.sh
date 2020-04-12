@@ -13,9 +13,6 @@ import (
 	"github.com/remicaumette/zaap.sh/pkg/configs"
 )
 
-// todo: check if the connection is always up, if not retry it until it is alive
-//       don't forget to store locally all messages that are not sent
-
 func main() {
 
 	logrus.Info("Starting 'daemon' ...")
