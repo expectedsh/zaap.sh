@@ -7,7 +7,7 @@ const cx = classnames.bind(style)
 
 function AuthTextField({ type = "text", input, meta, name, value, ...props }) {
   const error = useMemo(() => {
-    return meta.touched && (meta.error || meta.submitError)
+    return meta?.touched && (meta.error || meta.submitError)
   }, [meta])
 
   return (

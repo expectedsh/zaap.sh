@@ -3,6 +3,7 @@
 .alert {
   padding: 16px;
   border-radius: 4px;
+  margin-bottom: 24px;
 
   &.alert-error {
     background: $color-red;

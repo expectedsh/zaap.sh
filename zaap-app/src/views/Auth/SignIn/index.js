@@ -43,7 +43,7 @@ function SignIn() {
               )}
               <Field component={TextField} type="email" name="email" placeholder="Email" />
               <Field component={TextField} type="password" name="password" placeholder="Password" />
-              <Button className="btn btn-success" type="submit" loading={loading}>
+              <Button className="btn btn-large btn-block btn-success" type="submit" loading={loading}>
                 Continue
               </Button>
             </form>

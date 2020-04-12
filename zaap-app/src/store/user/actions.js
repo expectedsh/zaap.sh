@@ -16,6 +16,16 @@ export function fetchUser() {
   }
 }
 
+export function updateUser(user) {
+  return dispatch => {
+    return api.patch("/me", user)
+      .then(res => {
+        dispatch(fetchUserSuccess(res.data.user))
+        return res.data.user
+      })
+  }
+}
+
 export function fetchUserPending() {
   return {
     type: FETCH_USER_PENDING,

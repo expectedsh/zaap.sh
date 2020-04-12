@@ -16,11 +16,13 @@
 #  index_users_on_scheduler_token  (scheduler_token) UNIQUE
 #
 class User < ApplicationRecord
+  before_save :downcase_email
+
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
   has_secure_password
 
-  before_save :downcase_email
+  has_many :applications
 
   def issue_token
     JWT.encode ({ user_id: id, exp: 24.hours.from_now.to_i }),

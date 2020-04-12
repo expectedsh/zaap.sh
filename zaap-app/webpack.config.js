@@ -2,7 +2,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const {join} = require('path')
 
-const sassLoader = (cssLoaderOptions = {}) => [
+const cssLoader = (customLoaders = [], cssLoaderOptions = {}) => [
   process.env.NODE_ENV === 'production'
     ? MiniCssExtractPlugin.loader
     : 'style-loader',
@@ -10,7 +10,7 @@ const sassLoader = (cssLoaderOptions = {}) => [
     loader: 'css-loader',
     options: cssLoaderOptions,
   },
-  'sass-loader',
+  ...customLoaders,
   {
     loader: 'postcss-loader',
     options: {
@@ -69,7 +69,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: sassLoader({
+        use: cssLoader(['sass-loader'], {
           importLoaders: true,
           modules: {
             localIdentName: process.env.NODE_ENV === 'production'
@@ -81,8 +81,12 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: sassLoader(),
+        use: cssLoader(['sass-loader']),
         exclude: /\.module\.s[ac]ss$/,
+      },
+      {
+        test: /\.css$/i,
+        use: cssLoader(),
       },
       {
         test: /\.(png|jpe?g|gif|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff2?|eot|ttf|otf)(\?.*)?$/,

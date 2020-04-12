@@ -1,10 +1,4 @@
 class UsersController < ApplicationController
-  def index
-  end
-
-  def show
-  end
-
   def create
     @user = User.new registration_params
     unless @user.save
@@ -13,13 +7,6 @@ class UsersController < ApplicationController
     end
     @token = @user.issue_token
     render status: :created
-  end
-
-  def update
-  end
-
-  def delete
-
   end
 
   private

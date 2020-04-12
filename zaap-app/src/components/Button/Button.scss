@@ -1,15 +1,37 @@
 @import "~stylesheets/variables";
 
 .btn {
-  margin-top: 24px;
   display: block;
-  width: 100%;
   border: none;
   border-radius: 4px;
   font-size: $text-font-size-lg;
   font-weight: 500;
-  padding: 14px 0;
   cursor: pointer;
+  padding: 10px 20px;
+  width: auto;
+  text-decoration: none;
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &.btn-large {
+    padding: 14px 28px;
+  }
+
+  &.btn-block {
+    width: 100%;
+  }
+
+  &.btn-primary {
+    color: $color-white;
+    background: $color-blue;
+
+    &:hover {
+      background: $color-blue-dark;
+    }
+  }
 
   &.btn-success {
     color: $color-white;

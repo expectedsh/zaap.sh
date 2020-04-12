@@ -1,20 +1,22 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames/bind'
-import style from './TextField.scss'
+import style from './TextField.module.scss'
 
 const cx = classnames.bind(style)
 
 function TextField({ type = "text", input, meta, name, label, value, ...props }) {
+  const fromArrayOrCurrent = s =>
+    typeof s === 'string' ? s : s?.[0]
+
   const error = useMemo(() => {
-    return meta.touched && (meta.error || meta.submitError)
+    return meta?.touched && (fromArrayOrCurrent(meta.error) || fromArrayOrCurrent(meta.submitError))
   }, [meta])
 
   return (
-    <>
+    <div className={cx('root')}>
       {label && <label htmlFor={name}>{label}</label>}
       <input
-        className={cx('root')}
         type={type}
         name={name}
         defaultValue={value}
@@ -26,7 +28,7 @@ function TextField({ type = "text", input, meta, name, label, value, ...props })
           {error}
         </div>
       )}
-    </>
+    </div>
   )
 }
 

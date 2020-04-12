@@ -1,3 +1,4 @@
+@import "~react-toastify/dist/ReactToastify.css";
 @import "reset";
 @import "variables";
 
@@ -9,4 +10,61 @@ body {
 
 .container {
   @include make-container;
+}
+
+.header-title {
+  font-size: $text-font-size-xl;
+  font-weight: $text-font-weight-bold;
+  margin-bottom: 16px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  .header-title {
+    margin-bottom: 0;
+  }
+}
+
+.simple-table {
+  width: 100%;
+
+  th {
+    font-size: $text-font-size-sm;
+    font-weight: $text-font-weight-bold;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 21px 0;
+    border-bottom: 1px solid $color-border;
+  }
+
+  td {
+    padding: 16px 0;
+    color: $color-text-muted;
+    font-size: 16px;
+  }
+
+  tr {
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.Toastify__toast {
+  border-radius: 4px;
+}
+
+.Toastify__toast--success {
+  background: $color-green;
+}
+
+.Toastify__toast--error {
+  background: $color-red;
 }

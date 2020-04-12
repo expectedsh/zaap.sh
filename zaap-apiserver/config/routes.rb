@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   patch 'me', to: 'me#update'
 
   resources :users, except: %i[edit new]
+  resources :applications, except: %i[edit new]
 end
 

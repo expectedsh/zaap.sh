@@ -1,13 +1,13 @@
 import React, { useEffect } from "react"
 import classnames from "classnames/bind"
-import { Link, Route, Switch } from "react-router-dom"
+import { Link, Redirect, Route, Switch } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from "~/store/authentication/actions"
 import { fetchUser } from "~/store/user/actions"
 import Alert from "~/components/Alert"
-import WithBodyClasses from "~/components/WithBodyClasses"
 import Settings from "~/views/Dashboard/Settings"
-import Home from "~/views/Dashboard/ListApps"
+import ListApps from "~/views/Dashboard/ListApps"
+import NewApp from "~/views/Dashboard/NewApp"
 import logo from "~/assets/images/logo.svg"
 import style from "./Dashboard.module.scss"
 
@@ -37,18 +37,20 @@ function Dashboard() {
     return user ? (
       <Switch>
         <Route path="/settings" component={Settings}/>
-        <Route path="/" component={Home}/>
+        <Route path="/apps/new" component={NewApp}/>
+        <Route path="/apps" component={ListApps}/>
+        <Redirect to="/apps"/>
       </Switch>
     ) : null
   }
 
   return (
-    <WithBodyClasses classNames={[cx("dashboard-background")]}>
-      <>
-        <div className={cx("navbar")}>
+    <>
+      <div className={cx("navbar")}>
+        <div className={cx("container")}>
           <img className={cx("navbar-brand")} src={logo} alt="Zaap logo"/>
           <div className={cx("navbar-links")}>
-            <Link className={cx("navbar-link")} to="/">Apps</Link>
+            <Link className={cx("navbar-link")} to="/apps">Applications</Link>
           </div>
           <div className={cx("navbar-links", "navbar-links-right")}>
             <Link className={cx("navbar-link")} to="/settings">
@@ -59,9 +61,9 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        {renderBody()}
-      </>
-    </WithBodyClasses>
+      </div>
+      {renderBody()}
+    </>
   )
 }
 
