@@ -10,7 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 
-	"github.com/remicaumette/zaap.sh/zaap-services/internal/proxy"
+	"github.com/remicaumette/zaap.sh/zaap-services/internal/controller"
 	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
 
 	"github.com/kelseyhightower/envconfig"
@@ -18,9 +18,9 @@ import (
 
 func main() {
 
-	logrus.Info("Starting 'daemon-proxy' ...")
+	logrus.Info("Starting 'controller' ...")
 
-	daemonProxyConfig := configs.DaemonProxy{}
+	daemonProxyConfig := configs.Controller{}
 	if err := envconfig.Process("", &daemonProxyConfig); err != nil {
 		logrus.Panic(err)
 	}
@@ -30,13 +30,7 @@ func main() {
 		logrus.Panic(err)
 	}
 
-	dockerEventQueue, err := proxy.NewDockerEventQueue(rabbitConnection)
-	if err != nil {
-		logrus.Panic(err)
-	}
-
-	http.HandleFunc("/daemon", proxy.DaemonSocketHandler(dockerEventQueue))
-	http.HandleFunc("/api", proxy.APISocketHandler)
+	http.HandleFunc("/", controller.DaemonSocketHandler)
 
 	server := &http.Server{Addr: daemonProxyConfig.Address, Handler: http.DefaultServeMux}
 
@@ -47,6 +41,9 @@ func main() {
 			}
 		}
 	}()
+
+	consumeOrExit(rabbitConnection, "consumer-1")
+	consumeOrExit(rabbitConnection, "consumer-2")
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)
@@ -60,5 +57,16 @@ func main() {
 	}
 	if err := rabbitConnection.Close(); err != nil {
 		logrus.WithField("closer", "rabbit-mq").Panic(err)
+	}
+}
+
+func consumeOrExit(rabbitConnection *amqp.Connection, schedulerToken string) {
+	if consumer, err := controller.NewDeploymentQueueHandler(
+		context.Background(),
+		rabbitConnection,
+		schedulerToken); err != nil {
+		logrus.Panic(err)
+	} else {
+		go consumer.Consume()
 	}
 }

@@ -9,7 +9,7 @@ import (
 
 func ProxySocketHandler(connection *websocket.Conn) {
 
-	logger := logrus.WithField("socket-handler", "proxy")
+	logger := logrus.WithField("socket-handler", "controller")
 
 	go func() {
 		for {
