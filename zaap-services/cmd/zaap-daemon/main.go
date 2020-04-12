@@ -21,7 +21,7 @@ func main() {
 		logrus.Panic(err)
 	}
 
-	daemonProxy := url.URL{Scheme: "ws", Host: daemonConfig.DaemonProxyAddress, Path: "/daemon"}
+	daemonProxy := url.URL{Scheme: "ws", Host: daemonConfig.DaemonProxyAddress, Path: "/"}
 
 	connection, _, err := websocket.DefaultDialer.Dial(daemonProxy.String(), nil)
 	if err != nil {

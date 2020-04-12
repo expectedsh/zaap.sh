@@ -70,7 +70,7 @@ func (d *DockerEventListener) SendToDaemonProxy() {
 
 		if err := d.connection.WriteJSON(e); err != nil {
 
-			err := backoff.New("try connecting to daemon proxy", func() error {
+			err := backoff.New("try connecting to daemon controller", func() error {
 				conn, err := d.factory()
 				if err != nil {
 					return err
@@ -85,7 +85,7 @@ func (d *DockerEventListener) SendToDaemonProxy() {
 
 			if err != nil {
 
-				// In this case 10 attempt has been tried to connect to the daemon proxy.
+				// In this case 10 attempt has been tried to connect to the daemon controller.
 				// Since the server is not available we are relying to the next docker event
 				// to retry the connection.
 
