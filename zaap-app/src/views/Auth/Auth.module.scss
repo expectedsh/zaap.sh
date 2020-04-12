@@ -1,0 +1,40 @@
+@import "~stylesheets/variables.scss";
+
+.auth-background {
+  background: $color-blue url(../../assets/images/login-background.svg) center;
+}
+
+.root {
+  margin: 42px 0;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 32px;
+  height: 52px;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 48px 32px 32px;
+  border-radius: 4px;
+  max-width: 450px;
+  background: $color-white;
+}
+
+.title {
+  font-weight: $text-font-weight-thin;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.alternative {
+  margin: 24px 0;
+  text-align: center;
+  color: $color-white;
+
+  a {
+    color: $color-white;
+  }
+}

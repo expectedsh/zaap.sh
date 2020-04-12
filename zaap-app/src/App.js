@@ -1,20 +1,14 @@
-import React from "react"
-import { Redirect, Route, Switch } from "react-router-dom"
-import Login from "./views/Login"
-import SignUp from "./views/SignUp"
-
 import "./assets/stylesheets/index.scss"
 
+import React from "react"
+import { useSelector } from "react-redux"
+import Auth from "~/views/Auth"
+import Dashboard from "~/views/Dashboard"
+
 function App() {
-  return (
-    <>
-      <Switch>
-        <Route path="/login" component={Login}/>
-        <Route path="/sign_up" component={SignUp}/>
-        <Redirect exact path="/" to="/login"/>
-      </Switch>
-    </>
-  )
+  const token = useSelector(state => state.authentication.token)
+
+  return token ? <Dashboard/> : <Auth/>
 }
 
 export default App

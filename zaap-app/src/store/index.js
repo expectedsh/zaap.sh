@@ -1,15 +1,11 @@
 import {combineReducers, createStore, compose, applyMiddleware,} from 'redux'
 import thunk from 'redux-thunk'
-import instagramSearch from './instagramSearch/reducer'
-import instagramUser from './instagramUser/reducer'
-import instagramPosts from './instagramPosts/reducer'
-import instagramPost from './instagramPost/reducer'
+import authentication from './authentication/reducer'
+import user from './user/reducer'
 
 const reducer = combineReducers({
-  instagramSearch,
-  instagramUser,
-  instagramPosts,
-  instagramPost,
+  authentication,
+  user,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -1,0 +1,27 @@
+@mixin make-container {
+  width: 100%;
+  padding: 0 16px;
+  margin: 0 auto;
+
+  @media (min-width: 576px) {
+    max-width: 540px;
+  }
+
+  @media (min-width: 768px) {
+    max-width: 720px;
+  }
+
+  @media (min-width: 992px) {
+    max-width: 960px;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 1140px;
+  }
+}
+
+@mixin make-title {
+  font-size: $text-font-size-xl;
+  font-weight: $text-font-weight-bold;
+  margin-bottom: 16px;
+}

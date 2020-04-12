@@ -1,0 +1,16 @@
+@import "~stylesheets/variables";
+
+.root {
+  @include make-container;
+}
+
+.title {
+  @include make-title;
+}
+
+.content {
+  padding: 16px;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  background: $color-white;
+}

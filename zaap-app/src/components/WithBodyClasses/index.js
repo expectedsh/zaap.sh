@@ -10,7 +10,7 @@ function WithBodyClasses({ classNames, children = null }) {
     return () => {
       document.body.className = document.body.className
         .split(" ")
-        .filter(className => classNames.includes(className))
+        .filter(className => !classNames.includes(className))
         .join(" ")
     }
   }, [classNames])

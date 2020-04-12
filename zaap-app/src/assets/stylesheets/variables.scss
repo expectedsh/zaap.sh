@@ -1,3 +1,5 @@
+@import "mixins";
+
 $breakpoint-xs: 0;
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
@@ -7,13 +9,13 @@ $breakpoint-xl: 1200px;
 $text-line-height-heading: 1.15;
 $text-line-height-body: 1.4;
 
-$text-font-family: 'Lato', Arial, Helvetica, sans-serif;
+$text-font-family: 'Nunito', Arial, Helvetica, sans-serif;
 
-$text-font-size-xs: 11px;
-$text-font-size-sm: 12px;
-$text-font-size-md: 14px;
-$text-font-size-lg: 16px;
-$text-font-size-xl: 18px;
+$text-font-size-xs: 12px;
+$text-font-size-sm: 14px;
+$text-font-size-md: 16px;
+$text-font-size-lg: 18px;
+$text-font-size-xl: 20px;
 
 $text-font-weight-thin: 300;
 $text-font-weight-regular: 400;
@@ -23,7 +25,7 @@ $text-font-weight-bold: 600;
 $color-white: #FFF;
 
 $color-grey-light: #F9FBFD;
-$color-grey: #E3EBF6;
+$color-grey: #f2f3f5;
 $color-grey-dark: #95AAC9;
 
 $color-red-light: #FF7B72;
@@ -40,3 +42,5 @@ $color-blue-dark: #05367F;
 
 $color-text-normal: #212529;
 $color-text-muted: #6C757D;
+
+$color-border: rgba(0,0,0,0.12);

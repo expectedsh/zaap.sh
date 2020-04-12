@@ -1,0 +1,11 @@
+@import "~stylesheets/variables";
+
+.alert {
+  padding: 16px;
+  border-radius: 4px;
+
+  &.alert-error {
+    background: $color-red;
+    color: $color-white;
+  }
+}

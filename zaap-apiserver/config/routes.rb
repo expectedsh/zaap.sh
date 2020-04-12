@@ -1,3 +1,10 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  post 'auth/login'
+
+  get 'me', to: 'me#index'
+  put 'me', to: 'me#update'
+  patch 'me', to: 'me#update'
+
+  resources :users, except: %i[edit new]
 end
+

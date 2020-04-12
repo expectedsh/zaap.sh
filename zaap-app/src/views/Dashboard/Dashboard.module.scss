@@ -1,0 +1,43 @@
+@import "~stylesheets/variables";
+
+.dashboard-background {
+  background: $color-grey;
+}
+
+.navbar {
+  background: $color-blue-dark;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  margin-bottom: 32px;
+
+  .navbar-brand {
+    height: 32px;
+    padding: 16px 0;
+    margin-right: 16px;
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-links-right {
+    margin-left: auto;
+  }
+
+  .navbar-link {
+    cursor: pointer;
+    font-size: $text-font-size-lg;
+    font-weight: $text-font-weight-semi-bold;
+    color: $color-white;
+    text-decoration: none;
+    margin-right: 16px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
