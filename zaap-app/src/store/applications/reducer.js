@@ -1,8 +1,8 @@
 import {
   FETCH_APPLICATIONS_PENDING,
   FETCH_APPLICATIONS_SUCCESS,
-  FETCH_APPLICATIONS_ERROR
-} from './constants'
+  FETCH_APPLICATIONS_ERROR, ADD_APPLICATION,
+} from "./constants"
 
 const initialState = {
   pending: false,
@@ -31,7 +31,15 @@ export default function (state = initialState, action) {
         applications: null,
         error: action.error,
       }
-    default:
-      return state
+  case ADD_APPLICATION:
+    return {
+      ...state,
+      applications: [
+        ...state.applications.filter(v => v.id !== action.payload.id),
+        action.payload,
+      ],
+    }
+  default:
+    return state
   }
 }

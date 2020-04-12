@@ -16,10 +16,25 @@
 #  index_applications_on_user_id  (user_id)
 #
 class Application < ApplicationRecord
+  after_save :deploy
+
   validates :name, presence: true, length: { minimum: 2, maximum: 32 }
   validates :image, presence: true
 
   enum state: %i[unknown stopped starting running]
 
   belongs_to :user, dependent: :destroy
+
+  def deploy
+    payload = {
+      scheduler_token: user.scheduler_token,
+      application: self
+    }.to_json
+
+    conn = Bunny.new.tap(&:start)
+    ch = conn.create_channel
+    ch.default_exchange.publish payload, routing_key: 'deployments'
+    ch.close
+    conn.close
+  end
 end

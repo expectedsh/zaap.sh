@@ -39,7 +39,7 @@ function ListApps() {
                 <ApplicationStateBadge state={application.state}/>
               </td>
               <td>
-                Non
+                <Link to={`/apps/${application.id}`}>View</Link>
               </td>
             </tr>
           ))}

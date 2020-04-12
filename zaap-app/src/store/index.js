@@ -3,11 +3,13 @@ import thunk from 'redux-thunk'
 import authentication from './authentication/reducer'
 import user from './user/reducer'
 import applications from './applications/reducer'
+import application from './application/reducer'
 
 const reducer = combineReducers({
   authentication,
   user,
   applications,
+  application,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
