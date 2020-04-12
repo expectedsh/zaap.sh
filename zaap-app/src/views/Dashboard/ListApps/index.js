@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react'
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import classnames from "classnames/bind"
 import { fetchApplications } from "~/store/applications/actions"
 import ApplicationStateBadge from "~/components/ApplicationStateBadge"
 import Alert from "~/components/Alert"
-import style from "./ListApps.module.scss"
-
-const cx = classnames.bind(style)
 
 function ListApps() {
   const dispatch = useDispatch()
@@ -53,7 +49,7 @@ function ListApps() {
   }
 
   return (
-    <div className={cx('root')}>
+    <div className="container">
       <div className="header">
         <h1 className="header-title">
           Applications

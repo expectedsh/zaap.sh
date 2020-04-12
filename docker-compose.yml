@@ -22,15 +22,12 @@ services:
       - 1025:1025
       - 8025:8025
   rabbitmq:
-    image: 'bitnami/rabbitmq:3.8'
+    image: rabbitmq:3-management-alpine
     ports:
-      - '4369:4369'
-      - '5672:5672'
-      - '25672:25672'
-      - '15672:15672'
+      - 5672:5672
+      - 15672:15672
     volumes:
-      - 'rabbitmq_data:/bitnami'
+      - rabbitmq:/var/lib/rabbitmq
 volumes:
   postgres: {}
-  rabbitmq_data: {}
-
+  rabbitmq: {}

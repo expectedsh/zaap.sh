@@ -1,5 +1,4 @@
 import React from "react"
-import classnames from "classnames/bind"
 import { Field, Form } from "react-final-form"
 import { useDispatch, useSelector } from "react-redux"
 import { toast } from "react-toastify"
@@ -7,9 +6,6 @@ import { updateUser } from "~/store/user/actions"
 import TextField from "~/components/TextField"
 import Button from "~/components/Button"
 import FormSection from "~/components/FormSection"
-import style from "./Settings.module.scss"
-
-const cx = classnames.bind(style)
 
 function ProfileForm() {
   const dispatch = useDispatch()
@@ -57,7 +53,7 @@ function SchedulerForm() {
 
 function Settings() {
   return (
-    <div className={cx("root")}>
+    <div className="container">
       <h1 className="header-title">Settings</h1>
       <FormSection
         name="Profile"

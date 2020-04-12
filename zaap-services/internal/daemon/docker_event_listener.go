@@ -11,8 +11,8 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 
-	"github.com/remicaumette/zaap.sh/pkg/backoff"
-	"github.com/remicaumette/zaap.sh/pkg/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/backoff"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
 )
 
 type DockerEventListener struct {

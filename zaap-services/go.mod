@@ -1,4 +1,4 @@
-module github.com/remicaumette/zaap.sh
+module github.com/remicaumette/zaap.sh/zaap-services
 
 go 1.14
 

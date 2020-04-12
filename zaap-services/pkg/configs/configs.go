@@ -1,11 +1,8 @@
 package configs
 
-import "fmt"
-
-// amqp://user:bitnami@localhost:5672
 type DaemonProxy struct {
-	RabbitMQ RabbitMQConfig
-	Address  string `default:"localhost:9090"`
+	RabbitMQUrl string `default:"amqp://localhost"`
+	Address     string `default:"localhost:9090"`
 }
 
 type Daemon struct {
@@ -17,8 +14,4 @@ type RabbitMQConfig struct {
 	Password string `default:"bitnami"`
 	Host     string `default:"localhost"`
 	Port     string `default:"5672"`
-}
-
-func (r RabbitMQConfig) Url() string {
-	return fmt.Sprintf("amqp://%s:%s@%s:%s", r.User, r.Password, r.Host, r.Port)
 }

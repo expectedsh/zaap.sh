@@ -10,8 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 
-	"github.com/remicaumette/zaap.sh/internal/proxy"
-	"github.com/remicaumette/zaap.sh/pkg/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/internal/proxy"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
 
 	"github.com/kelseyhightower/envconfig"
 )
@@ -25,7 +25,7 @@ func main() {
 		logrus.Panic(err)
 	}
 
-	rabbitConnection, err := amqp.Dial(daemonProxyConfig.RabbitMQ.Url())
+	rabbitConnection, err := amqp.Dial(daemonProxyConfig.RabbitMQUrl)
 	if err != nil {
 		logrus.Panic(err)
 	}

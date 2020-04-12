@@ -4,7 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 
-	"github.com/remicaumette/zaap.sh/pkg/ws"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws"
 )
 
 func ProxySocketHandler(connection *websocket.Conn) {

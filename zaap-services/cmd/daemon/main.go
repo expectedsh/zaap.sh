@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/url"
 	"os"
 
@@ -9,8 +8,8 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 
-	"github.com/remicaumette/zaap.sh/internal/daemon"
-	"github.com/remicaumette/zaap.sh/pkg/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/internal/daemon"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
 )
 
 func main() {
@@ -28,11 +27,6 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-
-	connection.SetCloseHandler(func(code int, text string) error {
-		fmt.Println(code, text)
-		return nil
-	})
 
 	stop := make(chan os.Signal, 1)
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/remicaumette/zaap.sh/pkg/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
 )
 
 type ProxyFactoryFunc func() (*websocket.Conn, error)

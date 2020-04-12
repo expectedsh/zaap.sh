@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	dockerEventExchangeName = "docker-event"
-	dockerEventKey          = "docker-event"
+	dockerEventExchangeName = "sneakers"
+	dockerEventKey          = "docker_event"
 	dockerEventExchangeType = amqp.ExchangeDirect
 	dockerEventDeliveryMode = amqp.Persistent
 )
