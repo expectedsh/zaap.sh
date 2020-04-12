@@ -38,10 +38,10 @@ func NewDeploymentQueueHandler(
 	}
 
 	queue, err := channel.QueueDeclare(
-		"deployment",
+		"",
 		true,
 		false,
-		false,
+		true,
 		false,
 		nil,
 	)
@@ -52,7 +52,7 @@ func NewDeploymentQueueHandler(
 
 	if err := channel.QueueBind(
 		queue.Name,
-		schedulerToken,
+		"deployment-consumer-"+schedulerToken,
 		"deployment",
 		false,
 		nil,

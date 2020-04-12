@@ -33,7 +33,7 @@ class Application < ApplicationRecord
 
     conn = Bunny.new.tap(&:start)
     ch = conn.create_channel
-    ch.default_exchange.publish payload, routing_key: 'deployments'
+    ch.direct('deployment', durable: true).publish payload, routing_key: 'deployment-consumer-consumer-2'
     ch.close
     conn.close
   end
