@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	logrus.Info("Starting 'controller' ...")
+	logrus.Info("starting 'controller' ...")
 
 	config := controller.Config{}
 	if err := envconfig.Process("", &config); err != nil {

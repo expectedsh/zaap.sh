@@ -2,14 +2,49 @@ package daemon
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/remicaumette/zaap.sh/zaap-services/pkg/core"
+	"net/url"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
 	"github.com/sirupsen/logrus"
 )
+
+type Config struct {
+	SchedulerToken string `envconfig:"SCHEDULER_TOKEN"`
+	ControllerAddr string `envconfig:"CONTROLLER_ADDR" default:"localhost:9090"`
+}
+
+type Daemon struct {
+	config *Config
+	docker *client.Client
+}
+
+func New(config Config) *Daemon {
+	return &Daemon{
+		config: &config,
+	}
+}
+
+func (s *Daemon) Start(ctx context.Context) error {
+	if s.config.SchedulerToken == "" {
+		return errors.New("scheduler token required")
+	}
+	logrus.Infof("using scheduler token %v", s.config.SchedulerToken)
+
+	docker, err := client.NewEnvClient()
+	if err != nil {
+		return err
+	}
+	defer docker.Close()
+	s.docker = docker
+
+	controllerUrl := url.URL{Scheme: "ws", Host: s.config.ControllerAddr, Path: "/"}
+	return RegisterControllerConsumer(ctx, s.config.SchedulerToken, controllerUrl, s.docker)
+}
 
 type daemon struct {
 	dockerCli      *client.Client

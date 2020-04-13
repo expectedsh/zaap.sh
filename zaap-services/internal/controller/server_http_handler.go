@@ -52,7 +52,6 @@ func (d *daemonWebsocketConsumer) OnConnectionCreation(conn *websocket.Conn) err
 func (d *daemonWebsocketConsumer) Handle(message ws.Message, conn *websocket.Conn) error {
 	switch message.MessageType {
 	case ws.MessageTypeSchedulerToken:
-
 		// in this case we need to register a deploymentConsumer to listen all deployments
 		// associated with this scheduler token.
 

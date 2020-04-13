@@ -2,58 +2,33 @@ package main
 
 import (
 	"context"
-	"net/url"
 	"os"
 	"os/signal"
 	"time"
 
-	"github.com/docker/docker/client"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 
 	"github.com/remicaumette/zaap.sh/zaap-services/internal/daemon"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/configs"
 )
 
 func main() {
-
 	logrus.Info("Starting 'daemon' ...")
-
-	daemonConfig := configs.Daemon{}
-	if err := envconfig.Process("", &daemonConfig); err != nil {
-		logrus.Panic(err)
+	config := daemon.Config{}
+	if err := envconfig.Process("", &config); err != nil {
+		logrus.WithError(err).Fatal("could not process configuration")
 	}
+	d := daemon.New(config)
 
-	controllerWsUrl := url.URL{Scheme: "ws", Host: daemonConfig.DaemonProxyAddress, Path: "/"}
-
-	dockerClient, err := client.NewEnvClient()
-	if err != nil {
-		logrus.WithError(err).Panic("unable to create docker client")
+	ctx, exit := context.WithCancel(context.Background())
+	if err := d.Start(ctx); err != nil {
+		logrus.WithError(err).Fatal("could not start daemon")
 	}
-
-	daemonCtx, daemonExit := context.WithCancel(context.Background())
-	go func() {
-		err := daemon.RegisterControllerConsumer(daemonCtx, daemonConfig.SchedulerToken, controllerWsUrl, dockerClient)
-		if err != nil {
-			logrus.WithError(err).Panic("unable to communicate with controller websocket")
-		}
-	}()
-
-	go func() {
-		dockerEventConsumer, err := daemon.NewDockerEventConsumer(daemonCtx, daemonConfig, dockerClient)
-		if err != nil {
-			logrus.WithError(err).Panic("unable to create docker event consumer")
-		}
-
-		if err := dockerEventConsumer.Listen(); err != nil {
-			logrus.WithError(err).Panic()
-		}
-	}()
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, os.Kill)
 
 	<-stop
-	daemonExit()
+	exit()
 	time.Sleep(1 * time.Second)
 }
