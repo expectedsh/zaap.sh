@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/docker/docker/api/types/filters"
 	"github.com/remicaumette/zaap.sh/zaap-services/pkg/core"
 	"net/url"
 
@@ -58,23 +59,35 @@ func newDaemon(client *client.Client, token string) *daemon {
 	}
 }
 
-func (d *daemon) deployApplication(payload core.DeploymentPayload) error {
-	logrus.WithField("daemon-func", "deployApplication").WithField("payload", payload).Info()
-	var replicas = uint64(1)
+func (d *daemon) getApplication(id string) (*swarm.Service, error) {
+	args := filters.NewArgs()
+	args.Add("label", fmt.Sprintf("zaap-app-id=%s", id))
+	services, err := d.dockerCli.ServiceList(context.Background(), types.ServiceListOptions{
+		Filters: args,
+	})
+	if err != nil {
+		return nil, err
+	}
+	if len(services) == 0 {
+		return nil, nil
+	}
+	return &services[0], nil
+}
 
+func (d *daemon) createApplication(application core.Application) error {
+	var replicas = uint64(1)
 	_, err := d.dockerCli.ServiceCreate(context.Background(), swarm.ServiceSpec{
 		Annotations: swarm.Annotations{
-			Name: payload.Application.ID + "_" + payload.Application.Name,
+			Name: application.Name + "_" + application.ID,
 			Labels: map[string]string{
-				"container_id": payload.Application.ID,
-				"user_id":      payload.Application.UserID,
-				"name":         payload.Application.Name,
+				"zaap-app-id":   application.ID,
+				"zaap-app-name": application.Name,
 			},
 		},
 		TaskTemplate: swarm.TaskSpec{
 			ContainerSpec: swarm.ContainerSpec{
-				Image: payload.Application.Name,
-				Env:   convertEnvironmentVariables(payload.Application.Environment),
+				Image: application.Name,
+				Env:   convertEnvironmentVariables(application.Environment),
 			},
 		},
 		Mode: swarm.ServiceMode{
@@ -83,7 +96,49 @@ func (d *daemon) deployApplication(payload core.DeploymentPayload) error {
 			},
 		},
 	}, types.ServiceCreateOptions{})
+	return err
+}
 
+func (d *daemon) updateApplication(application core.Application, service *swarm.Service) error {
+	var replicas = uint64(1)
+	_, err := d.dockerCli.ServiceUpdate(context.Background(), service.ID, service.Version, swarm.ServiceSpec{
+		Annotations: swarm.Annotations{
+			Name: application.Name + "_" + application.ID,
+			Labels: map[string]string{
+				"zaap-app-id":   application.ID,
+				"zaap-app-name": application.Name,
+			},
+		},
+		TaskTemplate: swarm.TaskSpec{
+			ContainerSpec: swarm.ContainerSpec{
+				Image: application.Name,
+				Env:   convertEnvironmentVariables(application.Environment),
+			},
+		},
+		Mode: swarm.ServiceMode{
+			Replicated: &swarm.ReplicatedService{
+				Replicas: &replicas,
+			},
+		},
+	}, types.ServiceUpdateOptions{})
+	return err
+}
+
+func (d *daemon) deployApplication(payload core.DeploymentPayload) error {
+	log := logrus.WithField("application", payload.Application.ID)
+	log.Info("deployment requested")
+	currentApp, err := d.getApplication(payload.Application.ID)
+	if err != nil {
+		return err
+	}
+
+	if currentApp == nil {
+		log.Info("application does not exists, creating")
+		err = d.createApplication(payload.Application)
+	} else {
+		log.Info("application already exists, updating")
+		err = d.updateApplication(payload.Application, currentApp)
+	}
 	return err
 }
 
