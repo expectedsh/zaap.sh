@@ -3,13 +3,12 @@ package daemon
 import (
 	"context"
 	"fmt"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/core"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/client"
 	"github.com/sirupsen/logrus"
-
-	application "github.com/remicaumette/zaap.sh/zaap-services/pkg/models/applications"
 )
 
 type daemon struct {
@@ -24,7 +23,7 @@ func newDaemon(client *client.Client, token string) *daemon {
 	}
 }
 
-func (d *daemon) deployApplication(payload application.DeploymentPayload) error {
+func (d *daemon) deployApplication(payload core.DeploymentPayload) error {
 	logrus.WithField("daemon-func", "deployApplication").WithField("payload", payload).Info()
 	var replicas = uint64(1)
 

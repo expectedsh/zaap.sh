@@ -2,33 +2,30 @@ package controller
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
 	"github.com/streadway/amqp"
 
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/amqputils/consumer"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/amqputils/consumer"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/ws"
 )
 
 type deploymentConsumer struct {
 	websocket *websocket.Conn
 }
 
-func registerDeploymentConsumer(
+func (s *Server) registerDeploymentConsumer(
 	schedulerToken string,
 	websocket *websocket.Conn,
-	ctx context.Context,
-	connection *amqp.Connection) error {
+	ctx context.Context) error {
 
 	deploymentConsumer := deploymentConsumer{websocket: websocket}
 
 	options := []consumer.OptionFn{
-		consumer.WithOptionQueueBindRoutineKey(fmt.Sprintf("deployment-consumer-%s", schedulerToken)),
+		consumer.WithOptionQueueBindRoutineKey(schedulerToken),
 		consumer.WithOptionContext(ctx),
 	}
-	if err := consumer.RegisterAmqpConsumer(&deploymentConsumer, connection, "deployment", options...); err != nil {
+	if err := consumer.RegisterAmqpConsumer(&deploymentConsumer, s.amqpConnection, "deployments", options...); err != nil {
 		return err
 	}
 

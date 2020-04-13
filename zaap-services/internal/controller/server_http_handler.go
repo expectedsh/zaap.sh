@@ -12,12 +12,13 @@ import (
 	"github.com/streadway/amqp"
 
 	"github.com/remicaumette/zaap.sh/zaap-services/internal/controller/react"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/models/scheduler"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws/consumer"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/core"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/ws"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/ws/consumer"
 )
 
 type daemonWebsocketConsumer struct {
+	server                         *Server
 	deploymentConsumerCtx          context.Context
 	deploymentConsumerCtxCanceller context.CancelFunc
 	hasDeploymentConsumer          bool
@@ -26,25 +27,26 @@ type daemonWebsocketConsumer struct {
 	logger *logrus.Entry
 }
 
-func (d *daemonWebsocketConsumer) OnConnectionCreation(conn *websocket.Conn) error {
-	return nil
-}
-
-func RegisterDaemonWebsocketConsumer(connection *amqp.Connection) http.HandlerFunc {
+func (s *Server) HttpHandler() http.HandlerFunc {
 	const name = "daemon-websocket"
 	factory := func() consumer.Handler {
 		ctx, cancelFunc := context.WithCancel(context.Background())
 
 		return &daemonWebsocketConsumer{
+			server:                         s,
 			deploymentConsumerCtx:          ctx,
 			deploymentConsumerCtxCanceller: cancelFunc,
 			hasDeploymentConsumer:          false,
-			conn:                           connection,
+			conn:                           s.amqpConnection,
 			logger:                         logrus.WithField("consumer", name),
 		}
 	}
 
 	return consumer.RegisterServerWebsocketConsumer(name, factory)
+}
+
+func (d *daemonWebsocketConsumer) OnConnectionCreation(conn *websocket.Conn) error {
+	return nil
 }
 
 func (d *daemonWebsocketConsumer) Handle(message ws.Message, conn *websocket.Conn) error {
@@ -55,12 +57,12 @@ func (d *daemonWebsocketConsumer) Handle(message ws.Message, conn *websocket.Con
 		// associated with this scheduler token.
 
 		if !d.hasDeploymentConsumer {
-			token := scheduler.Token{}
+			token := core.Token{}
 			if err := json.Unmarshal(message.Payload, &token); err != nil {
 				return errors.Wrap(err, "unable to unmarshal in scheduler.Token")
 			}
 
-			if err := registerDeploymentConsumer(token.Token, conn, d.deploymentConsumerCtx, d.conn); err != nil {
+			if err := d.server.registerDeploymentConsumer(token.Token, conn, d.deploymentConsumerCtx); err != nil {
 				return errors.Wrap(err, "unable to register a deploymentConsumer")
 			}
 
@@ -87,6 +89,5 @@ func (d *daemonWebsocketConsumer) Close() error {
 	if d.hasDeploymentConsumer {
 		d.deploymentConsumerCtxCanceller()
 	}
-
 	return nil
 }

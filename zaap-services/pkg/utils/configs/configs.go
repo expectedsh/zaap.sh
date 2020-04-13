@@ -7,5 +7,5 @@ type Controller struct {
 
 type Daemon struct {
 	DaemonProxyAddress string `default:"localhost:9090"`
-	SchedulerToken     string `default:"jesuisuntoken"`
+	SchedulerToken     string `envconfig:"SCHEDULER_TOKEN" default:"jesuisuntoken"`
 }

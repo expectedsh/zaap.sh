@@ -12,7 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/remicaumette/zaap.sh/zaap-services/internal/daemon"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/configs"
 )
 
 func main() {
@@ -32,7 +32,6 @@ func main() {
 	}
 
 	daemonCtx, daemonExit := context.WithCancel(context.Background())
-
 	go func() {
 		err := daemon.RegisterControllerConsumer(daemonCtx, daemonConfig.SchedulerToken, controllerWsUrl, dockerClient)
 		if err != nil {

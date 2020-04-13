@@ -10,9 +10,9 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/backoff"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/backoff"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/ws"
 )
 
 type DockerEventConsumer struct {

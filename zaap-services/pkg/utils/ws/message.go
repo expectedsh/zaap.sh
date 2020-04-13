@@ -10,6 +10,7 @@ const (
 	MessageTypeApplicationDeployment = iota + 1 // type applications.Deployment
 	MessageTypeSchedulerToken                   // type scheduler.Token
 	MessageTypeDockerEvent                      // type events.message
+	MessageTypeApplicationRunning
 )
 
 type Message struct {
@@ -26,10 +27,6 @@ func NewMessage(messageType MessageType, payload interface{}) (*Message, error) 
 }
 
 func NewMessageRaw(messageType MessageType, payload []byte) (*Message, error) {
-	payload, err := json.Marshal(payload)
-	if err != nil {
-		return nil, err
-	}
 	return &Message{MessageType: messageType, Payload: payload}, nil
 }
 

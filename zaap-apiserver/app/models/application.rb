@@ -26,14 +26,11 @@ class Application < ApplicationRecord
   belongs_to :user, dependent: :destroy
 
   def deploy
-    payload = {
-      scheduler_token: user.scheduler_token,
-      application: self
-    }.to_json
+    payload = { scheduler_token: user.scheduler_token, application: self }.to_json
 
     conn = Bunny.new.tap(&:start)
     ch = conn.create_channel
-    ch.direct('deployment', durable: true).publish payload, routing_key: 'deployment-consumer-consumer-2'
+    ch.direct('deployment', durable: true).publish payload, routing_key: "deployment-consumer-#{user.scheduler_token}"
     ch.close
     conn.close
   end

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/configs"
 )
 
 type controllerFactoryFunc func() (*websocket.Conn, error)

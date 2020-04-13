@@ -44,5 +44,3 @@ enum DeploymentEventResponseType {
   OK = 0;
   ERROR = 1;
 }
-
-

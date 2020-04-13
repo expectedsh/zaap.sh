@@ -7,37 +7,24 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
-
-	"github.com/remicaumette/zaap.sh/zaap-services/internal/controller"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
-
 	"github.com/kelseyhightower/envconfig"
+	"github.com/remicaumette/zaap.sh/zaap-services/internal/controller"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-
 	logrus.Info("Starting 'controller' ...")
 
-	daemonProxyConfig := configs.Controller{}
-	if err := envconfig.Process("", &daemonProxyConfig); err != nil {
-		logrus.Panic(err)
+	config := controller.Config{}
+	if err := envconfig.Process("", &config); err != nil {
+		logrus.WithError(err).Fatal("could not process configuration")
 	}
-
-	rabbitConnection, err := amqp.Dial(daemonProxyConfig.RabbitMQUrl)
-	if err != nil {
-		logrus.Panic(err)
-	}
-
-	http.HandleFunc("/", controller.RegisterDaemonWebsocketConsumer(rabbitConnection))
-
-	server := &http.Server{Addr: daemonProxyConfig.Address, Handler: http.DefaultServeMux}
+	ctrl := controller.New(config)
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil {
+		if err := ctrl.Start(); err != nil {
 			if err != http.ErrServerClosed {
-				logrus.Panic(err)
+				logrus.WithError(err).Fatal("could not start the server")
 			}
 		}
 	}()
@@ -49,10 +36,7 @@ func main() {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
-	if err := server.Shutdown(ctx); err != nil {
-		logrus.WithField("entity", "http-server").Panic(err)
-	}
-	if err := rabbitConnection.Close(); err != nil {
-		logrus.WithField("entity", "rabbit-mq").Panic(err)
+	if err := ctrl.Shutdown(ctx); err != nil {
+		logrus.WithError(err).Fatal("failed to shutdown the server")
 	}
 }

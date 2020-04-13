@@ -10,10 +10,9 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
 
-	application "github.com/remicaumette/zaap.sh/zaap-services/pkg/models/applications"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/models/scheduler"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws"
-	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws/consumer"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/core"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/ws"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/utils/ws/consumer"
 )
 
 type controllerConsumer struct {
@@ -38,11 +37,10 @@ func RegisterControllerConsumer(ctx context.Context, schedulerToken string, cont
 func (c *controllerConsumer) Handle(message ws.Message, connection *websocket.Conn) error {
 	switch message.MessageType {
 	case ws.MessageTypeApplicationDeployment:
-		payload := application.DeploymentPayload{}
+		payload := core.DeploymentPayload{}
 		if err := json.Unmarshal(message.Payload, &payload); err != nil {
 			return errors.Wrap(err, "unable to unmarshal in application.DeploymentPayload")
 		}
-
 		if err := c.daemon.deployApplication(payload); err != nil {
 			return err
 		}
@@ -53,7 +51,7 @@ func (c *controllerConsumer) Handle(message ws.Message, connection *websocket.Co
 
 func (c *controllerConsumer) OnConnectionCreation(conn *websocket.Conn) error {
 	if !c.hasSentSchedulerToken {
-		message, err := ws.NewMessage(ws.MessageTypeSchedulerToken, scheduler.Token{Token: c.daemon.schedulerToken})
+		message, err := ws.NewMessage(ws.MessageTypeSchedulerToken, core.Token{Token: c.daemon.schedulerToken})
 		if err != nil {
 			return err
 		}
