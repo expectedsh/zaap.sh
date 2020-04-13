@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchApplication, deployApplication } from "~/store/applications/actions"
+import { fetchApplication, deployApplication } from "~/store/application/actions"
 import ApplicationStateBadge from "~/components/ApplicationStateBadge"
 import Alert from "~/components/Alert"
 import Button from "~/components/Button"

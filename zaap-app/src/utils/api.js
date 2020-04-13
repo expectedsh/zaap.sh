@@ -5,8 +5,8 @@ import store from "~/store"
 const client = axios.create({
   baseURL: process.env.API_ENDPOINT || "http://localhost:3000/",
   headers: {
-    "Content-Type": "applications/json",
-    "Accept": "applications/json",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
   },
   transformRequest: [
     data => humps.decamelizeKeys(data),
