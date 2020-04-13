@@ -37,7 +37,7 @@ func registerDeploymentConsumer(
 
 func (d *deploymentConsumer) Handle(delivery amqp.Delivery) error {
 	fmt.Println(string(delivery.Body))
-	wsMessage, err := ws.NewMessageRaw(ws.MessageTypeDeployment, delivery.Body)
+	wsMessage, err := ws.NewMessageRaw(ws.MessageTypeApplicationDeployment, delivery.Body)
 	if err != nil {
 		return errors.Wrap(err, "unable to create ws.Message from  amqp.Delivery")
 	}

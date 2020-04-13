@@ -20,11 +20,13 @@ type DockerEventConsumer struct {
 	connection   *websocket.Conn
 	logger       *logrus.Entry
 
-	factory controllerFactoryFunc
+	ctx          context.Context
+	dockerClient *client.Client
+	factory      controllerFactoryFunc
 }
 
-func NewDockerEventListener(daemon configs.Daemon) (*DockerEventConsumer, error) {
-	factory := controllerFactory(daemon)
+func NewDockerEventConsumer(ctx context.Context, daemon configs.Daemon, dockerClient *client.Client) (*DockerEventConsumer, error) {
+	factory := controllerWebsocketFactory(daemon)
 
 	conn, err := factory()
 	if err != nil {
@@ -32,6 +34,8 @@ func NewDockerEventListener(daemon configs.Daemon) (*DockerEventConsumer, error)
 	}
 
 	return &DockerEventConsumer{
+		ctx:          ctx,
+		dockerClient: dockerClient,
 		eventsQueued: make([]ws.Message, 0),
 		connection:   conn,
 		factory:      factory,
@@ -41,17 +45,13 @@ func NewDockerEventListener(daemon configs.Daemon) (*DockerEventConsumer, error)
 }
 
 func (d *DockerEventConsumer) Listen() error {
-
-	cli, err := client.NewEnvClient()
-
-	if err != nil {
-		return err
-	}
-
-	eventMessage, eventError := cli.Events(context.Background(), types.EventsOptions{})
+	eventMessage, eventError := d.dockerClient.Events(context.Background(), types.EventsOptions{})
 
 	for {
 		select {
+		case <-d.ctx.Done():
+			d.logger.Info("closing consumer due to app termination")
+			return nil
 		case msg := <-eventMessage:
 			message, err := ws.NewMessage(ws.MessageTypeDockerEvent, msg)
 			if err != nil {
@@ -60,7 +60,7 @@ func (d *DockerEventConsumer) Listen() error {
 			}
 
 			d.eventsQueued = append(d.eventsQueued, *message)
-			d.SendToDaemonProxy()
+			d.sendToDaemonProxy()
 
 			break
 		case err := <-eventError:
@@ -71,7 +71,7 @@ func (d *DockerEventConsumer) Listen() error {
 	}
 }
 
-func (d *DockerEventConsumer) SendToDaemonProxy() {
+func (d *DockerEventConsumer) sendToDaemonProxy() {
 
 	for _, e := range d.eventsQueued {
 		if err := d.connection.WriteJSON(e); err != nil {
@@ -101,7 +101,7 @@ func (d *DockerEventConsumer) SendToDaemonProxy() {
 				// In this case the connection is established so we can retry the WriteJSON operation
 				// previously failed.
 
-				d.SendToDaemonProxy()
+				d.sendToDaemonProxy()
 				return
 			}
 		} else {

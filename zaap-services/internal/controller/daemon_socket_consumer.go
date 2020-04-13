@@ -38,7 +38,7 @@ func RegisterDaemonWebsocketConsumer(connection *amqp.Connection) http.HandlerFu
 		}
 	}
 
-	return consumer.RegisterHttpWebsocketConsumer(name, factory)
+	return consumer.RegisterServerWebsocketConsumer(name, factory)
 }
 
 func (d *daemonWebsocketConsumer) Handle(message ws.Message, conn *websocket.Conn) error {

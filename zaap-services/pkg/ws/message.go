@@ -7,9 +7,9 @@ type MessageType int
 const (
 	MessageTypeUnknown = 0
 
-	MessageTypeDeployment     = iota + 1 // type applications.Deployment
-	MessageTypeSchedulerToken            // type scheduler.Token
-	MessageTypeDockerEvent               // type events.message
+	MessageTypeApplicationDeployment = iota + 1 // type applications.Deployment
+	MessageTypeSchedulerToken                   // type scheduler.Token
+	MessageTypeDockerEvent                      // type events.message
 )
 
 type Message struct {

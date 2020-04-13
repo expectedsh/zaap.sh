@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"net/url"
 	"os"
+	"os/signal"
+	"time"
 
-	"github.com/gorilla/websocket"
+	"github.com/docker/docker/client"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 
@@ -21,27 +24,37 @@ func main() {
 		logrus.Panic(err)
 	}
 
-	daemonProxy := url.URL{Scheme: "ws", Host: daemonConfig.DaemonProxyAddress, Path: "/"}
+	controllerWsUrl := url.URL{Scheme: "ws", Host: daemonConfig.DaemonProxyAddress, Path: "/"}
 
-	connection, _, err := websocket.DefaultDialer.Dial(daemonProxy.String(), nil)
+	dockerClient, err := client.NewEnvClient()
 	if err != nil {
-		logrus.Fatal(err)
+		logrus.WithError(err).Panic("unable to create docker client")
 	}
 
-	stop := make(chan os.Signal, 1)
+	daemonCtx, daemonExit := context.WithCancel(context.Background())
 
 	go func() {
-		<-stop
-		logrus.Info("Stopping the connection")
-		connection.Close()
+		err := daemon.RegisterControllerConsumer(daemonCtx, controllerWsUrl, dockerClient)
+		if err != nil {
+			logrus.WithError(err).Panic("unable to communicate with controller websocket")
+		}
 	}()
 
-	go daemon.ProxySocketHandler(connection)
+	go func() {
+		dockerEventConsumer, err := daemon.NewDockerEventConsumer(daemonCtx, daemonConfig, dockerClient)
+		if err != nil {
+			logrus.WithError(err).Panic("unable to create docker event consumer")
+		}
 
-	if dockerListener, err := daemon.NewDockerEventListener(daemonConfig); err != nil {
-		logrus.Panic(err)
-	} else {
-		dockerListener.Listen()
-	}
+		if err := dockerEventConsumer.Listen(); err != nil {
+			logrus.WithError(err).Panic()
+		}
+	}()
 
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, os.Kill)
+
+	<-stop
+	daemonExit()
+	time.Sleep(1 * time.Second)
 }

@@ -1,7 +1,9 @@
 package consumer
 
 import (
+	"context"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -19,9 +21,9 @@ type Handler interface {
 	Close() error
 }
 
-func RegisterHttpWebsocketConsumer(name string, handlerFactory func() Handler) http.HandlerFunc {
+func RegisterServerWebsocketConsumer(name string, handlerFactory func() Handler) http.HandlerFunc {
 	var daemonSocketHandler = websocket.Upgrader{}
-	logger := logrus.WithField("consumer-type", "websocket").WithField("consumer-name", name)
+	logger := logrus.WithField("consumer-type", "server-websocket").WithField("consumer-name", name)
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		connection, err := daemonSocketHandler.Upgrade(w, r, nil)
@@ -30,25 +32,83 @@ func RegisterHttpWebsocketConsumer(name string, handlerFactory func() Handler) h
 			return
 		}
 
-		defer connection.Close()
+		err = handleConnection(r.Context(), handlerFactory, logger, connection)
+	}
+}
 
-		handler := handlerFactory()
+func RegisterClientWebsocketConsumer(
+	ctx context.Context,
+	name string,
+	retriesInterval time.Duration,
+	connectionUrl url.URL,
+	handlerFactory func() Handler) error {
 
-		logger.Info("handling messages")
+	logger := logrus.WithField("consumer-type", "client-websocket").WithField("consumer-name", name)
+
+	connection, _, err := websocket.DefaultDialer.DialContext(ctx, connectionUrl.String(), nil)
+	if err != nil {
+		return err
+	}
+
+	for {
+		if err := handleConnection(ctx, handlerFactory, logger, connection); err == context.Canceled {
+			return nil
+		}
+
+		// reconnection logic
 		for {
-			_, message, err := connection.ReadMessage()
+			logger.Info("trying to connect to ", connectionUrl.String())
 
+			connection, _, err = websocket.DefaultDialer.Dial(connectionUrl.String(), nil)
 			if err != nil {
-				if ws.IsClosedError(err) {
-					logger.WithError(err).Info("closing consumer")
-					if err := handler.Close(); err != nil {
-						logger.WithError(err).Error("unable to close handler")
-					}
-					return
-				}
-				logger.WithError(err).Warn("an error occurred while reading a message")
+				time.Sleep(retriesInterval)
 				continue
 			}
+
+			break
+		}
+	}
+}
+
+func handleConnection(
+	ctx context.Context,
+	handlerFactory func() Handler,
+	logger *logrus.Entry,
+	connection *websocket.Conn) error {
+
+	handler := handlerFactory()
+
+	logger.Info("handling messages")
+
+	messages, errors := readMessageAsChannel(connection, ctx)
+
+	defer func() {
+		if err := connection.Close(); err != nil {
+			logger.WithError(err).Error("unable to close connection")
+		}
+	}()
+
+	for {
+		select {
+		case <-ctx.Done():
+			logger.Info("closing consumer due to app termination")
+			if err := handler.Close(); err != nil {
+				logger.WithError(err).Error("unable to close handler")
+			}
+
+			return ctx.Err()
+		case err := <-errors:
+			if ws.IsClosedError(err) {
+				logger.WithError(err).Info("closing consumer due to error")
+				if err := handler.Close(); err != nil {
+					logger.WithError(err).Error("unable to close handler")
+				}
+
+				return err
+			}
+			logger.WithError(err).Warn("an error occurred while reading a message")
+			continue
+		case message := <-messages:
 
 			wsMessage, err := ws.NewMessageFromBytes(message)
 			if err != nil {
@@ -60,11 +120,31 @@ func RegisterHttpWebsocketConsumer(name string, handlerFactory func() Handler) h
 			if err := handler.Handle(*wsMessage, connection); err != nil {
 				logger.WithField("elapsed", time.Now().Sub(before).String()).
 					WithError(err).Error("handler return an error")
-				return
+				continue
 			} else {
 				logger.WithField("elapsed", time.Now().Sub(before).String()).
 					Info("message handled")
 			}
 		}
 	}
+}
+
+func readMessageAsChannel(connection *websocket.Conn, ctx context.Context) (<-chan []byte, <-chan error) {
+	msgCh, errCh := make(chan []byte), make(chan error)
+	go func() {
+		for {
+			_, message, err := connection.ReadMessage()
+			if err != nil {
+				errCh <- err
+			} else {
+				msgCh <- message
+			}
+
+			if err := ctx.Err(); err != nil {
+				return
+			}
+		}
+	}()
+
+	return msgCh, errCh
 }

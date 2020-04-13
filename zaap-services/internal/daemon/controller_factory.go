@@ -13,7 +13,7 @@ import (
 
 type controllerFactoryFunc func() (*websocket.Conn, error)
 
-func controllerFactory(daemonConfig configs.Daemon) controllerFactoryFunc {
+func controllerWebsocketFactory(daemonConfig configs.Daemon) controllerFactoryFunc {
 	daemonProxyUrl := url.URL{Scheme: "ws", Host: daemonConfig.DaemonProxyAddress, Path: "/"}
 
 	return func() (*websocket.Conn, error) {
