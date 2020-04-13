@@ -36,5 +36,8 @@ var reactionDefinition = map[string]map[string]Reactor{
 }
 
 func On(message events.Message) {
-	reactionDefinition[message.Type][message.Action](message)
+	reactor := reactionDefinition[message.Type][message.Action]
+	if reactor != nil {
+		reactor(message)
+	}
 }

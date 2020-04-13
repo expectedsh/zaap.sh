@@ -2,101 +2,53 @@ package controller
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/sirupsen/logrus"
+	"github.com/gorilla/websocket"
+	"github.com/pkg/errors"
 	"github.com/streadway/amqp"
+
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/amqputils/consumer"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws"
 )
 
-type DeploymentConsumer struct {
-	ctx        context.Context
-	connection *amqp.Connection
-	channel    *amqp.Channel
-	deliveries <-chan amqp.Delivery
-	logger     *logrus.Entry
+type deploymentConsumer struct {
+	websocket *websocket.Conn
 }
 
-func NewDeploymentQueueHandler(
+func registerDeploymentConsumer(
+	schedulerToken string,
+	websocket *websocket.Conn,
 	ctx context.Context,
-	connection *amqp.Connection,
-	schedulerToken string) (*DeploymentConsumer, error) {
+	connection *amqp.Connection) error {
 
-	channel, err := connection.Channel()
-	if err != nil {
-		return nil, err
+	deploymentConsumer := deploymentConsumer{websocket: websocket}
+
+	options := []consumer.OptionFn{
+		consumer.WithOptionQueueBindRoutineKey(fmt.Sprintf("deployment-consumer-%s", schedulerToken)),
+		consumer.WithOptionContext(ctx),
+	}
+	if err := consumer.RegisterAmqpConsumer(&deploymentConsumer, connection, "deployment", options...); err != nil {
+		return err
 	}
 
-	if err := channel.ExchangeDeclare(
-		"deployment",
-		amqp.ExchangeDirect,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	); err != nil {
-		return nil, err
-	}
-
-	queue, err := channel.QueueDeclare(
-		"",
-		true,
-		false,
-		true,
-		false,
-		nil,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if err := channel.QueueBind(
-		queue.Name,
-		"deployment-consumer-"+schedulerToken,
-		"deployment",
-		false,
-		nil,
-	); err != nil {
-		return nil, err
-	}
-
-	deliveries, err := channel.Consume(
-		queue.Name,
-		"deployment-consumer-"+schedulerToken,
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
-
-	return &DeploymentConsumer{
-		connection: connection,
-		channel:    channel,
-		deliveries: deliveries,
-		ctx:        ctx,
-		logger:     logrus.WithField("amqp-consumer", "deployment-consumer-"+schedulerToken),
-	}, nil
+	return nil
 }
 
-func (d *DeploymentConsumer) Consume() {
-	d.logger.Info("consuming")
-	for {
-		cancelled := false
-		select {
-		case <-d.ctx.Done():
-			d.logger.Info("terminated")
-			if err := d.channel.Close(); err != nil {
-				d.logger.Info("unable to close correctly")
-			}
-			cancelled = true
-			break
-		case msg := <-d.deliveries:
-			d.logger.WithField("payload", string(msg.Body)).Info("consume message")
-		}
-
-		if cancelled {
-			break
-		}
+func (d *deploymentConsumer) Handle(delivery amqp.Delivery) error {
+	fmt.Println(string(delivery.Body))
+	wsMessage, err := ws.NewMessageRaw(ws.MessageTypeDeployment, delivery.Body)
+	if err != nil {
+		return errors.Wrap(err, "unable to create ws.Message from  amqp.Delivery")
 	}
+
+	if err := d.websocket.WriteJSON(wsMessage); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d *deploymentConsumer) Close() error {
+	return nil
 }

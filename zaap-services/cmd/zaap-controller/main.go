@@ -30,7 +30,7 @@ func main() {
 		logrus.Panic(err)
 	}
 
-	http.HandleFunc("/", controller.DaemonSocketHandler)
+	http.HandleFunc("/", controller.RegisterDaemonWebsocketConsumer(rabbitConnection))
 
 	server := &http.Server{Addr: daemonProxyConfig.Address, Handler: http.DefaultServeMux}
 
@@ -42,9 +42,6 @@ func main() {
 		}
 	}()
 
-	consumeOrExit(rabbitConnection, "consumer-1")
-	consumeOrExit(rabbitConnection, "consumer-2")
-
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)
 
@@ -53,20 +50,9 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		logrus.WithField("closer", "http-server").Panic(err)
+		logrus.WithField("entity", "http-server").Panic(err)
 	}
 	if err := rabbitConnection.Close(); err != nil {
-		logrus.WithField("closer", "rabbit-mq").Panic(err)
-	}
-}
-
-func consumeOrExit(rabbitConnection *amqp.Connection, schedulerToken string) {
-	if consumer, err := controller.NewDeploymentQueueHandler(
-		context.Background(),
-		rabbitConnection,
-		schedulerToken); err != nil {
-		logrus.Panic(err)
-	} else {
-		go consumer.Consume()
+		logrus.WithField("entity", "rabbit-mq").Panic(err)
 	}
 }

@@ -6,40 +6,41 @@ import (
 	"time"
 
 	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/events"
 	"github.com/docker/docker/client"
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 
 	"github.com/remicaumette/zaap.sh/zaap-services/pkg/backoff"
 	"github.com/remicaumette/zaap.sh/zaap-services/pkg/configs"
+	"github.com/remicaumette/zaap.sh/zaap-services/pkg/ws"
 )
 
-type DockerEventListener struct {
-	eventsQueued []events.Message
+type DockerEventConsumer struct {
+	eventsQueued []ws.Message
 	connection   *websocket.Conn
 	logger       *logrus.Entry
 
-	factory ProxyFactoryFunc
+	factory controllerFactoryFunc
 }
 
-func NewDockerEventListener(daemon configs.Daemon) (*DockerEventListener, error) {
-	factory := ProxyFactory(daemon)
+func NewDockerEventListener(daemon configs.Daemon) (*DockerEventConsumer, error) {
+	factory := controllerFactory(daemon)
 
 	conn, err := factory()
 	if err != nil {
 		return nil, err
 	}
 
-	return &DockerEventListener{
-		eventsQueued: make([]events.Message, 0),
+	return &DockerEventConsumer{
+		eventsQueued: make([]ws.Message, 0),
 		connection:   conn,
 		factory:      factory,
-		logger:       logrus.WithField("listener", "docker-event-listener"),
+		logger: logrus.WithField("consumer-type", "docker-event").
+			WithField("consumer-name", "docker-event-listener"),
 	}, nil
 }
 
-func (d *DockerEventListener) Listen() error {
+func (d *DockerEventConsumer) Listen() error {
 
 	cli, err := client.NewEnvClient()
 
@@ -52,9 +53,15 @@ func (d *DockerEventListener) Listen() error {
 	for {
 		select {
 		case msg := <-eventMessage:
-			d.eventsQueued = append(d.eventsQueued, msg)
+			message, err := ws.NewMessage(ws.MessageTypeDockerEvent, msg)
+			if err != nil {
+				d.logger.WithError(err).Warn("unable to create ws.Message")
+				continue
+			}
 
+			d.eventsQueued = append(d.eventsQueued, *message)
 			d.SendToDaemonProxy()
+
 			break
 		case err := <-eventError:
 			if err == io.EOF {
@@ -64,10 +71,9 @@ func (d *DockerEventListener) Listen() error {
 	}
 }
 
-func (d *DockerEventListener) SendToDaemonProxy() {
+func (d *DockerEventConsumer) SendToDaemonProxy() {
 
 	for _, e := range d.eventsQueued {
-
 		if err := d.connection.WriteJSON(e); err != nil {
 
 			err := backoff.New("try connecting to daemon controller", func() error {
