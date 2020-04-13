@@ -21,14 +21,20 @@ type daemonWebsocketConsumer struct {
 	deploymentConsumerCtx          context.Context
 	deploymentConsumerCtxCanceller context.CancelFunc
 	hasDeploymentConsumer          bool
-	conn                           *amqp.Connection
-	logger                         *logrus.Entry
+
+	conn   *amqp.Connection
+	logger *logrus.Entry
+}
+
+func (d *daemonWebsocketConsumer) OnConnectionCreation(conn *websocket.Conn) error {
+	return nil
 }
 
 func RegisterDaemonWebsocketConsumer(connection *amqp.Connection) http.HandlerFunc {
-	ctx, cancelFunc := context.WithCancel(context.Background())
 	const name = "daemon-websocket"
 	factory := func() consumer.Handler {
+		ctx, cancelFunc := context.WithCancel(context.Background())
+
 		return &daemonWebsocketConsumer{
 			deploymentConsumerCtx:          ctx,
 			deploymentConsumerCtxCanceller: cancelFunc,
@@ -44,6 +50,10 @@ func RegisterDaemonWebsocketConsumer(connection *amqp.Connection) http.HandlerFu
 func (d *daemonWebsocketConsumer) Handle(message ws.Message, conn *websocket.Conn) error {
 	switch message.MessageType {
 	case ws.MessageTypeSchedulerToken:
+
+		// in this case we need to register a deploymentConsumer to listen all deployments
+		// associated with this scheduler token.
+
 		if !d.hasDeploymentConsumer {
 			token := scheduler.Token{}
 			if err := json.Unmarshal(message.Payload, &token); err != nil {

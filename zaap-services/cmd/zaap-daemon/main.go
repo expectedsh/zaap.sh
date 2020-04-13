@@ -34,7 +34,7 @@ func main() {
 	daemonCtx, daemonExit := context.WithCancel(context.Background())
 
 	go func() {
-		err := daemon.RegisterControllerConsumer(daemonCtx, controllerWsUrl, dockerClient)
+		err := daemon.RegisterControllerConsumer(daemonCtx, daemonConfig.SchedulerToken, controllerWsUrl, dockerClient)
 		if err != nil {
 			logrus.WithError(err).Panic("unable to communicate with controller websocket")
 		}

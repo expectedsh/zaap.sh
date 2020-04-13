@@ -7,7 +7,7 @@ type Application struct {
 	Environment map[string]string `json:"environment"`
 	Image       string            `json:"image"`
 	Name        string            `json:"name"`
-	State       int               `json:"state"`
+	State       string            `json:"state"`
 	CreatedAt   time.Time         `json:"created_at"`
 	UpdatedAt   time.Time         `json:"updated_at"`
 	UserID      string            `json:"user_id"`
@@ -15,5 +15,5 @@ type Application struct {
 
 type DeploymentPayload struct {
 	SchedulerToken string      `json:"scheduler_token"`
-	Application    Application `json:"applications"`
+	Application    Application `json:"application"`
 }

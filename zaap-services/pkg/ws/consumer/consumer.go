@@ -17,6 +17,8 @@ type Handler interface {
 	// Handle is called when a message is ready to be handled
 	Handle(message ws.Message, conn *websocket.Conn) error
 
+	OnConnectionCreation(conn *websocket.Conn) error
+
 	// Close is called when the consumer is done (context cancellation)
 	Close() error
 }
@@ -32,7 +34,9 @@ func RegisterServerWebsocketConsumer(name string, handlerFactory func() Handler)
 			return
 		}
 
-		err = handleConnection(r.Context(), handlerFactory, logger, connection)
+		handler := handlerFactory()
+
+		err = handleConnection(r.Context(), handler, logger, connection)
 	}
 }
 
@@ -45,38 +49,42 @@ func RegisterClientWebsocketConsumer(
 
 	logger := logrus.WithField("consumer-type", "client-websocket").WithField("consumer-name", name)
 
-	connection, _, err := websocket.DefaultDialer.DialContext(ctx, connectionUrl.String(), nil)
-	if err != nil {
-		return err
-	}
-
 	for {
-		if err := handleConnection(ctx, handlerFactory, logger, connection); err == context.Canceled {
-			return nil
-		}
+		handler := handlerFactory()
+
+		var (
+			connection *websocket.Conn
+			err        error
+		)
 
 		// reconnection logic
 		for {
-			logger.Info("trying to connect to ", connectionUrl.String())
-
 			connection, _, err = websocket.DefaultDialer.Dial(connectionUrl.String(), nil)
 			if err != nil {
 				time.Sleep(retriesInterval)
+				logger.Info("trying to connect to ", connectionUrl.String())
 				continue
 			}
 
 			break
+		}
+
+		if err := handler.OnConnectionCreation(connection); err != nil {
+			logger.WithError(err).Error("connection creation error", connectionUrl.String())
+			continue
+		}
+
+		if err := handleConnection(ctx, handler, logger, connection); err == context.Canceled {
+			return nil
 		}
 	}
 }
 
 func handleConnection(
 	ctx context.Context,
-	handlerFactory func() Handler,
+	handler Handler,
 	logger *logrus.Entry,
 	connection *websocket.Conn) error {
-
-	handler := handlerFactory()
 
 	logger.Info("handling messages")
 
