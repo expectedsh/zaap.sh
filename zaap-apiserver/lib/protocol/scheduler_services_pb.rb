@@ -15,6 +15,8 @@ module Scheduler
 
     rpc :TestConnection, TestConnectionRequest, TestConnectionResponse
     rpc :DeployApplication, DeployApplicationRequest, DeployApplicationResponse
+    rpc :DeleteApplication, DeleteApplicationRequest, DeleteApplicationResponse
+    rpc :GetApplicationLogs, GetApplicationLogsRequest, stream(GetApplicationLogsResponse)
   end
 
   Stub = Service.rpc_stub_class

@@ -24,7 +24,7 @@ class User < ApplicationRecord
   validate :scheduler_url, :check_scheduler_connection, on: :update
   has_secure_password
 
-  has_many :applications
+  has_many :applications, dependent: :destroy
 
   def issue_token
     JWT.encode ({ user_id: id, exp: 24.hours.from_now.to_i }),
@@ -38,10 +38,9 @@ class User < ApplicationRecord
   def check_scheduler_connection
     req = TestConnectionRequest.new token: scheduler_token
     res = scheduler_connection.test_connection req
-    errors.add(:scheduler_url, 'invalid scheduler token') unless res.ok
-  rescue StandardError => e
-    pp e
-    errors.add(:scheduler_url, 'connection failed')
+    errors.add :scheduler_url, 'invalid scheduler token' unless res.ok
+  rescue StandardError
+    errors.add :scheduler_url, 'connection failed'
   end
 
   private

@@ -5,6 +5,9 @@ import {
   DEPLOY_APPLICATION_PENDING,
   DEPLOY_APPLICATION_SUCCESS,
   DEPLOY_APPLICATION_ERROR,
+  DELETE_APPLICATION_PENDING,
+  DELETE_APPLICATION_SUCCESS,
+  DELETE_APPLICATION_ERROR,
 } from './constants'
 
 const initialState = {
@@ -12,7 +15,7 @@ const initialState = {
   application: null,
   error: null,
   deployPending: false,
-  deployError: null,
+  deletePending: false,
 }
 
 export default function (state = initialState, action) {
@@ -39,20 +42,12 @@ export default function (state = initialState, action) {
     case DEPLOY_APPLICATION_PENDING:
       return {
         ...state,
-        deployPending: true,
+        deployPending: action.payload,
       }
-    case DEPLOY_APPLICATION_SUCCESS:
+    case DELETE_APPLICATION_PENDING:
       return {
         ...state,
-        deployPending: false,
-        application: action.payload,
-        deployError: null,
-      }
-    case DEPLOY_APPLICATION_ERROR:
-      return {
-        ...state,
-        deployPending: false,
-        deployError: action.error,
+        deletePending: action.payload,
       }
     default:
       return state

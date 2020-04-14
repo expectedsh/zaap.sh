@@ -5,7 +5,7 @@ protoc \
   -I. \
   -I/usr/local/include \
   -I$GOPATH/src \
-  --go_out=plugins=grpc:../zaap-scheduler/protocol \
+  --go_out=plugins=grpc:../zaap-scheduler/pkg/protocol \
   $FILES
 
 grpc_tools_ruby_protoc \

@@ -26,7 +26,7 @@ const cssLoader = (customLoaders = [], cssLoaderOptions = {}) => [
 ]
 
 module.exports = {
-  entry: join(__dirname, 'src', 'index.js'),
+  entry: ['core-js', join(__dirname, 'src', 'index.js')],
   context: join(__dirname, 'src'),
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -62,7 +62,13 @@ module.exports = {
             ],
             plugins: [
               "@babel/plugin-proposal-nullish-coalescing-operator",
-              "@babel/plugin-proposal-optional-chaining"
+              "@babel/plugin-proposal-optional-chaining",
+              [
+                "@babel/plugin-transform-runtime",
+                {
+                  "regenerator": true
+                }
+              ],
             ],
           },
         }

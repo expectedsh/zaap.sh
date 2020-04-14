@@ -20,22 +20,22 @@ class Application < ApplicationRecord
   after_save :request_deployment
   before_destroy :request_deletion
 
-  validates :name, presence: true, length: {minimum: 2, maximum: 32}
+  validates :name, presence: true, length: { minimum: 2, maximum: 32 }
   validates :image, presence: true
 
   enum state: %i[unknown stopped starting running]
 
-  belongs_to :user, dependent: :destroy
+  belongs_to :user
 
   def request_deployment
     req = DeployApplicationRequest.new id: id, name: name, image: image,
                                        replicas: replicas,
                                        environment: environment
-    res = user.scheduler_connection.deploy_application req
-    pp res
+    user.scheduler_connection.deploy_application req
   end
 
   def request_deletion
-
+    req = DeleteApplicationRequest.new id: id
+    user.scheduler_connection.delete_application req
   end
 end

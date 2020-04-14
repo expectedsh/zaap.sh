@@ -11,15 +11,39 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "TestConnectionResponse" do
       optional :ok, :bool, 1
     end
-    add_message "DeployApplicationRequest" do
+    add_message "Application" do
       optional :id, :string, 1
       optional :name, :string, 2
       optional :image, :string, 3
       optional :replicas, :uint32, 4
       map :environment, :string, :string, 5
     end
+    add_message "DeployApplicationRequest" do
+      optional :application, :message, 1, "Application"
+    end
     add_message "DeployApplicationResponse" do
-      optional :state, :enum, 1, "ApplicationState"
+    end
+    add_message "DeleteApplicationRequest" do
+      optional :id, :string, 1
+    end
+    add_message "DeleteApplicationResponse" do
+    end
+    add_message "GetApplicationLogsRequest" do
+      optional :id, :string, 1
+    end
+    add_message "Timestamp" do
+      optional :second, :int64, 1
+      optional :nanoSecond, :int64, 2
+    end
+    add_message "GetApplicationLogsResponse" do
+      optional :output, :enum, 1, "GetApplicationLogsResponse.Output"
+      optional :time, :message, 2, "Timestamp"
+      optional :taskId, :string, 3
+      optional :message, :string, 4
+    end
+    add_enum "GetApplicationLogsResponse.Output" do
+      value :STDOUT, 0
+      value :STDERR, 1
     end
     add_enum "ApplicationState" do
       value :UNKNOWN, 0
@@ -32,6 +56,13 @@ end
 
 TestConnectionRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("TestConnectionRequest").msgclass
 TestConnectionResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("TestConnectionResponse").msgclass
+Application = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("Application").msgclass
 DeployApplicationRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeployApplicationRequest").msgclass
 DeployApplicationResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeployApplicationResponse").msgclass
+DeleteApplicationRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeleteApplicationRequest").msgclass
+DeleteApplicationResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeleteApplicationResponse").msgclass
+GetApplicationLogsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("GetApplicationLogsRequest").msgclass
+Timestamp = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("Timestamp").msgclass
+GetApplicationLogsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("GetApplicationLogsResponse").msgclass
+GetApplicationLogsResponse::Output = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("GetApplicationLogsResponse.Output").enummodule
 ApplicationState = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("ApplicationState").enummodule

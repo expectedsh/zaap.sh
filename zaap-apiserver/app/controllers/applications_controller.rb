@@ -24,6 +24,11 @@ class ApplicationsController < ApplicationController
     render status: :unprocessable_entity, json: @current_application.errors
   end
 
+  def destroy
+    @current_application.destroy
+    head :no_content
+  end
+
   def deploy
     @current_application.request_deployment
   rescue StandardError => e
@@ -38,6 +43,6 @@ class ApplicationsController < ApplicationController
 
   def current_application!
     @current_application = Application.joins(:user).find_by(id: params[:id], user_id: @current_user.id)
-    head 404 unless @current_application
+    head :not_found unless @current_application
   end
 end

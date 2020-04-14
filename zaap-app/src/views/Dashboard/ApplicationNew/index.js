@@ -7,11 +7,11 @@ import classnames from "classnames/bind"
 import { createApplication } from "~/store/applications/actions"
 import TextField from "~/components/TextField"
 import Button from "~/components/Button"
-import style from "./NewApp.module.scss"
+import style from "./ApplicationNew.module.scss"
 
 const cx = classnames.bind(style)
 
-function ListApps() {
+function ApplicationNew() {
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -48,4 +48,4 @@ function ListApps() {
   )
 }
 
-export default ListApps
+export default ApplicationNew

@@ -6,8 +6,8 @@ import { logout } from "~/store/authentication/actions"
 import { fetchUser } from "~/store/user/actions"
 import Alert from "~/components/Alert"
 import Settings from "~/views/Dashboard/Settings"
-import ListApps from "~/views/Dashboard/ListApps"
-import NewApp from "~/views/Dashboard/NewApp"
+import ApplicationNew from "~/views/Dashboard/ApplicationNew"
+import ApplicationList from "~/views/Dashboard/ApplicationList"
 import ApplicationShow from "~/views/Dashboard/ApplicationShow"
 import logo from "~/assets/images/logo.svg"
 import style from "./Dashboard.module.scss"
@@ -38,9 +38,9 @@ function Dashboard() {
     return user ? (
       <Switch>
         <Route path="/settings" component={Settings}/>
-        <Route path="/apps/new" component={NewApp}/>
+        <Route path="/apps/new" component={ApplicationNew}/>
         <Route path="/apps/:id" component={ApplicationShow}/>
-        <Route path="/apps" component={ListApps}/>
+        <Route path="/apps" component={ApplicationList}/>
         <Redirect to="/apps"/>
       </Switch>
     ) : null

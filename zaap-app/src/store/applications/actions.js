@@ -4,7 +4,11 @@ import {
   FETCH_APPLICATIONS_SUCCESS,
   FETCH_APPLICATIONS_ERROR,
   ADD_APPLICATION,
+  UPDATE_APPLICATION,
+  DELETE_APPLICATION,
+  CREATE_APPLICATION_PENDING,
 } from "./constants"
+import { DELETE_APPLICATION_PENDING } from "~/store/application/constants"
 
 export function fetchApplications() {
   return dispatch => {
@@ -23,11 +27,13 @@ export function fetchApplications() {
 
 export function createApplication({ name, image }) {
   return dispatch => {
+    dispatch(createApplicationPending(true))
     return api.post("/applications", { name, image })
       .then(res => {
         dispatch(addApplication(res.data.application))
         return res.data.application
       })
+      .finally(() => dispatch(createApplicationPending(false)))
   }
 }
 
@@ -54,6 +60,27 @@ export function fetchApplicationsError(error) {
 export function addApplication(payload) {
   return {
     type: ADD_APPLICATION,
+    payload,
+  }
+}
+
+export function updateApplication(payload) {
+  return {
+    type: UPDATE_APPLICATION,
+    payload,
+  }
+}
+
+export function deleteApplication(payload) {
+  return {
+    type: DELETE_APPLICATION,
+    payload,
+  }
+}
+
+export function createApplicationPending(payload) {
+  return {
+    type: CREATE_APPLICATION_PENDING,
     payload,
   }
 }

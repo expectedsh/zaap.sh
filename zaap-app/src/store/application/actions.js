@@ -1,11 +1,14 @@
 import api from "~/utils/api"
 import {
+  updateApplication as updateApplicationFromList,
+  deleteApplication as deleteApplicationFromList
+} from "~/store/applications/actions"
+import {
   FETCH_APPLICATION_PENDING,
   FETCH_APPLICATION_SUCCESS,
   FETCH_APPLICATION_ERROR,
-  DEPLOY_APPLICATION_ERROR,
-  DEPLOY_APPLICATION_SUCCESS,
   DEPLOY_APPLICATION_PENDING,
+  DELETE_APPLICATION_PENDING,
 } from "./constants"
 
 export function fetchApplication({ id }) {
@@ -23,18 +26,26 @@ export function fetchApplication({ id }) {
   }
 }
 
+export function deleteApplication({ id }) {
+  return async dispatch => {
+    dispatch(deleteApplicationPending(true))
+    return api.delete(`/applications/${id}`)
+      .then(() => {
+        dispatch(deleteApplicationFromList(id))
+      })
+      .finally(() => dispatch(deleteApplicationPending(false)))
+  }
+}
+
 export function deployApplication({ id }) {
   return dispatch => {
-    dispatch(deployApplicationPending())
+    dispatch(deployApplicationPending(true))
     return api.post(`/applications/${id}/deploy`)
       .then(res => {
-        dispatch(deployApplicationSuccess(res.data.application))
+        dispatch(updateApplicationFromList(res.data.application))
         return res.data.application
       })
-      .catch(error => {
-        dispatch(deployApplicationError(error))
-        return Promise.reject(error)
-      })
+      .finally(() => dispatch(deployApplicationPending(false)))
   }
 }
 
@@ -58,22 +69,16 @@ export function fetchApplicationError(error) {
   }
 }
 
-export function deployApplicationPending() {
+export function deleteApplicationPending(payload) {
   return {
-    type: DEPLOY_APPLICATION_PENDING,
-  }
-}
-
-export function deployApplicationSuccess(payload) {
-  return {
-    type: DEPLOY_APPLICATION_SUCCESS,
+    type: DELETE_APPLICATION_PENDING,
     payload,
   }
 }
 
-export function deployApplicationError(error) {
+export function deployApplicationPending(payload) {
   return {
-    type: DEPLOY_APPLICATION_ERROR,
-    error,
+    type: DEPLOY_APPLICATION_PENDING,
+    payload,
   }
 }

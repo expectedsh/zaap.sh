@@ -4,14 +4,22 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchApplications } from "~/store/applications/actions"
 import ApplicationStateBadge from "~/components/ApplicationStateBadge"
 import Alert from "~/components/Alert"
+import { deleteApplication } from "~/store/application/actions"
+import { toast } from "react-toastify"
 
-function ListApps() {
+function ApplicationList() {
   const dispatch = useDispatch()
   const { pending, applications, error } = useSelector(state => state.applications)
 
   useEffect(() => {
     dispatch(fetchApplications())
   }, [])
+
+  function remove(id) {
+    dispatch(deleteApplication({ id }))
+      .then(() => toast.success('Application deleted.'))
+      .catch(err => toast.error(err.data?.message || err.response.statusText))
+  }
 
   function renderBody() {
     if (pending) {
@@ -40,6 +48,7 @@ function ListApps() {
               </td>
               <td>
                 <Link to={`/apps/${application.id}`}>View</Link>
+                <div onClick={() => remove(application.id)}>Delete</div>
               </td>
             </tr>
           ))}
@@ -63,4 +72,4 @@ function ListApps() {
   )
 }
 
-export default ListApps
+export default ApplicationList
