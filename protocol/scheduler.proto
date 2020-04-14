@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "protocol";
+
+service Scheduler {
+  rpc TestConnection (TestConnectionRequest) returns (TestConnectionResponse) {
+  }
+
+  rpc DeployApplication (DeployApplicationRequest) returns (DeployApplicationResponse) {
+  }
+}
+
+message TestConnectionRequest {
+  string token = 1;
+}
+
+message TestConnectionResponse {
+  bool ok = 1;
+}
+
+enum ApplicationState {
+  UNKNOWN = 0;
+  STOPPED = 1;
+  STARTING = 2;
+  RUNNING = 3;
+}
+
+message DeployApplicationRequest {
+  string id = 1;
+  string name = 2;
+  string image = 3;
+  uint32 replicas = 4;
+  map<string, string> environment = 5;
+}
+
+message DeployApplicationResponse {
+  ApplicationState state = 1;
+}

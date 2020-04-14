@@ -14,13 +14,13 @@ function ProfileForm() {
   function onSubmit(values) {
     return dispatch(updateUser(values))
       .then(() => {
-        toast.success('Profile updated.')
+        toast.success("Profile updated.")
       })
       .catch(error => {
         if (error.response.status === 422) {
           return error.data
         }
-        toast.error(error.response.statusText);
+        toast.error(error.response.statusText)
       })
   }
 
@@ -42,12 +42,38 @@ function ProfileForm() {
 }
 
 function SchedulerForm() {
+  const dispatch = useDispatch()
   const user = useSelector(state => state.user.user)
 
+  function onSubmit(values) {
+    return dispatch(updateUser(values))
+      .then(() => {
+        toast.success("Scheduler updated.")
+      })
+      .catch(error => {
+        if (error.response.status === 422) {
+          return error.data
+        }
+        toast.error(error.response.statusText)
+      })
+  }
+
   return (
-    <>
-      <TextField name="schedulerToken" label="Scheduler token" value={user.schedulerToken} disabled/>
-    </>
+    <Form
+      onSubmit={onSubmit}
+      initialValues={user}
+      render={({ handleSubmit, pristine }) => (
+        <form onSubmit={handleSubmit}>
+          <Field component={TextField} name="schedulerUrl" label="Scheduler URL"
+                 value={user.schedulerUrl}/>
+          <Field component={TextField} name="schedulerToken" label="Scheduler token"
+                 value={user.schedulerToken} disabled/>
+          <Button className="btn btn-success" type="submit" disabled={pristine}>
+            Update
+          </Button>
+        </form>
+      )}
+    />
   )
 }
 

@@ -35,7 +35,7 @@ function ApplicationShow() {
     if (application) {
       dispatch(deployApplication({ id: application.id }))
         .then(() => toast.success('Deployment requested'))
-        .catch(err => toast.error(err.response.statusText))
+        .catch(err => toast.error(err.data?.message || err.response.statusText))
     }
   }
 
@@ -46,7 +46,7 @@ function ApplicationShow() {
           Application
         </h1>
         <Button className="btn btn-success" loading={deployPending} onClick={deploy}>
-          Request deployment
+          Trigger deployment
         </Button>
       </div>
       {renderBody()}

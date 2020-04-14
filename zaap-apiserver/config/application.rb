@@ -22,6 +22,9 @@ module ZaapApiserver
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+    # back to classic mode for grpc
+    # https://guides.rubyonrails.org/autoloading_and_reloading_constants.html
+    config.autoloader = :classic
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -34,6 +37,8 @@ module ZaapApiserver
       end
     end
 
+    config.eager_load_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join('lib/protocol')
     config.rabbitmq = config_for(:rabbitmq)
 
     # Only loads a smaller set of middleware suitable for API only apps.

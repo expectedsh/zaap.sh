@@ -7,6 +7,7 @@
 #  first_name      :string
 #  password_digest :string
 #  scheduler_token :uuid             not null
+#  scheduler_url   :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

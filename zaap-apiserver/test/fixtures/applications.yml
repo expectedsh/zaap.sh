@@ -6,7 +6,8 @@
 #  environment :json
 #  image       :string           not null
 #  name        :string           not null
-#  state       :integer          default(0), not null
+#  replicas    :integer          default(1), not null
+#  state       :integer          default("unknown"), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  user_id     :uuid             not null

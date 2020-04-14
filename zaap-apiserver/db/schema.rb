@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_12_162018) do
+ActiveRecord::Schema.define(version: 2020_04_13_183149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2020_04_12_162018) do
     t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "replicas", default: 1, null: false
     t.index ["user_id"], name: "index_applications_on_user_id"
   end
 
@@ -35,6 +36,7 @@ ActiveRecord::Schema.define(version: 2020_04_12_162018) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "scheduler_token", default: -> { "gen_random_uuid()" }, null: false
+    t.string "scheduler_url"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["scheduler_token"], name: "index_users_on_scheduler_token", unique: true
   end
