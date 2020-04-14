@@ -6,6 +6,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/api/types/swarm"
+	"io"
 )
 
 func (d *Docker) ServiceGetFromApplication(ctx context.Context, id string) (*swarm.Service, error) {
@@ -35,4 +36,14 @@ func (d *Docker) ServiceUpdate(ctx context.Context, spec swarm.ServiceSpec, serv
 
 func (d *Docker) ServiceDelete(ctx context.Context, service *swarm.Service) error {
 	return d.Client.ServiceRemove(ctx, service.ID)
+}
+
+func (d *Docker) ServiceGetLogs(ctx context.Context, service *swarm.Service) (io.ReadCloser, error) {
+	return d.Client.ServiceLogs(ctx, service.ID, types.ContainerLogsOptions{
+		ShowStdout: true,
+		ShowStderr: true,
+		Follow:     true,
+		Details:    true,
+		Timestamps: true,
+	})
 }

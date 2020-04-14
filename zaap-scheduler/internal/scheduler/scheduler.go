@@ -1,7 +1,9 @@
 package scheduler
 
 import (
+	"bufio"
 	"context"
+	"errors"
 	"github.com/remicaumette/zaap.sh/zaap-scheduler/pkg/docker"
 	"github.com/remicaumette/zaap.sh/zaap-scheduler/pkg/protocol"
 	"github.com/sirupsen/logrus"
@@ -65,5 +67,46 @@ func (s *Server) DeleteApplication(ctx context.Context, r *protocol.DeleteApplic
 }
 
 func (s *Server) GetApplicationLogs(r *protocol.GetApplicationLogsRequest, srv protocol.Scheduler_GetApplicationLogsServer) error {
-	return nil
+	log := logrus.WithField("application", r.Id)
+	log.Info("getting logs application")
+
+	currentApp, err := s.dockerClient.ServiceGetFromApplication(srv.Context(), r.Id)
+	if err != nil {
+		return err
+	} else if currentApp == nil {
+		return errors.New("application not found")
+	}
+
+	logs, err := s.dockerClient.ServiceGetLogs(srv.Context(), currentApp)
+	if err != nil {
+		return err
+	}
+	defer logs.Close()
+
+	reader := docker.NewLogReader(logs)
+	scanner := bufio.NewScanner(reader)
+	for scanner.Scan() {
+		if err := srv.Send(readLogLine(reader)); err != nil {
+			return err
+		}
+	}
+
+	return scanner.Err()
+}
+
+func readLogLine(reader *docker.LogReader) *protocol.GetApplicationLogsResponse {
+	output := protocol.GetApplicationLogsResponse_STDOUT
+	if reader.Output == docker.OutputStderr {
+		output = protocol.GetApplicationLogsResponse_STDERR
+	}
+
+	return &protocol.GetApplicationLogsResponse{
+		Output: output,
+		TaskId: reader.Labels["com.docker.swarm.task.id"],
+		Time: &protocol.Timestamp{
+			Second:     int64(reader.Time.Second()),
+			NanoSecond: int64(reader.Time.Nanosecond()),
+		},
+		Message: reader.Message,
+	}
 }
