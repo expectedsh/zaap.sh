@@ -1,4 +1,3 @@
-import { EventSource } from 'event-source-polyfill'
 import api, { ENDPOINT } from "~/utils/api"
 import {
   updateApplication as updateApplicationFromList,

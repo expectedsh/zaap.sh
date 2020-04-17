@@ -33,25 +33,7 @@ class ApplicationsController < ApplicationController
   end
 
   def logs
-    response.headers['Content-Type'] = 'text/event-stream'
-    sse = SSE.new response.stream, retry: 300, event: 'logs'
-    logs = @current_application.request_logs
-    logs.each do |log_line|
-      pp ({
-          output: log_line.output,
-          time: Time.parse(log_line.time),
-          task_id: log_line.taskId,
-          message: log_line.message
-      })
-      sse.write({
-                  output: log_line.output,
-                  time: Time.parse(log_line.time),
-                  task_id: log_line.taskId,
-                  message: log_line.message
-                })
-    end
-  ensure
-    sse.close
+
   end
 
   def deploy
