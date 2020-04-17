@@ -3,9 +3,9 @@
 # Table name: users
 #
 #  id              :uuid             not null, primary key
-#  email           :string
-#  first_name      :string
-#  password_digest :string
+#  email           :string           not null
+#  first_name      :string           not null
+#  password_digest :string           not null
 #  scheduler_token :uuid             not null
 #  scheduler_url   :string
 #  created_at      :datetime         not null
@@ -32,11 +32,11 @@ class User < ApplicationRecord
   end
 
   def scheduler_connection
-    Scheduler::Stub.new scheduler_url, :this_channel_is_insecure
+    Protocol::Scheduler::Stub.new scheduler_url, :this_channel_is_insecure
   end
 
   def check_scheduler_connection
-    req = TestConnectionRequest.new token: scheduler_token
+    req = Protocol::TestConnectionRequest.new token: scheduler_token
     res = scheduler_connection.test_connection req
     errors.add :scheduler_url, 'invalid scheduler token' unless res.ok
   rescue StandardError

@@ -27,15 +27,19 @@ class Application < ApplicationRecord
 
   belongs_to :user
 
+  def to_grpc
+    Protocol::Application.new id: id, name: name, image: image,
+                          replicas: replicas,
+                          environment: environment
+  end
+
   def request_deployment
-    req = DeployApplicationRequest.new id: id, name: name, image: image,
-                                       replicas: replicas,
-                                       environment: environment
+    req = Protocol::DeployApplicationRequest.new application: to_grpc
     user.scheduler_connection.deploy_application req
   end
 
   def request_deletion
-    req = DeleteApplicationRequest.new id: id
+    req = Protocol::DeleteApplicationRequest.new id: id
     user.scheduler_connection.delete_application req
   end
 end

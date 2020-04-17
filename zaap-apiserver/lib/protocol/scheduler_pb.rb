@@ -5,47 +5,47 @@ require 'google/protobuf'
 
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("scheduler.proto", :syntax => :proto3) do
-    add_message "TestConnectionRequest" do
+    add_message "protocol.TestConnectionRequest" do
       optional :token, :string, 1
     end
-    add_message "TestConnectionResponse" do
+    add_message "protocol.TestConnectionResponse" do
       optional :ok, :bool, 1
     end
-    add_message "Application" do
+    add_message "protocol.Application" do
       optional :id, :string, 1
       optional :name, :string, 2
       optional :image, :string, 3
       optional :replicas, :uint32, 4
       map :environment, :string, :string, 5
     end
-    add_message "DeployApplicationRequest" do
-      optional :application, :message, 1, "Application"
+    add_message "protocol.DeployApplicationRequest" do
+      optional :application, :message, 1, "protocol.Application"
     end
-    add_message "DeployApplicationResponse" do
+    add_message "protocol.DeployApplicationResponse" do
     end
-    add_message "DeleteApplicationRequest" do
+    add_message "protocol.DeleteApplicationRequest" do
       optional :id, :string, 1
     end
-    add_message "DeleteApplicationResponse" do
+    add_message "protocol.DeleteApplicationResponse" do
     end
-    add_message "GetApplicationLogsRequest" do
+    add_message "protocol.GetApplicationLogsRequest" do
       optional :id, :string, 1
     end
-    add_message "Timestamp" do
+    add_message "protocol.Timestamp" do
       optional :second, :int64, 1
       optional :nanoSecond, :int64, 2
     end
-    add_message "GetApplicationLogsResponse" do
-      optional :output, :enum, 1, "GetApplicationLogsResponse.Output"
-      optional :time, :message, 2, "Timestamp"
+    add_message "protocol.GetApplicationLogsResponse" do
+      optional :output, :enum, 1, "protocol.GetApplicationLogsResponse.Output"
+      optional :time, :message, 2, "protocol.Timestamp"
       optional :taskId, :string, 3
       optional :message, :string, 4
     end
-    add_enum "GetApplicationLogsResponse.Output" do
+    add_enum "protocol.GetApplicationLogsResponse.Output" do
       value :STDOUT, 0
       value :STDERR, 1
     end
-    add_enum "ApplicationState" do
+    add_enum "protocol.ApplicationState" do
       value :UNKNOWN, 0
       value :STOPPED, 1
       value :STARTING, 2
@@ -54,15 +54,17 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   end
 end
 
-TestConnectionRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("TestConnectionRequest").msgclass
-TestConnectionResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("TestConnectionResponse").msgclass
-Application = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("Application").msgclass
-DeployApplicationRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeployApplicationRequest").msgclass
-DeployApplicationResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeployApplicationResponse").msgclass
-DeleteApplicationRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeleteApplicationRequest").msgclass
-DeleteApplicationResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DeleteApplicationResponse").msgclass
-GetApplicationLogsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("GetApplicationLogsRequest").msgclass
-Timestamp = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("Timestamp").msgclass
-GetApplicationLogsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("GetApplicationLogsResponse").msgclass
-GetApplicationLogsResponse::Output = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("GetApplicationLogsResponse.Output").enummodule
-ApplicationState = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("ApplicationState").enummodule
+module Protocol
+  TestConnectionRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.TestConnectionRequest").msgclass
+  TestConnectionResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.TestConnectionResponse").msgclass
+  Application = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.Application").msgclass
+  DeployApplicationRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.DeployApplicationRequest").msgclass
+  DeployApplicationResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.DeployApplicationResponse").msgclass
+  DeleteApplicationRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.DeleteApplicationRequest").msgclass
+  DeleteApplicationResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.DeleteApplicationResponse").msgclass
+  GetApplicationLogsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.GetApplicationLogsRequest").msgclass
+  Timestamp = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.Timestamp").msgclass
+  GetApplicationLogsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.GetApplicationLogsResponse").msgclass
+  GetApplicationLogsResponse::Output = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.GetApplicationLogsResponse.Output").enummodule
+  ApplicationState = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.ApplicationState").enummodule
+end

@@ -29,10 +29,22 @@ ActiveRecord::Schema.define(version: 2020_04_13_183149) do
     t.index ["user_id"], name: "index_applications_on_user_id"
   end
 
+  create_table "apps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "image", null: false
+    t.json "environment"
+    t.integer "state", default: 0, null: false
+    t.uuid "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "replicas", default: 1, null: false
+    t.index ["user_id"], name: "index_apps_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "email"
-    t.string "password_digest"
-    t.string "first_name"
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.string "first_name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "scheduler_token", default: -> { "gen_random_uuid()" }, null: false
