@@ -42,4 +42,9 @@ class Application < ApplicationRecord
     req = Protocol::DeleteApplicationRequest.new id: id
     user.scheduler_connection.delete_application req
   end
+
+  def request_logs
+    req = Protocol::GetApplicationLogsRequest.new id: id
+    user.scheduler_connection.get_application_logs req
+  end
 end

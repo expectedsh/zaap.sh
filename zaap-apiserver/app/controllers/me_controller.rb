@@ -1,5 +1,5 @@
 class MeController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user
 
   def update
     return if @current_user.update user_params
@@ -10,6 +10,6 @@ class MeController < ApplicationController
   private
 
   def user_params
-    params.permit(%i[first_name email scheduler_url])
+    params.permit %i[first_name email scheduler_url]
   end
 end

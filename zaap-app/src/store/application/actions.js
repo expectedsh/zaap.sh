@@ -1,4 +1,5 @@
-import api from "~/utils/api"
+import { EventSource } from 'event-source-polyfill'
+import api, { ENDPOINT } from "~/utils/api"
 import {
   updateApplication as updateApplicationFromList,
   deleteApplication as deleteApplicationFromList
@@ -46,6 +47,13 @@ export function deployApplication({ id }) {
         return res.data.application
       })
       .finally(() => dispatch(deployApplicationPending(false)))
+  }
+}
+
+export function fetchApplicationLogs({ id }) {
+  return async (dispatch, getState) => {
+    const token = getState().authentication.token
+    return new EventSource(`${ENDPOINT}/applications/${id}/logs?token=${token}`)
   }
 }
 

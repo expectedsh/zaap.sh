@@ -2,8 +2,10 @@ import axios from "axios"
 import humps from "humps"
 import store from "~/store"
 
+export const ENDPOINT = process.env.API_ENDPOINT || "http://localhost:3000"
+
 const client = axios.create({
-  baseURL: process.env.API_ENDPOINT || "http://localhost:3000/",
+  baseURL: ENDPOINT,
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",

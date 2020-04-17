@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "core-js": "^3.6.5",
+    "event-source-polyfill": "^1.0.12",
     "final-form": "^4.19.1",
     "history": "^4.10.1",
     "humps": "^2.0.1",

@@ -8,6 +8,7 @@ import (
 	"github.com/remicaumette/zaap.sh/zaap-scheduler/pkg/protocol"
 	"github.com/sirupsen/logrus"
 	"os"
+	"time"
 )
 
 type Server struct {
@@ -101,12 +102,9 @@ func readLogLine(reader *docker.LogReader) *protocol.GetApplicationLogsResponse 
 	}
 
 	return &protocol.GetApplicationLogsResponse{
-		Output: output,
-		TaskId: reader.Labels["com.docker.swarm.task.id"],
-		Time: &protocol.Timestamp{
-			Second:     int64(reader.Time.Second()),
-			NanoSecond: int64(reader.Time.Nanosecond()),
-		},
+		Output:  output,
+		TaskId:  reader.Labels["com.docker.swarm.task.id"],
+		Time:    reader.Time.Format(time.RFC3339),
 		Message: reader.Message,
 	}
 }

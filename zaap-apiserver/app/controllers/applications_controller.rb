@@ -1,6 +1,9 @@
 class ApplicationsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :current_application!, except: %i[index create]
+  include ActionController::Live
+
+  before_action :authenticate_user, except: [:logs]
+  before_action :authenticate_user_from_params, only: [:logs]
+  before_action :current_application, except: %i[index create]
 
   def index
     @applications = @current_user.applications
@@ -29,6 +32,28 @@ class ApplicationsController < ApplicationController
     head :no_content
   end
 
+  def logs
+    response.headers['Content-Type'] = 'text/event-stream'
+    sse = SSE.new response.stream, retry: 300, event: 'logs'
+    logs = @current_application.request_logs
+    logs.each do |log_line|
+      pp ({
+          output: log_line.output,
+          time: Time.parse(log_line.time),
+          task_id: log_line.taskId,
+          message: log_line.message
+      })
+      sse.write({
+                  output: log_line.output,
+                  time: Time.parse(log_line.time),
+                  task_id: log_line.taskId,
+                  message: log_line.message
+                })
+    end
+  ensure
+    sse.close
+  end
+
   def deploy
     @current_application.request_deployment
   rescue StandardError => e
@@ -38,10 +63,10 @@ class ApplicationsController < ApplicationController
   private
 
   def application_params
-    params.permit(%i[name image environment replicas])
+    params.permit %i[name image environment replicas]
   end
 
-  def current_application!
+  def current_application
     @current_application = Application.joins(:user).find_by(id: params[:id], user_id: @current_user.id)
     head :not_found unless @current_application
   end

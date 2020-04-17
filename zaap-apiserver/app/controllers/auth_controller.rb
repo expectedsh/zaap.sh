@@ -2,7 +2,7 @@ class AuthController < ApplicationController
   def login
     @user = User.find_by email: login_params[:email]&.downcase
     unless @user&.authenticate(params[:password])
-      render status: 404, json: { message: 'Invalid email or password.' }
+      render status: :not_found, json: { message: 'Invalid email or password.' }
       return
     end
     @token = @user.issue_token
@@ -11,6 +11,6 @@ class AuthController < ApplicationController
   private
 
   def login_params
-    params.permit(%i[email password])
+    params.permit %i[email password]
   end
 end

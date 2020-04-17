@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :users, except: %i[edit new]
   resources :applications, except: %i[edit new] do
     member do
+      get 'logs'
       post 'deploy'
     end
   end

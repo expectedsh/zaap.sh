@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchApplication, deployApplication } from "~/store/application/actions"
+import { fetchApplication, deployApplication, fetchApplicationLogs } from "~/store/application/actions"
 import ApplicationStateBadge from "~/components/ApplicationStateBadge"
 import Alert from "~/components/Alert"
 import Button from "~/components/Button"
@@ -14,6 +14,11 @@ function ApplicationShow() {
 
   useEffect(() => {
     dispatch(fetchApplication({ id: params.id }))
+    dispatch(fetchApplicationLogs({ id: params.id }))
+      .then((events) => {
+        events.addEventListener('message', console.log)
+      })
+      .catch(console.error)
   }, [params])
 
   function renderBody() {

@@ -57,11 +57,6 @@ message GetApplicationLogsRequest {
   string id = 1;
 }
 
-message Timestamp {
-  int64 second = 1;
-  int64 nanoSecond = 2;
-}
-
 message GetApplicationLogsResponse {
   enum Output {
     STDOUT = 0;
@@ -69,7 +64,7 @@ message GetApplicationLogsResponse {
   }
 
   Output output = 1;
-  Timestamp time = 2;
+  string time = 2;
   string taskId = 3;
   string message = 4;
 }

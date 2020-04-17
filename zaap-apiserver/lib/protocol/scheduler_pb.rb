@@ -31,13 +31,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "protocol.GetApplicationLogsRequest" do
       optional :id, :string, 1
     end
-    add_message "protocol.Timestamp" do
-      optional :second, :int64, 1
-      optional :nanoSecond, :int64, 2
-    end
     add_message "protocol.GetApplicationLogsResponse" do
       optional :output, :enum, 1, "protocol.GetApplicationLogsResponse.Output"
-      optional :time, :message, 2, "protocol.Timestamp"
+      optional :time, :string, 2
       optional :taskId, :string, 3
       optional :message, :string, 4
     end
@@ -63,7 +59,6 @@ module Protocol
   DeleteApplicationRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.DeleteApplicationRequest").msgclass
   DeleteApplicationResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.DeleteApplicationResponse").msgclass
   GetApplicationLogsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.GetApplicationLogsRequest").msgclass
-  Timestamp = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.Timestamp").msgclass
   GetApplicationLogsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.GetApplicationLogsResponse").msgclass
   GetApplicationLogsResponse::Output = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.GetApplicationLogsResponse.Output").enummodule
   ApplicationState = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("protocol.ApplicationState").enummodule

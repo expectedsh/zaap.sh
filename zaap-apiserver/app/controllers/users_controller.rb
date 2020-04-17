@@ -12,6 +12,6 @@ class UsersController < ApplicationController
   private
 
   def registration_params
-    params.permit(%i[first_name email password])
+    params.permit %i[first_name email password]
   end
 end
