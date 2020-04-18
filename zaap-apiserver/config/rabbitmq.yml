@@ -1,8 +1,0 @@
-development:
-  url: <%= ENV['RABBITMQ_URL'] || 'amqp://localhost' %>
-
-test:
-  url: <%= ENV['RABBITMQ_URL'] || 'amqp://localhost' %>
-
-production:
-  url: <%= ENV['RABBITMQ_URL'] %>

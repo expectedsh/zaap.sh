@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/docker/docker/client"
-	"github.com/remicaumette/zaap.sh/zaap-scheduler/internal/scheduler"
-	"github.com/remicaumette/zaap.sh/zaap-scheduler/pkg/docker"
-	"github.com/remicaumette/zaap.sh/zaap-scheduler/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-scheduler/internal/scheduler"
+	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/docker"
+	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"

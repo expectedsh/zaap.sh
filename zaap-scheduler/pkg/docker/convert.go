@@ -2,7 +2,7 @@ package docker
 
 import (
 	"github.com/docker/docker/api/types/swarm"
-	"github.com/remicaumette/zaap.sh/zaap-scheduler/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
 )
 
 func ConvertApplication(application *protocol.Application) swarm.ServiceSpec {
