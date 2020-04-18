@@ -13,7 +13,7 @@ function AuthTextField({ type = "text", input, meta, name, value, ...props }) {
   return (
     <>
       <input
-        className={cx('root', { 'has-error': error != null })}
+        className={cx('root', { 'has-error': !!error })}
         type={type}
         name={name}
         defaultValue={value}

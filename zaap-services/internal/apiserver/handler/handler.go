@@ -37,7 +37,10 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 		r.Get("/me", me.HandleFind())
 		r.Patch("/me", me.HandleUpdate(userStore))
 
-		r.Get("/applications", applications.HandleFind(applicationStore))
+		r.Get("/applications", applications.HandleList(applicationStore))
+		r.Post("/applications", applications.HandleCreate(applicationStore))
+		r.Get("/applications/{id}", applications.HandleFind(applicationStore))
+		r.Delete("/applications/{id}", applications.HandleDelete(applicationStore))
 	})
 
 	return r

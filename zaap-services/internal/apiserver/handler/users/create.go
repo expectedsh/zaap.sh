@@ -10,18 +10,11 @@ import (
 	"net/http"
 )
 
-type (
-	createUserRequest struct {
-		Email     string `json:"email"`
-		Password  string `json:"password"`
-		FirstName string `json:"first_name"`
-	}
-
-	createUserResponse struct {
-		Token string     `json:"token"`
-		User  *core.User `json:"user"`
-	}
-)
+type createUserRequest struct {
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	FirstName string `json:"first_name"`
+}
 
 func (r *createUserRequest) Validate() error {
 	return validation.ValidateStruct(r,
@@ -69,9 +62,9 @@ func HandleCreate(store core.UserStore, service core.UserService) http.HandlerFu
 			return
 		}
 
-		response.Created(w, &createUserResponse{
-			Token: token,
-			User:  user,
+		response.Created(w, map[string]interface{}{
+			"token": token,
+			"user":  user,
 		})
 	}
 }

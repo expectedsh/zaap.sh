@@ -11,10 +11,10 @@ import (
 type (
 	User struct {
 		ID             uuid.UUID `gorm:"primary_key" json:"id"`
-		Email          string    `gorm:"type:varchar;unique_index" json:"email"`
-		Password       string    `gorm:"type:varchar" json:"password"`
-		FirstName      string    `gorm:"type:varchar" json:"first_name"`
-		SchedulerToken uuid.UUID `gorm:"unique_index" json:"scheduler_token"`
+		Email          string    `gorm:"type:varchar;unique_index;not null" json:"email"`
+		Password       string    `gorm:"type:varchar;not null" json:"password"`
+		FirstName      string    `gorm:"type:varchar;not null" json:"first_name"`
+		SchedulerToken uuid.UUID `gorm:"unique_index;not null" json:"scheduler_token"`
 		SchedulerURL   *string   `gorm:"type:varchar" json:"scheduler_url"`
 		CreatedAt      time.Time `json:"created_at"`
 		UpdatedAt      time.Time `json:"updated_at"`

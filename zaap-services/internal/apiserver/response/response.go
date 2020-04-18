@@ -35,6 +35,11 @@ func Forbidden(w http.ResponseWriter) {
 	})
 }
 
+func NoContent(w http.ResponseWriter) {
+	w.Header().Add("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func WriteResponse(w http.ResponseWriter, status int, v interface{}) {
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(status)

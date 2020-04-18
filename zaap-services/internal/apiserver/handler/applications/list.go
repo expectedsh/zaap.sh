@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func HandleFind(store core.ApplicationStore) http.HandlerFunc {
+func HandleList(store core.ApplicationStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := request.UserFrom(r.Context())
 
