@@ -1,4 +1,4 @@
-module github.com/remicaumette/zaap.sh/zaap-scheduler
+module github.com/expected.sh/zaap.sh/zaap-scheduler
 
 go 1.14
 

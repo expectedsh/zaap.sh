@@ -2,8 +2,10 @@ package core
 
 import (
 	"context"
+	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"google.golang.org/grpc"
 	"strings"
 	"time"
 )
@@ -40,6 +42,8 @@ type (
 		HashPassword(string) (string, error)
 
 		ComparePassword(string, string) bool
+
+		NewSchedulerConnection(user *User) (protocol.SchedulerClient, *grpc.ClientConn, error)
 	}
 )
 
