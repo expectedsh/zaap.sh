@@ -17,7 +17,7 @@ func NewApplicationStore(db *gorm.DB) core.ApplicationStore {
 
 func (s applicationStore) Find(ctx context.Context, id uuid.UUID) (*core.Application, error) {
 	application := new(core.Application)
-	if err := s.db.First(application, "id = ?", id.String()).Error; err != nil {
+	if err := s.db.Preload("User").First(application, "id = ?", id.String()).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			return nil, nil
 		} else {

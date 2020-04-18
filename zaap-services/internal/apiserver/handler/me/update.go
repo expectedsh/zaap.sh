@@ -2,6 +2,8 @@ package me
 
 import (
 	"encoding/json"
+	"errors"
+	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
@@ -20,11 +22,10 @@ func (r *userUpdateRequest) Validate() error {
 	return validation.ValidateStruct(r,
 		validation.Field(&r.Email, is.Email),
 		validation.Field(&r.FirstName, validation.Length(1, 0)),
-		validation.Field(&r.SchedulerURL, is.URL),
 	)
 }
 
-func HandleUpdate(store core.UserStore) http.HandlerFunc {
+func HandleUpdate(store core.UserStore, service core.UserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := request.UserFrom(r.Context())
 		in := new(userUpdateRequest)
@@ -47,6 +48,26 @@ func HandleUpdate(store core.UserStore) http.HandlerFunc {
 		}
 		if in.SchedulerURL != nil {
 			user.SchedulerURL = in.SchedulerURL
+			client, conn, err := service.NewSchedulerConnection(user)
+			if err != nil {
+				response.UnprocessableEntity(w, validation.Errors{
+					"scheduler_url": err,
+				})
+				return
+			}
+			defer conn.Close()
+			res, err := client.TestConnection(r.Context(), &protocol.TestConnectionRequest{Token: user.SchedulerToken.String()})
+			if err != nil {
+				response.UnprocessableEntity(w, validation.Errors{
+					"scheduler_url": err,
+				})
+				return
+			} else if !res.Ok {
+				response.UnprocessableEntity(w, validation.Errors{
+					"scheduler_url": errors.New("invalid scheduler token"),
+				})
+				return
+			}
 		}
 
 		if err := store.Update(r.Context(), user); err != nil {

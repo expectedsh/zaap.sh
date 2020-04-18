@@ -32,15 +32,25 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 	r.Post("/users", users.HandleCreate(userStore, userService))
 
 	r.Group(func(r chi.Router) {
-		r.Use(auth.Required(userStore, userService))
+		r.Use(AuthRequired(userStore, userService))
 
-		r.Get("/me", me.HandleFind())
-		r.Patch("/me", me.HandleUpdate(userStore))
+		r.Route("/me", func(r chi.Router) {
+			r.Get("/", me.HandleFind())
+			r.Patch("/", me.HandleUpdate(userStore, userService))
+		})
 
-		r.Get("/applications", applications.HandleList(applicationStore))
-		r.Post("/applications", applications.HandleCreate(applicationStore))
-		r.Get("/applications/{id}", applications.HandleFind(applicationStore))
-		r.Delete("/applications/{id}", applications.HandleDelete(applicationStore))
+		r.Route("/applications", func(r chi.Router) {
+			r.Get("/", applications.HandleList(applicationStore))
+			r.Post("/", applications.HandleCreate(applicationStore))
+
+			r.Route("/{id}", func(r chi.Router) {
+				r.Use(InjectApplication(applicationStore))
+
+				r.Get("/", applications.HandleFind())
+				r.Delete("/", applications.HandleDelete(applicationStore))
+				r.Post("/deploy", applications.HandleDeploy(applicationStore, userService))
+			})
+		})
 	})
 
 	return r
