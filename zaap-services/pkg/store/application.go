@@ -27,16 +27,20 @@ func (s applicationStore) Find(ctx context.Context, id uuid.UUID) (*core.Applica
 	return application, nil
 }
 
-func (s applicationStore) List(ctx context.Context, userId uuid.UUID) ([]*core.Application, error) {
-	applications := new([]*core.Application)
+func (s applicationStore) List(ctx context.Context, userId uuid.UUID) (*[]core.Application, error) {
+	applications := new([]core.Application)
 	if err := s.db.Find(applications, "user_id = ?", userId).Error; err != nil {
 		return nil, err
 	}
-	return *applications, nil
+	return applications, nil
 }
 
 func (s applicationStore) Create(ctx context.Context, application *core.Application) error {
 	return s.db.Create(application).Error
+}
+
+func (s applicationStore) Update(ctx context.Context, application *core.Application) error {
+	return s.db.Save(application).Error
 }
 
 func (s applicationStore) Delete(ctx context.Context, id uuid.UUID) error {

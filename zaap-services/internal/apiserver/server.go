@@ -30,7 +30,7 @@ func (s *Server) Start() error {
 	defer db.Close()
 	s.db = db
 	// todo: use real migration
-	if err := db.AutoMigrate(&core.User{}, &core.Application{}).Error; err != nil {
+	if err := db.AutoMigrate(&core.User{}, &core.Application{}, &core.Deployment{}).Error; err != nil {
 		return err
 	}
 

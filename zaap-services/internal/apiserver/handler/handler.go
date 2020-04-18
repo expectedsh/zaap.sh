@@ -25,8 +25,8 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 
 	userStore := store.NewUserStore(db)
 	userService := service.NewUserService(config.SecretKey)
-
 	applicationStore := store.NewApplicationStore(db)
+	deploymentStore := store.NewDeploymentStore(db)
 
 	r.Post("/auth/login", auth.HandleLogin(userStore, userService))
 	r.Post("/users", users.HandleCreate(userStore, userService))
@@ -46,7 +46,8 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 			r.Route("/{id}", func(r chi.Router) {
 				r.Use(InjectApplication(applicationStore))
 
-				r.Get("/", applications.HandleFind())
+				r.Get("/", applications.HandleFind(deploymentStore))
+				r.Patch("/", applications.HandleUpdate(applicationStore, deploymentStore))
 				r.Delete("/", applications.HandleDelete(applicationStore))
 				r.Post("/deploy", applications.HandleDeploy(applicationStore, userService))
 			})

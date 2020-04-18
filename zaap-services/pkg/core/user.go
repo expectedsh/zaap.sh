@@ -21,7 +21,7 @@ type (
 		CreatedAt      time.Time `json:"created_at"`
 		UpdatedAt      time.Time `json:"updated_at"`
 
-		Applications []Application `json:"-"`
+		Applications []*Application `json:"-"`
 	}
 
 	UserStore interface {

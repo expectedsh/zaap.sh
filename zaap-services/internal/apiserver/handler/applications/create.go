@@ -6,6 +6,8 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
+	uuid "github.com/satori/go.uuid"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -36,19 +38,26 @@ func HandleCreate(store core.ApplicationStore) http.HandlerFunc {
 			return
 		}
 
+		deployment := &core.Deployment{
+			ID:       uuid.NewV4(),
+			Image:    in.Image,
+			Replicas: 1,
+		}
 		application := &core.Application{
-			Name:   in.Name,
-			Image:  in.Image,
-			State:  core.ApplicationStateUnknown,
-			UserID: user.ID,
+			Name:                in.Name,
+			State:               core.ApplicationStateUnknown,
+			UserID:              user.ID,
+			CurrentDeploymentID: deployment.ID,
+			Deployments:         []*core.Deployment{deployment},
 		}
 		if err := store.Create(r.Context(), application); err != nil {
+			logrus.WithError(err).Warn("could not create application")
 			response.InternalServerError(w)
 			return
 		}
 		// @todo: deploy
 
-		response.Ok(w, map[string]interface{}{
+		response.Created(w, map[string]interface{}{
 			"application": application,
 		})
 	}
