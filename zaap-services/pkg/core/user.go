@@ -26,6 +26,8 @@ type (
 		FindByEmail(context.Context, string) (*User, error)
 
 		Create(context.Context, *User) error
+
+		Update(context.Context, *User) error
 	}
 
 	UserService interface {

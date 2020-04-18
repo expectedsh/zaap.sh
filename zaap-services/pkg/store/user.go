@@ -42,3 +42,7 @@ func (s *userStore) FindByEmail(ctx context.Context, email string) (*core.User, 
 func (s *userStore) Create(ctx context.Context, user *core.User) error {
 	return s.db.Create(user).Error
 }
+
+func (s *userStore) Update(ctx context.Context, user *core.User) error {
+	return s.db.Save(user).Error
+}

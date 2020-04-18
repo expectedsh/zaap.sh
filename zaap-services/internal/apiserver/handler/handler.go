@@ -17,7 +17,7 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 
 	r.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true,
 	}).Handler)
@@ -32,6 +32,7 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 		r.Use(auth.Required(userStore, userService))
 
 		r.Get("/me", me.HandleFind())
+		r.Patch("/me", me.HandleUpdate(userStore))
 	})
 
 	return r
