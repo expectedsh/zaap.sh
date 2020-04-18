@@ -18,7 +18,23 @@ func NewUserStore(db *gorm.DB) core.UserStore {
 func (s *userStore) Find(ctx context.Context, id uuid.UUID) (*core.User, error) {
 	user := new(core.User)
 	if err := s.db.Find(user, "id = ?", id.String()).Error; err != nil {
-		return nil, err
+		if gorm.IsRecordNotFoundError(err) {
+			return nil, nil
+		} else {
+			return nil, err
+		}
+	}
+	return user, nil
+}
+
+func (s *userStore) FindByEmail(ctx context.Context, email string) (*core.User, error) {
+	user := new(core.User)
+	if err := s.db.Find(user, "email = ?", email).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return nil, nil
+		} else {
+			return nil, err
+		}
 	}
 	return user, nil
 }

@@ -13,9 +13,13 @@
   &:focus {
     outline: none;
   }
+
+  &.has-error {
+    margin-bottom: 6px;
+  }
 }
 
 .error {
-  margin-top: 6px;
   color: $color-red;
+  margin-bottom: 24px;
 }

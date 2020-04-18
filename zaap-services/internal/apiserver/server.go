@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/config"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"net/http"
@@ -28,6 +29,10 @@ func (s *Server) Start() error {
 	}
 	defer db.Close()
 	s.db = db
+	// todo: use real migration
+	if err := db.AutoMigrate(&core.User{}).Error; err != nil {
+		return err
+	}
 
 	s.httpServer = &http.Server{
 		Addr:    s.config.Addr,
