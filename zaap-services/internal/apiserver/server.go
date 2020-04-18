@@ -2,18 +2,20 @@ package apiserver
 
 import (
 	"context"
+	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/config"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler"
 	"github.com/jinzhu/gorm"
+	_ "github.com/lib/pq"
 	"net/http"
 )
 
 type Server struct {
-	config     *Config
+	config     *config.Config
 	httpServer *http.Server
 	db         *gorm.DB
 }
 
-func New(config *Config) *Server {
+func New(config *config.Config) *Server {
 	return &Server{
 		config: config,
 	}
@@ -29,7 +31,7 @@ func (s *Server) Start() error {
 
 	s.httpServer = &http.Server{
 		Addr:    s.config.Addr,
-		Handler: handler.New(db),
+		Handler: handler.New(s.config, s.db),
 	}
 	return s.httpServer.ListenAndServe()
 }

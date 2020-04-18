@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver"
+	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/config"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -10,15 +11,15 @@ import (
 )
 
 func main() {
-	config, err := apiserver.ConfigFromEnv()
+	cfg, err := config.FromEnv()
 	if err != nil {
 		logrus.WithError(err).Fatal("could not parse configuration")
 	}
 
-	server := apiserver.New(config)
+	server := apiserver.New(cfg)
 
 	go func() {
-		logrus.Infof("listening on %v", config.Addr)
+		logrus.Infof("listening on %v", cfg.Addr)
 		if err := server.Start(); err != nil {
 			logrus.WithError(err).Fatal("could not start apiserver")
 		}

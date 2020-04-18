@@ -24,6 +24,10 @@ type (
 
 		Create(context.Context, *User) error
 	}
+
+	UserService interface {
+		IssueToken(*User) (string, error)
+	}
 )
 
 func (u *User) BeforeSave() error {

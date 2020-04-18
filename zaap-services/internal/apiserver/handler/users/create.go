@@ -1,6 +1,8 @@
 package users
 
 import (
+	"crypto/sha512"
+	"encoding/hex"
 	"encoding/json"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/sirupsen/logrus"
@@ -20,7 +22,7 @@ type (
 	}
 )
 
-func HandleCreate(store core.UserStore) http.HandlerFunc {
+func HandleCreate(store core.UserStore, service core.UserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		in := new(createUserRequest)
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
@@ -28,20 +30,32 @@ func HandleCreate(store core.UserStore) http.HandlerFunc {
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
+		hash := sha512.New()
+		if _, err := hash.Write([]byte(in.Password)); err != nil {
+			logrus.WithError(err).Error("could not hash password")
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			return
+		}
 		user := &core.User{
 			Email:     in.Email,
-			Password:  in.Password,
+			Password:  hex.Dump(hash.Sum(nil)),
 			FirstName: in.FirstName,
 		}
 		if err := store.Create(r.Context(), user); err != nil {
 			logrus.WithError(err).Error("could not create user")
-			w.WriteHeader(http.StatusUnprocessableEntity)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		token, err := service.IssueToken(user)
+		if err != nil {
+			logrus.WithError(err).Error("could not issue token")
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		w.WriteHeader(http.StatusCreated)
 		_ = json.NewEncoder(w).Encode(&createUserResponse{
-			Token: "",
-			User: user,
+			Token: token,
+			User:  user,
 		})
 	}
 }
