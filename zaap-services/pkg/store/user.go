@@ -17,7 +17,7 @@ func NewUserStore(db *gorm.DB) core.UserStore {
 
 func (s *userStore) Find(ctx context.Context, id uuid.UUID) (*core.User, error) {
 	user := new(core.User)
-	if err := s.db.Find(user, "id = ?", id.String()).Error; err != nil {
+	if err := s.db.First(user, "id = ?", id.String()).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			return nil, nil
 		} else {

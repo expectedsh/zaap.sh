@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/config"
+	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler/applications"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler/auth"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler/me"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler/users"
@@ -25,6 +26,8 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 	userStore := store.NewUserStore(db)
 	userService := service.NewUserService(config.SecretKey)
 
+	applicationStore := store.NewApplicationStore(db)
+
 	r.Post("/auth/login", auth.HandleLogin(userStore, userService))
 	r.Post("/users", users.HandleCreate(userStore, userService))
 
@@ -33,6 +36,8 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 
 		r.Get("/me", me.HandleFind())
 		r.Patch("/me", me.HandleUpdate(userStore))
+
+		r.Get("/applications", applications.HandleFind(applicationStore))
 	})
 
 	return r

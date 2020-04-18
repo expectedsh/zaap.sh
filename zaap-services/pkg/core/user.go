@@ -18,6 +18,8 @@ type (
 		SchedulerURL   *string   `gorm:"type:varchar" json:"scheduler_url"`
 		CreatedAt      time.Time `json:"created_at"`
 		UpdatedAt      time.Time `json:"updated_at"`
+
+		Applications []Application `json:"-"`
 	}
 
 	UserStore interface {
