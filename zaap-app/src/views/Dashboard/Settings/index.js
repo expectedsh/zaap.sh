@@ -6,6 +6,7 @@ import { updateUser } from "~/store/user/actions"
 import TextField from "~/components/TextField"
 import Button from "~/components/Button"
 import FormSection from "~/components/FormSection"
+import Header from "~/components/Header"
 
 function ProfileForm() {
   const dispatch = useDispatch()
@@ -79,21 +80,23 @@ function SchedulerForm() {
 
 function Settings() {
   return (
-    <div className="container">
-      <h1 className="header-title">Settings</h1>
-      <FormSection
-        name="Profile"
-        description="Your email address is your identity on Zaap and is used to log in."
-      >
-        <ProfileForm/>
-      </FormSection>
-      <FormSection
-        name="Scheduler"
-        description="Informations about your scheduler."
-      >
-        <SchedulerForm/>
-      </FormSection>
-    </div>
+    <>
+      <Header preTitle="Account" title="Settings"/>
+      <div className="container">
+        <FormSection
+          name="Profile"
+          description="Your email address is your identity on Zaap and is used to log in."
+        >
+          <ProfileForm/>
+        </FormSection>
+        <FormSection
+          name="Scheduler"
+          description="Informations about your scheduler."
+        >
+          <SchedulerForm/>
+        </FormSection>
+      </div>
+    </>
   )
 }
 

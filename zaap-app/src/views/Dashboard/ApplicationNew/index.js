@@ -8,6 +8,7 @@ import { createApplication } from "~/store/applications/actions"
 import TextField from "~/components/TextField"
 import Button from "~/components/Button"
 import style from "./ApplicationNew.module.scss"
+import Header from "~/components/Header"
 
 const cx = classnames.bind(style)
 
@@ -30,21 +31,23 @@ function ApplicationNew() {
   }
 
   return (
-    <div className={cx('root')}>
-      <h1 className="header-title">New application</h1>
-      <Form
-        onSubmit={onSubmit}
-        render={({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Field component={TextField} name="name" label="Name" placeholder="my-app"/>
-            <Field component={TextField} name="image" label="Image" placeholder="nginx:latest"/>
-            <Button className="btn btn-success" type="submit">
-              Create app
-            </Button>
-          </form>
-        )}
-      />
-    </div>
+    <>
+      <Header title="Create new application" centered />
+      <div className={cx('root')}>
+        <Form
+          onSubmit={onSubmit}
+          render={({ handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+              <Field component={TextField} name="name" label="Name" placeholder="my-app"/>
+              <Field component={TextField} name="image" label="Image" placeholder="nginx:latest"/>
+              <Button className="btn btn-success" type="submit">
+                Create app
+              </Button>
+            </form>
+          )}
+        />
+      </div>
+    </>
   )
 }
 

@@ -2,14 +2,14 @@
 
 .btn {
   display: block;
-  border: none;
   border-radius: 4px;
   font-size: $text-font-size-md;
-  font-weight: 500;
+  font-weight: $text-font-weight-bold;
   cursor: pointer;
   padding: 10px 20px;
   width: auto;
   text-decoration: none;
+  border: 1px solid transparent;
 
   &:disabled {
     opacity: 0.5;
@@ -27,18 +27,32 @@
   &.btn-primary {
     color: $color-white;
     background: $color-blue;
+    border-color: $color-blue;
 
     &:hover {
       background: $color-blue-dark;
+      border-color: $color-blue-dark;
+    }
+  }
+
+  &.btn-secondary {
+    color: $color-blue;
+    background: $color-white;
+    border-color: $color-blue;
+
+    &:hover {
+      background: lighten($color-blue, 55);
     }
   }
 
   &.btn-success {
     color: $color-white;
     background: $color-green-light;
+    border-color: $color-green-light;
 
     &:hover {
       background: $color-green;
+      border-color: $color-green;
     }
   }
 }

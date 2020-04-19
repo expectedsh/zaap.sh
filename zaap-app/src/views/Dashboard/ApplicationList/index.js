@@ -6,6 +6,7 @@ import ApplicationStateBadge from "~/components/ApplicationStateBadge"
 import Alert from "~/components/Alert"
 import { deleteApplication } from "~/store/application/actions"
 import { toast } from "react-toastify"
+import Header from "~/components/Header"
 
 function ApplicationList() {
   const dispatch = useDispatch()
@@ -58,17 +59,16 @@ function ApplicationList() {
   }
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1 className="header-title">
-          Applications
-        </h1>
-        <Link className="btn btn-success" to="/apps/new">
+    <>
+      <Header preTitle="Overview" title="Applications">
+        <Link className="btn btn-secondary" to="/apps/new">
           New application
         </Link>
+      </Header>
+      <div className="container">
+        {renderBody()}
       </div>
-      {renderBody()}
-    </div>
+    </>
   )
 }
 
