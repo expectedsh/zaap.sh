@@ -6,6 +6,7 @@
   border: 1px solid $color-border;
   border-radius: 4px;
   padding: 4px 0;
+  overflow-y: auto;
 }
 
 .log-line {
@@ -15,13 +16,19 @@
   padding: 8px;
   font-size: $text-font-size-sm;
 
-  .time {
+  .info {
     padding-right: 16px;
     border-right: 1px solid $color-border;
     margin-right: 16px;
+    min-width: fit-content;
+    align-self: center;
   }
 
   &:hover {
     background: darken($color-grey-light, 5);
+  }
+
+  .message-error {
+    color: $color-red;
   }
 }

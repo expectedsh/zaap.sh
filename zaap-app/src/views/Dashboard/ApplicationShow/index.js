@@ -8,8 +8,8 @@ import Button from "~/components/Button"
 import Header from "~/components/Header"
 import NavigationBar from "~/components/NavigationBar"
 import Activity from "~/views/Dashboard/ApplicationShow/Activity"
-import Configuration from "~/views/Dashboard/ApplicationShow/Configuration"
-import Logs from "~/views/Dashboard/ApplicationShow/Logs"
+import ApplicationSettings from "~/views/Dashboard/ApplicationShow/ApplicationSettings"
+import ApplicationLogs from "~/views/Dashboard/ApplicationShow/ApplicationLogs"
 
 function ApplicationShow() {
   const dispatch = useDispatch()
@@ -30,8 +30,8 @@ function ApplicationShow() {
     return application ? (
       <Switch>
         <Route path="/apps/:id/activity" component={Activity}/>
-        <Route path="/apps/:id/config" component={Configuration}/>
-        <Route path="/apps/:id/logs" component={Logs}/>
+        <Route path="/apps/:id/logs" component={ApplicationLogs}/>
+        <Route path="/apps/:id/settings" component={ApplicationSettings}/>
         <Redirect from="/apps/:id" to={`/apps/${params.id}/activity`}/>
       </Switch>
     ) : null
@@ -59,11 +59,11 @@ function ApplicationShow() {
         <NavigationBar.Link to={`/apps/${params.id}/resources`}>
           Resources
         </NavigationBar.Link>
-        <NavigationBar.Link to={`/apps/${params.id}/config`}>
-          Configuration
-        </NavigationBar.Link>
         <NavigationBar.Link to={`/apps/${params.id}/logs`}>
           Logs
+        </NavigationBar.Link>
+        <NavigationBar.Link to={`/apps/${params.id}/settings`}>
+          Settings
         </NavigationBar.Link>
       </NavigationBar>
       <div className="container">

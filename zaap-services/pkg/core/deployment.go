@@ -19,7 +19,6 @@ type (
 		Environment   Environment `gorm:"type:json;not null" json:"environment"`
 		ApplicationID uuid.UUID   `json:"application_id"`
 		CreatedAt     time.Time   `json:"created_at"`
-		UpdatedAt     time.Time   `json:"updated_at"`
 
 		Application *Application `json:"-"`
 	}

@@ -56,6 +56,16 @@ function ApplicationList() {
         config={tableConfig}
         dataSource={applications}
         onRowClick={app => history.push(`/apps/${app.id}`)}
+        noData={
+          <div className={cx('no-application')}>
+            <div className={cx('title')}>
+              You don't have applications 😭
+            </div>
+            <div className={cx('description')}>
+              Create an application and it will show up here.
+            </div>
+          </div>
+        }
       />
     ) : null
   }

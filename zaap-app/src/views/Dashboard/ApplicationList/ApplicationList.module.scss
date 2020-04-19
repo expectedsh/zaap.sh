@@ -1,3 +1,5 @@
+@import "~stylesheets/variables";
+
 .cell-name {
   flex: 1 1 0;
 }
@@ -9,4 +11,19 @@
 
 .cell-endpoint {
   width: 260px;
+}
+
+.no-application {
+  background: $color-grey-light;
+  text-align: center;
+  padding: 64px 0;
+
+  .title {
+    font-size: $text-font-size-lg;
+    font-weight: $text-font-weight-bold;
+  }
+
+  .description {
+    margin-top: 16px;
+  }
 }

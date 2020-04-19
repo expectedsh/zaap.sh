@@ -26,17 +26,24 @@ func (r *updateApplicationRequest) Validate() error {
 	)
 }
 
-func HandleUpdate(store core.ApplicationStore) http.HandlerFunc {
+func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		application := request.ApplicationFrom(r.Context())
+
+		currentDeployment, err := deploymentStore.Find(r.Context(), application.CurrentDeploymentID)
+		if err != nil {
+			response.InternalServerError(w)
+			return
+		} else if currentDeployment == nil {
+			response.NotFound(w)
+			return
+		}
 
 		in := new(updateApplicationRequest)
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
 			response.UnprocessableEntity(w, err)
 			return
-		}
-
-		if err := in.Validate(); err != nil {
+		} else if err := in.Validate(); err != nil {
 			response.UnprocessableEntity(w, err)
 			return
 		}
@@ -47,10 +54,11 @@ func HandleUpdate(store core.ApplicationStore) http.HandlerFunc {
 		if in.Image != nil || in.Replicas != nil || in.Environment != nil {
 			deployment := &core.Deployment{
 				ID:          uuid.NewV4(),
-				Image:       application.CurrentDeployment.Image,
-				Replicas:    application.CurrentDeployment.Replicas,
-				Environment: application.CurrentDeployment.Environment,
+				Image:       currentDeployment.Image,
+				Replicas:    currentDeployment.Replicas,
+				Environment: currentDeployment.Environment,
 			}
+
 			if in.Image != nil {
 				deployment.Image = *in.Image
 			}
@@ -60,6 +68,7 @@ func HandleUpdate(store core.ApplicationStore) http.HandlerFunc {
 			if in.Environment != nil {
 				deployment.Environment = *in.Environment
 			}
+
 			application.Deployments = append(application.Deployments, deployment)
 			application.CurrentDeploymentID = deployment.ID
 		}

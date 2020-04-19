@@ -8,7 +8,8 @@ import {
   FETCH_APPLICATION_SUCCESS,
   FETCH_APPLICATION_ERROR,
   DEPLOY_APPLICATION_PENDING,
-  DELETE_APPLICATION_PENDING,
+  UPDATE_APPLICATION_PENDING,
+  DELETE_APPLICATION_PENDING
 } from "./constants"
 
 export function fetchApplication({ id }) {
@@ -26,6 +27,22 @@ export function fetchApplication({ id }) {
   }
 }
 
+export function updateApplication({ id, ...payload }) {
+  return async (dispatch, getState) => {
+    dispatch(updateApplicationPending(true))
+    return api.patch(`/applications/${id}`, payload)
+      .then(res => {
+        const application = res.data.application
+        dispatch(updateApplicationFromList(application))
+        if (getState().application.application?.id === application.id) {
+          dispatch(fetchApplicationSuccess(application))
+        }
+        return application
+      })
+      .finally(() => dispatch(updateApplicationPending(false)))
+  }
+}
+
 export function deleteApplication({ id }) {
   return async dispatch => {
     dispatch(deleteApplicationPending(true))
@@ -38,12 +55,16 @@ export function deleteApplication({ id }) {
 }
 
 export function deployApplication({ id }) {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(deployApplicationPending(true))
     return api.post(`/applications/${id}/deploy`)
       .then(res => {
-        dispatch(updateApplicationFromList(res.data.application))
-        return res.data.application
+        const application = res.data.application
+        dispatch(updateApplicationFromList(application))
+        if (getState().application.application?.id === application.id) {
+          dispatch(fetchApplicationSuccess(application))
+        }
+        return application
       })
       .finally(() => dispatch(deployApplicationPending(false)))
   }
@@ -73,6 +94,13 @@ export function fetchApplicationError(error) {
   return {
     type: FETCH_APPLICATION_ERROR,
     error,
+  }
+}
+
+export function updateApplicationPending(payload) {
+  return {
+    type: UPDATE_APPLICATION_PENDING,
+    payload,
   }
 }
 

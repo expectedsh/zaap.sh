@@ -8,7 +8,6 @@ import {
   DELETE_APPLICATION,
   CREATE_APPLICATION_PENDING,
 } from "./constants"
-import { DELETE_APPLICATION_PENDING } from "~/store/application/constants"
 
 export function fetchApplications() {
   return dispatch => {

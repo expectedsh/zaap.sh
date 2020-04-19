@@ -1,9 +1,8 @@
-import React, { useEffect, useReducer } from "react"
+import React, { useEffect, useReducer, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import classnames from "classnames/bind"
-import moment from "moment"
 import { fetchApplicationLogs } from "~/store/application/actions"
-import style from "./Logs.module.scss"
+import style from "./ApplicationLogs.module.scss"
 
 const cx = classnames.bind(style)
 
@@ -18,8 +17,9 @@ function messageReducer(state, action) {
   }
 }
 
-function Logs() {
+function ApplicationLogs() {
   const dispatch = useDispatch()
+  const ref = useRef(null)
   const application = useSelector(state => state.application.application)
   const [state, messageDispatch] = useReducer(messageReducer, [])
 
@@ -30,22 +30,26 @@ function Logs() {
         _eventSource = eventSource
         eventSource.addEventListener("message", (event) => {
           messageDispatch(addMessage(JSON.parse(event.data)))
+          ref.current.scrollBy(0, ref.current.scrollHeight)
         })
       })
       .catch(console.error)
     return () => {
       _eventSource?.close()
     }
-  }, [application])
+  }, [application, ref])
 
   return (
-    <div className={cx('root')}>
-      {state.map(v => (
-        <div className={cx('log-line')}>
-          <div className={cx('time')}>
+    <div className={cx('root')} ref={ref}>
+      {state.map((v, index) => (
+        <div key={index} className={cx('log-line')}>
+          <div className={cx('info')}>
             {v.time}
           </div>
-          <div className={cx('message')}>
+          <div className={cx('info')}>
+            {v.taskId}
+          </div>
+          <div className={cx({ 'message-error': v.output === 1 })}>
             {v.message}
           </div>
         </div>
@@ -54,4 +58,4 @@ function Logs() {
   )
 }
 
-export default Logs
+export default ApplicationLogs

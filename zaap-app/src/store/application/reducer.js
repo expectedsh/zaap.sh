@@ -3,11 +3,8 @@ import {
   FETCH_APPLICATION_SUCCESS,
   FETCH_APPLICATION_ERROR,
   DEPLOY_APPLICATION_PENDING,
-  DEPLOY_APPLICATION_SUCCESS,
-  DEPLOY_APPLICATION_ERROR,
+  UPDATE_APPLICATION_PENDING,
   DELETE_APPLICATION_PENDING,
-  DELETE_APPLICATION_SUCCESS,
-  DELETE_APPLICATION_ERROR,
 } from './constants'
 
 const initialState = {
@@ -15,6 +12,7 @@ const initialState = {
   application: null,
   error: null,
   deployPending: false,
+  updatePending: false,
   deletePending: false,
 }
 
@@ -25,11 +23,14 @@ export default function (state = initialState, action) {
         ...state,
         pending: true,
       }
-    case FETCH_APPLICATION_SUCCESS:
+  case FETCH_APPLICATION_SUCCESS:
       return {
         ...state,
         pending: false,
-        application: action.payload,
+        application: state.application?.id === action.payload.id ? {
+          ...state.application,
+          ...action.payload,
+        } : action.payload,
         error: null,
       }
     case FETCH_APPLICATION_ERROR:
@@ -43,6 +44,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         deployPending: action.payload,
+      }
+    case UPDATE_APPLICATION_PENDING:
+      return {
+        ...state,
+        updatePending: action.payload,
       }
     case DELETE_APPLICATION_PENDING:
       return {

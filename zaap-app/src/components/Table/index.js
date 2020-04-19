@@ -5,27 +5,31 @@ import style from "./Table.module.scss"
 
 const cx = classnames.bind(style)
 
-function Table({ config, dataSource, onRowClick }) {
+function Table({ config, dataSource, onRowClick, noData = null }) {
   return (
     <div className={cx("root")}>
-      <div className={cx("header")}>
-        {config.map((item, index) => (
-          <div key={index} className={cx("cell", item.cellClassName)}>
-            {item.renderHeader()}
-          </div>
-        ))}
-      </div>
-      <div>
-        {dataSource.map((row, rIndex) => (
-          <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}>
+      {dataSource.length ? (
+        <>
+          <div className={cx("header")}>
             {config.map((item, index) => (
               <div key={index} className={cx("cell", item.cellClassName)}>
-                {item.renderCell(row)}
+                {item.renderHeader()}
               </div>
             ))}
           </div>
-        ))}
-      </div>
+          <div>
+            {dataSource.map((row, rIndex) => (
+              <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}>
+                {config.map((item, index) => (
+                  <div key={index} className={cx("cell", item.cellClassName)}>
+                    {item.renderCell(row)}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </>
+      ) : noData}
     </div>
   )
 }
@@ -40,6 +44,7 @@ Table.propTypes = {
   ).isRequired,
   dataSource: PropTypes.array.isRequired,
   onRowClick: PropTypes.func,
+  noData: PropTypes.node,
 }
 
 export default Table

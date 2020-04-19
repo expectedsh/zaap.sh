@@ -47,7 +47,7 @@ function Dashboard() {
   }
 
   return (
-    <>
+    <div className={cx("root")}>
       <div className={cx("navbar")}>
         <div className={cx("container")}>
           <img className={cx("navbar-brand")} src={logo} alt="Zaap logo"/>
@@ -65,7 +65,7 @@ function Dashboard() {
         </div>
       </div>
       {renderBody()}
-    </>
+    </div>
   )
 }
 

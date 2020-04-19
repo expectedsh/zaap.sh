@@ -8,7 +8,6 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -35,7 +34,6 @@ func HandleLogs(userService core.UserService) http.HandlerFunc {
 
 		for {
 			log, err := logs.Recv()
-			logrus.Info(log)
 			if err != nil {
 				break
 			}

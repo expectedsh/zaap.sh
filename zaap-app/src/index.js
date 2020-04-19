@@ -14,6 +14,6 @@ ReactDOM.render((
     <Router history={history}>
       <App />
     </Router>
-    <ToastContainer autoClose={8000} position={toast.POSITION.TOP_RIGHT} />
+    <ToastContainer autoClose={4000} position={toast.POSITION.TOP_RIGHT} />
   </Provider>
 ), document.getElementById('root'))
