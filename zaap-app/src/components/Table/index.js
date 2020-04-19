@@ -15,7 +15,7 @@ function Table({ config, dataSource, onRowClick }) {
           </div>
         ))}
       </div>
-      <div className={cx("body")}>
+      <div>
         {dataSource.map((row, rIndex) => (
           <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}>
             {config.map((item, index) => (

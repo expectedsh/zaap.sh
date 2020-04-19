@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react'
-import { useParams } from "react-router-dom"
+import React, { useEffect } from "react"
+import { Redirect, Route, Switch, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchApplication, deployApplication, fetchApplicationLogs } from "~/store/application/actions"
-import ApplicationStateBadge from "~/components/ApplicationStateBadge"
+import { toast } from "react-toastify"
+import { deployApplication, fetchApplication } from "~/store/application/actions"
 import Alert from "~/components/Alert"
 import Button from "~/components/Button"
-import { toast } from "react-toastify"
+import Header from "~/components/Header"
+import NavigationBar from "~/components/NavigationBar"
+import Activity from "~/views/Dashboard/ApplicationShow/Activity"
+import Configuration from "~/views/Dashboard/ApplicationShow/Configuration"
+import Logs from "~/views/Dashboard/ApplicationShow/Logs"
 
 function ApplicationShow() {
   const dispatch = useDispatch()
@@ -14,11 +18,11 @@ function ApplicationShow() {
 
   useEffect(() => {
     dispatch(fetchApplication({ id: params.id }))
-    dispatch(fetchApplicationLogs({ id: params.id }))
-      .then((events) => {
-        events.addEventListener('message', console.log)
-      })
-      .catch(console.error)
+    // dispatch(fetchApplicationLogs({ id: params.id }))
+    //   .then((events) => {
+    //     events.addEventListener("message", console.log)
+    //   })
+    //   .catch(console.error)
   }, [params])
 
   function renderBody() {
@@ -26,36 +30,48 @@ function ApplicationShow() {
       return <div>Loading...</div>
     }
     if (error) {
-      return <Alert className="alert alert-error" error={error} />
+      return <Alert className="alert alert-error" error={error}/>
     }
     return application ? (
-      <>
-        <div>{application.name}</div>
-        <ApplicationStateBadge state={application.state}/>
-      </>
+      <Switch>
+        <Route path="/apps/:id/activity" component={Activity}/>
+        <Route path="/apps/:id/config" component={Configuration}/>
+        <Route path="/apps/:id/logs" component={Logs}/>
+        <Redirect from="/apps/:id" to={`/apps/${params.id}/activity`}/>
+      </Switch>
     ) : null
   }
 
   function deploy() {
     if (application) {
       dispatch(deployApplication({ id: application.id }))
-        .then(() => toast.success('Deployment requested'))
+        .then(() => toast.success("Deployment requested"))
         .catch(err => toast.error(err.data?.message || err.response.statusText))
     }
   }
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1 className="header-title">
-          Application
-        </h1>
-        <Button className="btn btn-success" loading={deployPending} onClick={deploy}>
+    <>
+      <Header preTitle="Containers" title={application?.name ?? ""}>
+        <Button className="btn btn-secondary" loading={deployPending} onClick={deploy}>
           Trigger deployment
         </Button>
+      </Header>
+      <NavigationBar style={{ marginTop: -32 }}>
+        <NavigationBar.Link to={`/apps/${params.id}/activity`}>
+          Activity
+        </NavigationBar.Link>
+        <NavigationBar.Link to={`/apps/${params.id}/config`}>
+          Configuration
+        </NavigationBar.Link>
+        <NavigationBar.Link to={`/apps/${params.id}/logs`}>
+          Logs
+        </NavigationBar.Link>
+      </NavigationBar>
+      <div className="container">
+        {renderBody()}
       </div>
-      {renderBody()}
-    </div>
+    </>
   )
 }
 
