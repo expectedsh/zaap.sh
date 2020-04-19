@@ -1,15 +1,45 @@
-import React, { useEffect } from 'react'
-import { Link } from "react-router-dom"
+import React, { useEffect } from "react"
+import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchApplications } from "~/store/applications/actions"
-import ApplicationStateBadge from "~/components/ApplicationStateBadge"
-import Alert from "~/components/Alert"
-import { deleteApplication } from "~/store/application/actions"
 import { toast } from "react-toastify"
+import classnames from "classnames/bind"
+import moment from "moment"
+import { fetchApplications } from "~/store/applications/actions"
+import { deleteApplication } from "~/store/application/actions"
+import Alert from "~/components/Alert"
 import Header from "~/components/Header"
+import Table from "~/components/Table"
+import style from "./ApplicationList.module.scss"
+import ApplicationStateBadge from "~/components/ApplicationStateBadge"
+
+const cx = classnames.bind(style)
+
+const tableConfig = [
+  {
+    renderHeader: () => "Name",
+    renderCell: () => "My name",
+    cellClassNames: cx("cell-name"),
+  },
+  {
+    renderHeader: () => "Status",
+    renderCell: app => <ApplicationStateBadge state={app.state}/>,
+    cellClassNames: cx("cell-state"),
+  },
+  {
+    renderHeader: () => "Endpoint",
+    renderCell: () => "My name",
+    cellClassNames: cx("cell-endpoint"),
+  },
+  {
+    renderHeader: () => "Created",
+    renderCell: app => moment(app.createdAt).fromNow(),
+    cellClassNames: cx("cell-created"),
+  },
+]
 
 function ApplicationList() {
   const dispatch = useDispatch()
+  const history = useHistory()
   const { pending, applications, error } = useSelector(state => state.applications)
 
   useEffect(() => {
@@ -18,7 +48,7 @@ function ApplicationList() {
 
   function remove(id) {
     dispatch(deleteApplication({ id }))
-      .then(() => toast.success('Application deleted.'))
+      .then(() => toast.success("Application deleted."))
       .catch(err => toast.error(err.data?.message || err.response.statusText))
   }
 
@@ -27,34 +57,14 @@ function ApplicationList() {
       return <div>Loading...</div>
     }
     if (error) {
-      return <Alert className="alert alert-error" error={error} />
+      return <Alert className="alert alert-error" error={error}/>
     }
     return applications ? (
-      <table className="simple-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.map(application => (
-            <tr key={application.id}>
-              <td>{application.name}</td>
-              <td>{application.image}</td>
-              <td>
-                <ApplicationStateBadge state={application.state}/>
-              </td>
-              <td>
-                <Link to={`/apps/${application.id}`}>View</Link>
-                <div onClick={() => remove(application.id)}>Delete</div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Table
+        config={tableConfig}
+        dataSource={applications}
+        onRowClick={app => history.push(`/apps/${app.id}`)}
+      />
     ) : null
   }
 

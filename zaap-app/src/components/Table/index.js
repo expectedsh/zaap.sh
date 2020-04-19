@@ -1,0 +1,45 @@
+import React from "react"
+import PropTypes from "prop-types"
+import classnames from "classnames/bind"
+import style from "./Table.module.scss"
+
+const cx = classnames.bind(style)
+
+function Table({ config, dataSource, onRowClick }) {
+  return (
+    <div className={cx("root")}>
+      <div className={cx("header")}>
+        {config.map((item, index) => (
+          <div key={index} className={cx("cell", item.cellClassNames)}>
+            {item.renderHeader()}
+          </div>
+        ))}
+      </div>
+      <div className={cx("body")}>
+        {dataSource.map((row, rIndex) => (
+          <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}>
+            {config.map((item, index) => (
+              <div key={index} className={cx("cell", item.cellClassNames)}>
+                {item.renderCell(row)}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+Table.propTypes = {
+  config: PropTypes.arrayOf(
+    PropTypes.shape({
+      renderHeader: PropTypes.func.isRequired,
+      renderCell: PropTypes.func.isRequired,
+      cellClassNames: PropTypes.string,
+    }),
+  ).isRequired,
+  dataSource: PropTypes.array.isRequired,
+  onRowClick: PropTypes.func,
+}
+
+export default Table
