@@ -37,11 +37,9 @@ func HandleLogs(userService core.UserService) http.HandlerFunc {
 			log, err := logs.Recv()
 			logrus.Info(log)
 			if err != nil {
-				logrus.WithError(err).Info("wtf")
 				break
 			}
 			if err := sendLogLine(w, log); err != nil {
-				logrus.WithError(err).Info("log line")
 				break
 			}
 		}

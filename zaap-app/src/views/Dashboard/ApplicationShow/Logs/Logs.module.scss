@@ -1,0 +1,27 @@
+@import "~stylesheets/variables";
+
+.root {
+  height: 600px;
+  background: $color-grey-light;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  padding: 4px 0;
+}
+
+.log-line {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+  font-size: $text-font-size-sm;
+
+  .time {
+    padding-right: 16px;
+    border-right: 1px solid $color-border;
+    margin-right: 16px;
+  }
+
+  &:hover {
+    background: darken($color-grey-light, 5);
+  }
+}
