@@ -25,6 +25,8 @@ type (
 	}
 
 	DeploymentStore interface {
+		Find(context.Context, uuid.UUID) (*Deployment, error)
+
 		List(context.Context, uuid.UUID) (*[]*Deployment, error)
 
 		Create(context.Context, *Deployment) error

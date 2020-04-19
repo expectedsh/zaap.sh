@@ -18,12 +18,7 @@ function ApplicationShow() {
 
   useEffect(() => {
     dispatch(fetchApplication({ id: params.id }))
-    // dispatch(fetchApplicationLogs({ id: params.id }))
-    //   .then((events) => {
-    //     events.addEventListener("message", console.log)
-    //   })
-    //   .catch(console.error)
-  }, [params])
+  }, [params.id])
 
   function renderBody() {
     if (pending) {
@@ -60,6 +55,9 @@ function ApplicationShow() {
       <NavigationBar style={{ marginTop: -32 }}>
         <NavigationBar.Link to={`/apps/${params.id}/activity`}>
           Activity
+        </NavigationBar.Link>
+        <NavigationBar.Link to={`/apps/${params.id}/resources`}>
+          Resources
         </NavigationBar.Link>
         <NavigationBar.Link to={`/apps/${params.id}/config`}>
           Configuration

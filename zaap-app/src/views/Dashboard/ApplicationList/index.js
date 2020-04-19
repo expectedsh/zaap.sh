@@ -15,23 +15,23 @@ const cx = classnames.bind(style)
 const tableConfig = [
   {
     renderHeader: () => "Name",
-    renderCell: () => "My name",
-    cellClassNames: cx("cell-name"),
+    renderCell: app => app.name,
+    cellClassName: cx("cell-name"),
   },
   {
     renderHeader: () => "Status",
     renderCell: app => <ApplicationStateBadge state={app.state}/>,
-    cellClassNames: cx("cell-state"),
+    cellClassName: cx("cell-state"),
   },
   {
     renderHeader: () => "Endpoint",
     renderCell: () => "My name",
-    cellClassNames: cx("cell-endpoint"),
+    cellClassName: cx("cell-endpoint"),
   },
   {
     renderHeader: () => "Created",
     renderCell: app => moment(app.createdAt).fromNow(),
-    cellClassNames: cx("cell-created"),
+    cellClassName: cx("cell-created"),
   },
 ]
 

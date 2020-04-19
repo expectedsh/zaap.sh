@@ -13,9 +13,20 @@ import (
 func AuthRequired(store core.UserStore, service core.UserService) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			header := r.Header.Get("authorization")
-			headerParts := strings.Split(header, " ")
-			token := headerParts[len(headerParts)-1]
+			token := ""
+
+			if query := r.URL.Query().Get("authorization"); query != "" {
+				token = query
+			} else {
+				header := r.Header.Get("authorization")
+				headerParts := strings.Split(header, " ")
+				token = headerParts[len(headerParts)-1]
+			}
+
+			if token == "" {
+				response.Forbidden(w)
+				return
+			}
 
 			userId, err := service.UserIdFromToken(token)
 			if err != nil {

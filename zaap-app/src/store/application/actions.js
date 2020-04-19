@@ -52,7 +52,7 @@ export function deployApplication({ id }) {
 export function fetchApplicationLogs({ id }) {
   return async (dispatch, getState) => {
     const token = getState().authentication.token
-    return new EventSource(`${ENDPOINT}/applications/${id}/logs?token=${token}`)
+    return new EventSource(`${ENDPOINT}/applications/${id}/logs?authorization=${token}`)
   }
 }
 

@@ -15,6 +15,18 @@ func NewDeploymentStore(db *gorm.DB) core.DeploymentStore {
 	return &deploymentStore{db}
 }
 
+func (s deploymentStore) Find(ctx context.Context, id uuid.UUID) (*core.Deployment, error) {
+	deployment := new(core.Deployment)
+	if err := s.db.First(deployment, "id = ?", id.String()).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return nil, nil
+		} else {
+			return nil, err
+		}
+	}
+	return deployment, nil
+}
+
 func (s deploymentStore) List(ctx context.Context, applicationId uuid.UUID) (*[]*core.Deployment, error) {
 	deployments := new([]*core.Deployment)
 	if err := s.db.Find(deployments, "application_id = ?", applicationId.String()).Error; err != nil {

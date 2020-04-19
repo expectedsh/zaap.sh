@@ -10,7 +10,7 @@ function Table({ config, dataSource, onRowClick }) {
     <div className={cx("root")}>
       <div className={cx("header")}>
         {config.map((item, index) => (
-          <div key={index} className={cx("cell", item.cellClassNames)}>
+          <div key={index} className={cx("cell", item.cellClassName)}>
             {item.renderHeader()}
           </div>
         ))}
@@ -19,7 +19,7 @@ function Table({ config, dataSource, onRowClick }) {
         {dataSource.map((row, rIndex) => (
           <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}>
             {config.map((item, index) => (
-              <div key={index} className={cx("cell", item.cellClassNames)}>
+              <div key={index} className={cx("cell", item.cellClassName)}>
                 {item.renderCell(row)}
               </div>
             ))}
@@ -35,7 +35,7 @@ Table.propTypes = {
     PropTypes.shape({
       renderHeader: PropTypes.func.isRequired,
       renderCell: PropTypes.func.isRequired,
-      cellClassNames: PropTypes.string,
+      cellClassName: PropTypes.string,
     }),
   ).isRequired,
   dataSource: PropTypes.array.isRequired,
