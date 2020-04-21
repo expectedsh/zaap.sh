@@ -7,13 +7,13 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	"github.com/streadway/amqp"
 	"net/http"
 )
 
 type Server struct {
 	config     *config.Config
 	httpServer *http.Server
-	db         *gorm.DB
 }
 
 func New(config *config.Config) *Server {
@@ -28,15 +28,21 @@ func (s *Server) Start() error {
 		return err
 	}
 	defer db.Close()
-	s.db = db
+
 	// todo: use real migration
 	if err := db.AutoMigrate(&core.User{}, &core.Application{}, &core.Deployment{}).Error; err != nil {
 		return err
 	}
 
+	amqpConn, err := amqp.Dial(s.config.RabbitURL)
+	if err != nil {
+		return err
+	}
+	defer amqpConn.Close()
+
 	s.httpServer = &http.Server{
 		Addr:    s.config.Addr,
-		Handler: handler.New(s.config, s.db),
+		Handler: handler.New(s.config, db, amqpConn),
 	}
 	return s.httpServer.ListenAndServe()
 }

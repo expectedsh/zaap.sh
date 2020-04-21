@@ -35,6 +35,12 @@ type (
 
 		Delete(context.Context, uuid.UUID) error
 	}
+
+	ApplicationService interface {
+		Deploy(*Application) error
+
+		NotifyDeletion(*Application) error
+	}
 )
 
 const (

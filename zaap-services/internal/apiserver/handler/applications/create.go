@@ -23,7 +23,7 @@ func (r *createApplicationRequest) Validate() error {
 	)
 }
 
-func HandleCreate(store core.ApplicationStore) http.HandlerFunc {
+func HandleCreate(store core.ApplicationStore, service core.ApplicationService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := request.UserFrom(r.Context())
 
@@ -50,12 +50,17 @@ func HandleCreate(store core.ApplicationStore) http.HandlerFunc {
 			CurrentDeploymentID: deployment.ID,
 			Deployments:         []*core.Deployment{deployment},
 		}
+
 		if err := store.Create(r.Context(), application); err != nil {
 			logrus.WithError(err).Warn("could not create application")
 			response.InternalServerError(w)
 			return
 		}
-		// @todo: deploy
+
+		if err := service.Deploy(application); err != nil {
+			logrus.WithError(err).Warn("could not deploy application")
+			return
+		}
 
 		response.Created(w, map[string]interface{}{
 			"application": application,

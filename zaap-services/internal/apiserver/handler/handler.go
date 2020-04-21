@@ -11,9 +11,10 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/jinzhu/gorm"
+	"github.com/streadway/amqp"
 )
 
-func New(config *config.Config, db *gorm.DB) chi.Router {
+func New(config *config.Config, db *gorm.DB, amqpConn *amqp.Connection) chi.Router {
 	r := chi.NewRouter()
 
 	r.Use(cors.New(cors.Options{
@@ -26,6 +27,7 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 	userStore := store.NewUserStore(db)
 	userService := service.NewUserService(config.SecretKey)
 	applicationStore := store.NewApplicationStore(db)
+	applicationService := service.NewApplicationService(amqpConn)
 	deploymentStore := store.NewDeploymentStore(db)
 
 	r.Post("/auth/login", auth.HandleLogin(userStore, userService))
@@ -41,7 +43,7 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 
 		r.Route("/applications", func(r chi.Router) {
 			r.Get("/", applications.HandleList(applicationStore))
-			r.Post("/", applications.HandleCreate(applicationStore))
+			r.Post("/", applications.HandleCreate(applicationStore, applicationService))
 
 			r.Route("/{id}", func(r chi.Router) {
 				r.Use(InjectApplication(applicationStore))
@@ -50,7 +52,7 @@ func New(config *config.Config, db *gorm.DB) chi.Router {
 				r.Patch("/", applications.HandleUpdate(applicationStore, deploymentStore))
 				r.Delete("/", applications.HandleDelete(applicationStore))
 				r.Get("/logs", applications.HandleLogs(userService))
-				r.Post("/deploy", applications.HandleDeploy(deploymentStore, userService))
+				r.Post("/deploy", applications.HandleDeploy(applicationService))
 			})
 		})
 	})

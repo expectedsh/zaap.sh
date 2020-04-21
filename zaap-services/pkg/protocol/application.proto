@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package protocol;
+
+message ApplicationDeleted {
+    string applicationId = 1;
+}
+
+message ApplicationStateChanged {
+    string applicationId = 1;
+}

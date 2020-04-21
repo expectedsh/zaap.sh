@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+	logrus.Info("starting apiserver")
+
 	cfg, err := config.FromEnv()
 	if err != nil {
 		logrus.WithError(err).Fatal("could not parse configuration")
@@ -29,13 +31,11 @@ func main() {
 	signal.Notify(stop, os.Interrupt)
 
 	<-stop
-	logrus.Info("server is shutting down")
+	logrus.Info("shutting down")
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
 		logrus.WithError(err).Fatal("could not gracefully shutdown the server")
 	}
-
-	logrus.Info("server stopped")
 }
