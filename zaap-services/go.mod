@@ -10,6 +10,7 @@ require (
 	github.com/go-chi/chi v4.1.1+incompatible
 	github.com/go-chi/cors v1.1.1
 	github.com/go-ozzo/ozzo-validation/v4 v4.1.0
+	github.com/golang/protobuf v1.3.5
 	github.com/jinzhu/gorm v1.9.12
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lib/pq v1.3.0

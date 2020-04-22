@@ -50,7 +50,7 @@ func New(config *config.Config, db *gorm.DB, amqpConn *amqp.Connection) chi.Rout
 
 				r.Get("/", applications.HandleFind(deploymentStore))
 				r.Patch("/", applications.HandleUpdate(applicationStore, deploymentStore))
-				r.Delete("/", applications.HandleDelete(applicationStore))
+				r.Delete("/", applications.HandleDelete(applicationStore, applicationService))
 				r.Get("/logs", applications.HandleLogs(userService))
 				r.Post("/deploy", applications.HandleDeploy(applicationService))
 			})

@@ -18,6 +18,8 @@ func HandleDeploy(service core.ApplicationService) http.HandlerFunc {
 			return
 		}
 
+		logrus.Info(service.NotifyDeletion(application))
+
 		response.Ok(w, map[string]interface{}{
 			"application": application,
 		})
