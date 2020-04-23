@@ -3,22 +3,23 @@ package deployment_manager
 import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployment-manager/config"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/service"
-	"github.com/golang/protobuf/proto"
-	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 )
 
 type Manager struct {
-	context context.Context
-	config  *config.Config
+	context            context.Context
+	config             *config.Config
+	applicationService core.ApplicationService
+	errors             chan error
 }
 
 func New(config *config.Config) *Manager {
 	return &Manager{
 		context: context.TODO(),
 		config:  config,
+		errors:  make(chan error),
 	}
 }
 
@@ -29,33 +30,11 @@ func (m *Manager) Start() error {
 	}
 	defer amqpConn.Close()
 
-	applicationService := service.NewApplicationService(amqpConn)
+	m.applicationService = service.NewApplicationService(amqpConn)
 
-	listener, err := applicationService.Events(m.context)
-	if err != nil {
-		return err
-	}
+	go m.ApplicationEventsHandler()
 
-	for {
-		select {
-		case err := <-listener.Errors:
-			return err
-		case msg := <-listener.Messages:
-			m.HandleMessage(msg)
-		}
-	}
-
-	return nil
-}
-
-func (m *Manager) HandleMessage(msg proto.Message) error {
-	switch payload := msg.(type) {
-	case *protocol.ApplicationDeleted:
-		logrus.Info(payload)
-	default:
-		logrus.Warn("unhandled message")
-	}
-	return nil
+	return <-m.errors
 }
 
 func (m *Manager) Shutdown(ctx context.Context) error {

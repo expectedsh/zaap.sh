@@ -62,6 +62,7 @@ func (s applicationService) Events(ctx context.Context) (*messaging.EventListene
 
 func (s applicationService) NotifyDeletion(application *core.Application) error {
 	return s.events.Emit(&protocol.ApplicationDeleted{
-		ApplicationId: application.ID.String(),
+		Id: application.ID.String(),
+		Name: application.Name,
 	})
 }

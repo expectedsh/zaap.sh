@@ -1,7 +1,5 @@
-package notifier
-
-import "github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
+package notifiers
 
 type Notifier interface {
-	WhenApplicationDeleted(application *core.Application) error
+	WhenApplicationDeleted(id, name string) error
 }

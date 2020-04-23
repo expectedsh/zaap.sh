@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package protocol;
-
-message DeploymentRequest {
-    string applicationId = 1;
-    string deploymentId = 2;
-}
