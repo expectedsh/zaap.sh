@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployment-manager"
-	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployment-manager/config"
+	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployer"
+	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployer/config"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -11,18 +11,18 @@ import (
 )
 
 func main()  {
-	logrus.Infof("starting deployment manager")
+	logrus.Infof("starting deployer")
 
 	cfg, err := config.FromEnv()
 	if err != nil {
 		logrus.WithError(err).Fatal("could not parse configuration")
 	}
 
-	manager := deployment_manager.New(cfg)
+	manager := deployer.New(cfg)
 
 	go func() {
 		if err := manager.Start(); err != nil {
-			logrus.WithError(err).Fatal("could not start deployment manager")
+			logrus.WithError(err).Fatal("could not start")
 		}
 	}()
 
@@ -36,6 +36,6 @@ func main()  {
 	defer cancel()
 
 	if err := manager.Shutdown(ctx); err != nil {
-		logrus.WithError(err).Fatal("could not gracefully shutdown the deployment manager")
+		logrus.WithError(err).Fatal("could not gracefully shutdown")
 	}
 }
