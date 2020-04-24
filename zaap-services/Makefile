@@ -1,5 +1,4 @@
 PROTO_FILES=\
-	pkg/protocol/deployment.proto \
 	pkg/protocol/application.proto
 PROTO_FLAGS=-Ipkg/protocol -I/usr/local/include
 

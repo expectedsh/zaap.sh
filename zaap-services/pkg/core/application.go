@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/messaging"
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
 	"time"
@@ -39,8 +38,6 @@ type (
 
 	ApplicationService interface {
 		Deploy(*Application) error
-
-		Events(context.Context) (*messaging.EventListener, error)
 
 		NotifyDeletion(*Application) error
 	}

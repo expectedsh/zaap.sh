@@ -22,7 +22,7 @@ func main() {
 
 	go func() {
 		if err := server.Start(); err != nil {
-			logrus.WithError(err).Fatal("could not start notifier")
+			logrus.WithError(err).Fatal("could not start")
 		}
 	}()
 
@@ -35,6 +35,6 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		logrus.WithError(err).Fatal("could not gracefully shutdown the server")
+		logrus.WithError(err).Fatal("could not gracefully shutdown")
 	}
 }

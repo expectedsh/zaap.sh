@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListenEvents() error {
-	listener, err := s.applicationService.Events(s.context)
+	listener, err := s.applicationService.Events(s.context, "")
 	if err != nil {
 		return err
 	}

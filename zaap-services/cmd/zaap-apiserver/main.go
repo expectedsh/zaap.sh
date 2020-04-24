@@ -23,7 +23,7 @@ func main() {
 	go func() {
 		logrus.Infof("listening on %v", cfg.Addr)
 		if err := server.Start(); err != nil {
-			logrus.WithError(err).Fatal("could not start apiserver")
+			logrus.WithError(err).Fatal("could not start")
 		}
 	}()
 
@@ -36,6 +36,6 @@ func main() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		logrus.WithError(err).Fatal("could not gracefully shutdown the server")
+		logrus.WithError(err).Fatal("could not gracefully shutdown")
 	}
 }

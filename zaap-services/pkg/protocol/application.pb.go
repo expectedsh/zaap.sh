@@ -68,7 +68,7 @@ func (m *ApplicationDeleted) GetName() string {
 }
 
 type ApplicationStateChanged struct {
-	ApplicationId        string   `protobuf:"bytes,1,opt,name=applicationId,proto3" json:"applicationId,omitempty"`
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -99,9 +99,56 @@ func (m *ApplicationStateChanged) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ApplicationStateChanged proto.InternalMessageInfo
 
-func (m *ApplicationStateChanged) GetApplicationId() string {
+func (m *ApplicationStateChanged) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type ApplicationDeploymentRequest struct {
+	ApplicationId        string   `protobuf:"bytes,1,opt,name=applicationId,proto3" json:"applicationId,omitempty"`
+	DeploymentId         string   `protobuf:"bytes,2,opt,name=deploymentId,proto3" json:"deploymentId,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ApplicationDeploymentRequest) Reset()         { *m = ApplicationDeploymentRequest{} }
+func (m *ApplicationDeploymentRequest) String() string { return proto.CompactTextString(m) }
+func (*ApplicationDeploymentRequest) ProtoMessage()    {}
+func (*ApplicationDeploymentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fc846aced8fe6ea6, []int{2}
+}
+
+func (m *ApplicationDeploymentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ApplicationDeploymentRequest.Unmarshal(m, b)
+}
+func (m *ApplicationDeploymentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ApplicationDeploymentRequest.Marshal(b, m, deterministic)
+}
+func (m *ApplicationDeploymentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApplicationDeploymentRequest.Merge(m, src)
+}
+func (m *ApplicationDeploymentRequest) XXX_Size() int {
+	return xxx_messageInfo_ApplicationDeploymentRequest.Size(m)
+}
+func (m *ApplicationDeploymentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplicationDeploymentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApplicationDeploymentRequest proto.InternalMessageInfo
+
+func (m *ApplicationDeploymentRequest) GetApplicationId() string {
 	if m != nil {
 		return m.ApplicationId
+	}
+	return ""
+}
+
+func (m *ApplicationDeploymentRequest) GetDeploymentId() string {
+	if m != nil {
+		return m.DeploymentId
 	}
 	return ""
 }
@@ -109,18 +156,22 @@ func (m *ApplicationStateChanged) GetApplicationId() string {
 func init() {
 	proto.RegisterType((*ApplicationDeleted)(nil), "protocol.ApplicationDeleted")
 	proto.RegisterType((*ApplicationStateChanged)(nil), "protocol.ApplicationStateChanged")
+	proto.RegisterType((*ApplicationDeploymentRequest)(nil), "protocol.ApplicationDeploymentRequest")
 }
 
 func init() { proto.RegisterFile("application.proto", fileDescriptor_fc846aced8fe6ea6) }
 
 var fileDescriptor_fc846aced8fe6ea6 = []byte{
-	// 128 bytes of a gzipped FileDescriptorProto
+	// 163 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4c, 0x2c, 0x28, 0xc8,
 	0xc9, 0x4c, 0x4e, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x00,
 	0x53, 0xc9, 0xf9, 0x39, 0x4a, 0x16, 0x5c, 0x42, 0x8e, 0x08, 0x69, 0x97, 0xd4, 0x9c, 0xd4, 0x92,
 	0xd4, 0x14, 0x21, 0x3e, 0x2e, 0xa6, 0xcc, 0x14, 0x09, 0x46, 0x05, 0x46, 0x0d, 0xce, 0x20, 0xa6,
 	0xcc, 0x14, 0x21, 0x21, 0x2e, 0x96, 0xbc, 0xc4, 0xdc, 0x54, 0x09, 0x26, 0xb0, 0x08, 0x98, 0xad,
-	0x64, 0xcf, 0x25, 0x8e, 0xa4, 0x33, 0xb8, 0x24, 0xb1, 0x24, 0xd5, 0x39, 0x23, 0x31, 0x2f, 0x3d,
-	0x35, 0x45, 0x48, 0x85, 0x8b, 0x17, 0xc9, 0x4e, 0x4f, 0x98, 0x49, 0xa8, 0x82, 0x49, 0x6c, 0x60,
-	0x47, 0x18, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x58, 0x1a, 0x3d, 0x82, 0xa0, 0x00, 0x00, 0x00,
+	0xa4, 0xc9, 0x25, 0x8e, 0xa4, 0x33, 0xb8, 0x24, 0xb1, 0x24, 0xd5, 0x39, 0x23, 0x31, 0x2f, 0x1d,
+	0x53, 0xbb, 0x52, 0x06, 0x97, 0x0c, 0x8a, 0x25, 0x05, 0x39, 0xf9, 0x95, 0xb9, 0xa9, 0x79, 0x25,
+	0x41, 0xa9, 0x85, 0xa5, 0xa9, 0xc5, 0x25, 0x42, 0x2a, 0x5c, 0xbc, 0x48, 0x6e, 0xf4, 0x84, 0x69,
+	0x45, 0x15, 0x14, 0x52, 0xe2, 0xe2, 0x49, 0x81, 0x6b, 0xf5, 0x4c, 0x81, 0x3a, 0x06, 0x45, 0x2c,
+	0x89, 0x0d, 0xec, 0x31, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd4, 0xe7, 0x1a, 0x80, 0xf4,
+	0x00, 0x00, 0x00,
 }
