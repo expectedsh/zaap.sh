@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/messaging"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/golang/protobuf/proto"
 	"github.com/streadway/amqp"
@@ -13,7 +12,6 @@ const ApplicationEventsExchange = "application_events"
 
 type applicationService struct {
 	amqpConn *amqp.Connection
-	events   *messaging.EventBus
 }
 
 func NewApplicationService(amqpConn *amqp.Connection) core.ApplicationService {

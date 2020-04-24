@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployer/config"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/messaging"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/service"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/store"
 	"github.com/jinzhu/gorm"
@@ -43,7 +44,11 @@ func (s *Server) Start() error {
 	s.applicationStore = store.NewApplicationStore(db)
 	s.applicationService = service.NewApplicationService(amqpConn)
 
-	return s.ListenEvents()
+	queueConfig := messaging.NewSimpleWorkingQueue(service.ApplicationEventsExchange, "deployer")
+	subscriber := messaging.NewSubscriber(amqpConn, queueConfig)
+	subscriber.RegisterHandler(s.DeploymentHandler)
+
+	return subscriber.Subscribe(s.context)
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
