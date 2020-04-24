@@ -8,30 +8,36 @@ import (
 	"reflect"
 )
 
-type (
-	SubscriberHandler func(ctx context.Context, message proto.Message) error
+type Subscriber struct {
+	conn            *amqp.Connection
+	queueConfig     QueueConfiguration
+	messageTypes    map[string]reflect.Type
+	messageHandlers map[string]interface{}
+}
 
-	Subscriber struct {
-		conn            *amqp.Connection
-		exchangeName    string
-		queueName       string
-		messageRegistry map[string]reflect.Type
-		Handler         SubscriberHandler
-	}
-)
-
-func NewSubscriber(conn *amqp.Connection, exchangeName string, queueName string) *Subscriber {
+func NewSubscriber(conn *amqp.Connection, queueConfig QueueConfiguration) *Subscriber {
 	return &Subscriber{
 		conn:            conn,
-		exchangeName:    exchangeName,
-		queueName:       queueName,
-		messageRegistry: make(map[string]reflect.Type),
+		queueConfig:     queueConfig,
+		messageTypes:    make(map[string]reflect.Type),
+		messageHandlers: make(map[string]interface{}),
 	}
 }
 
-func (s *Subscriber) RegisterMessage(message *proto.Message) {
-	messageType := reflect.TypeOf(message).Elem()
-	s.messageRegistry[messageType.Name()] = messageType
+func (s *Subscriber) RegisterHandler(v interface{}) {
+	function := reflect.TypeOf(v)
+	if function.Kind() != reflect.Func {
+		panic("subscriber handler must be a function")
+	}
+	if function.NumIn() != 2 {
+		panic("subscriber handler function must take 2 arguments")
+	}
+	if function.In(0).Kind() == reflect.TypeOf(context.TODO()).Kind() {
+		panic("subscriber handler function first argument must be the context")
+	}
+	messageType := function.In(1).Elem()
+	s.messageTypes[messageType.Name()] = messageType
+	s.messageHandlers[messageType.Name()] = v
 }
 
 func (s *Subscriber) Subscribe(ctx context.Context) error {
@@ -41,29 +47,19 @@ func (s *Subscriber) Subscribe(ctx context.Context) error {
 	}
 	defer ch.Close()
 
-	err = ch.ExchangeDeclare(s.exchangeName, amqp.ExchangeTopic, true, false, false, false, nil)
+	queue, err := s.queueConfig.Initialise(ch)
 	if err != nil {
 		return err
 	}
 
-	q, err := ch.QueueDeclare(s.queueName, false, false, false, false, nil)
-	if err != nil {
-		return err
-	}
-
-	for messageType, _ := range s.messageRegistry {
-		err = ch.QueueBind(q.Name, messageType, s.exchangeName, false, nil)
+	for messageType, _ := range s.messageHandlers {
+		err = s.queueConfig.Bind(ch, *queue, messageType)
 		if err != nil {
 			return err
 		}
 	}
 
-	err = ch.Qos(1, 0, false)
-	if err != nil {
-		return err
-	}
-
-	messages, err := ch.Consume(q.Name, "", false, false, false, false, nil)
+	messages, err := s.queueConfig.Consume(ch, *queue)
 	if err != nil {
 		return err
 	}
@@ -73,7 +69,7 @@ func (s *Subscriber) Subscribe(ctx context.Context) error {
 		case <-ctx.Done():
 			return nil
 		case message := <-messages:
-			messageType := s.messageRegistry[message.RoutingKey]
+			messageType := s.messageTypes[message.RoutingKey]
 			if messageType == nil {
 				_ = message.Nack(false, true)
 				continue
@@ -86,11 +82,22 @@ func (s *Subscriber) Subscribe(ctx context.Context) error {
 				continue
 			}
 
-			if err = s.Handler(ctx, payload); err != nil {
-				_ = message.Nack(false, true)
-			} else {
-				_ = message.Ack(false)
+			handler := s.messageHandlers[message.RoutingKey]
+			if handler == nil {
+				continue
 			}
+
+			values := reflect.ValueOf(handler).Call([]reflect.Value{
+				reflect.ValueOf(ctx),
+				reflect.ValueOf(payload),
+			})
+
+			logrus.Info(values)
+			//if err = s.Handler(ctx, payload); err != nil {
+			//	_ = message.Nack(false, true)
+			//} else {
+			//	_ = message.Ack(false)
+			//}
 		}
 	}
 }
