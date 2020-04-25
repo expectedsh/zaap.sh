@@ -19,7 +19,8 @@ function Table({ config, dataSource, onRowClick, noData = null }) {
           </div>
           <div>
             {dataSource.map((row, rIndex) => (
-              <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}>
+              <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}
+                   style={onRowClick ? { cursor: 'pointer' } : {}}>
                 {config.map((item, index) => (
                   <div key={index} className={cx("cell", item.cellClassName)}>
                     {item.renderCell(row)}

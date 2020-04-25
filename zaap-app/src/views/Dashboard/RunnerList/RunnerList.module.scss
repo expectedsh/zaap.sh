@@ -1,0 +1,35 @@
+@import "~stylesheets/variables";
+
+.cell-name {
+  flex: 1 1 0;
+
+  .runner-logo {
+    height: 24px;
+    margin-right: 8px;
+  }
+}
+
+.cell-state,
+.cell-created {
+  width: 160px;
+}
+
+.cell-url {
+  width: 260px;
+}
+
+.no-runner {
+  background: $color-grey-light;
+  text-align: center;
+  padding: 64px 0;
+
+  .title {
+    font-size: $text-font-size-lg;
+    font-weight: $text-font-weight-bold;
+  }
+
+  .description {
+    margin-top: 16px;
+  }
+}
+

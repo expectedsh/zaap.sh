@@ -1,10 +1,10 @@
-import './Button.scss'
-import React from 'react'
-import PropTypes from 'prop-types'
+import "./Button.scss"
+import React from "react"
+import PropTypes from "prop-types"
 
-function Button({ loading, children, ...props }) {
+function Button({ loading, children, disabled, ...props }) {
   return (
-    <button {...props}>
+    <button {...props} disabled={loading || disabled}>
       {children}
     </button>
   )

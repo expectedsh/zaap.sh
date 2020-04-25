@@ -20,7 +20,7 @@ function GeneralForm() {
   }, [application])
 
   function validate(values) {
-    let errors = {}
+    const errors = {}
     if (!values.name) {
       errors.name = "can't be blank"
     }

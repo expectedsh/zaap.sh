@@ -11,7 +11,7 @@ func HandleFind(deploymentStore core.DeploymentStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		application := request.ApplicationFrom(r.Context())
 
-		deployments, err := deploymentStore.List(r.Context(), application.ID)
+		deployments, err := deploymentStore.ListByApplication(r.Context(), application.ID)
 		if err != nil {
 			response.InternalServerError(w)
 			return

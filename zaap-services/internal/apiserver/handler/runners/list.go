@@ -1,4 +1,4 @@
-package applications
+package runners
 
 import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
@@ -7,18 +7,18 @@ import (
 	"net/http"
 )
 
-func HandleList(store core.ApplicationStore) http.HandlerFunc {
+func HandleList(store core.RunnerStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := request.UserFrom(r.Context())
 
-		applications, err := store.ListByUser(r.Context(), user.ID)
+		runners, err := store.ListByUser(r.Context(), user.ID)
 		if err != nil {
 			response.InternalServerError(w)
 			return
 		}
 
 		response.Ok(w, map[string]interface{}{
-			"applications": applications,
+			"runners": runners,
 		})
 	}
 }

@@ -27,7 +27,7 @@ func (s deploymentStore) Find(ctx context.Context, id uuid.UUID) (*core.Deployme
 	return deployment, nil
 }
 
-func (s deploymentStore) List(ctx context.Context, applicationId uuid.UUID) (*[]*core.Deployment, error) {
+func (s deploymentStore) ListByApplication(ctx context.Context, applicationId uuid.UUID) (*[]*core.Deployment, error) {
 	deployments := new([]*core.Deployment)
 	if err := s.db.Find(deployments, "application_id = ?", applicationId.String()).Error; err != nil {
 		return nil, err

@@ -4,12 +4,14 @@ import authentication from './authentication/reducer'
 import user from './user/reducer'
 import applications from './applications/reducer'
 import application from './application/reducer'
+import runners from './runners/reducer'
 
 const reducer = combineReducers({
   authentication,
   user,
   applications,
   application,
+  runners,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -24,10 +24,10 @@ export function fetchApplications() {
   }
 }
 
-export function createApplication({ name, image }) {
+export function createApplication(payload) {
   return dispatch => {
     dispatch(createApplicationPending(true))
-    return api.post("/applications", { name, image })
+    return api.post("/applications", payload)
       .then(res => {
         dispatch(addApplication(res.data.application))
         return res.data.application

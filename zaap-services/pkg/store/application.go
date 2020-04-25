@@ -27,7 +27,7 @@ func (s applicationStore) Find(ctx context.Context, id uuid.UUID) (*core.Applica
 	return application, nil
 }
 
-func (s applicationStore) List(ctx context.Context, userId uuid.UUID) (*[]core.Application, error) {
+func (s applicationStore) ListByUser(ctx context.Context, userId uuid.UUID) (*[]core.Application, error) {
 	applications := new([]core.Application)
 	if err := s.db.Find(applications, "user_id = ?", userId).Error; err != nil {
 		return nil, err

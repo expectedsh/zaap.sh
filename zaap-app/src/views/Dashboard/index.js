@@ -6,9 +6,11 @@ import { logout } from "~/store/authentication/actions"
 import { fetchUser } from "~/store/user/actions"
 import Alert from "~/components/Alert"
 import Settings from "~/views/Dashboard/Settings"
-import ApplicationNew from "~/views/Dashboard/ApplicationNew"
 import ApplicationList from "~/views/Dashboard/ApplicationList"
+import ApplicationNew from "~/views/Dashboard/ApplicationNew"
 import ApplicationShow from "~/views/Dashboard/ApplicationShow"
+import RunnerList from "~/views/Dashboard/RunnerList"
+import RunnerNew from "~/views/Dashboard/RunnerNew"
 import logo from "~/assets/images/logo.svg"
 import style from "./Dashboard.module.scss"
 
@@ -38,9 +40,14 @@ function Dashboard() {
     return user ? (
       <Switch>
         <Route path="/settings" component={Settings}/>
+
         <Route path="/apps/new" component={ApplicationNew}/>
         <Route path="/apps/:id" component={ApplicationShow}/>
         <Route path="/apps" component={ApplicationList}/>
+
+        <Route path="/runners/new" component={RunnerNew}/>
+        <Route path="/runners" component={RunnerList}/>
+
         <Redirect to="/apps"/>
       </Switch>
     ) : null
@@ -53,6 +60,7 @@ function Dashboard() {
           <img className={cx("navbar-brand")} src={logo} alt="Zaap logo"/>
           <div className={cx("navbar-links")}>
             <Link className={cx("navbar-link")} to="/apps">Applications</Link>
+            <Link className={cx("navbar-link")} to="/runners">Runners</Link>
           </div>
           <div className={cx("navbar-links", "navbar-links-right")}>
             <Link className={cx("navbar-link")} to="/settings">

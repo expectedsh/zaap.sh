@@ -5,10 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	uuid "github.com/satori/go.uuid"
-	"google.golang.org/grpc"
 )
 
 type userService struct {
@@ -58,12 +56,4 @@ func (s userService) ComparePassword(hashedPassword string, password string) boo
 		return false
 	}
 	return hashedPassword == hash
-}
-
-func (s userService) NewSchedulerConnection(user *core.User) (protocol.SchedulerClient, *grpc.ClientConn, error) {
-	conn, err := grpc.Dial(*user.SchedulerURL, grpc.WithInsecure())
-	if err != nil {
-		return nil, nil, err
-	}
-	return protocol.NewSchedulerClient(conn), conn, nil
 }

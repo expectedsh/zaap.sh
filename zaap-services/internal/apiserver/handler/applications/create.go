@@ -2,28 +2,44 @@ package applications
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
-	uuid "github.com/satori/go.uuid"
+	"github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 type createApplicationRequest struct {
-	Name  string `json:"name"`
-	Image string `json:"image"`
+	Name     string `json:"name"`
+	Image    string `json:"image"`
+	RunnerID string `json:"runner_id"`
 }
 
 func (r *createApplicationRequest) Validate() error {
 	return validation.ValidateStruct(r,
-		validation.Field(&r.Name, validation.Required, validation.Length(1, 0)),
-		validation.Field(&r.Image, validation.Required, validation.Length(1, 0)),
+		validation.Field(
+			&r.Name,
+			validation.Length(3, 50),
+			validation.
+				Match(core.ApplicationNameRegex).
+				Error("should only contain letters, numbers, and dashes"),
+		),
+		validation.Field(
+			&r.Image,
+			validation.Required,
+			validation.
+				Match(core.DeploymentImageRegex).
+				Error("invalid image"),
+		),
+		validation.Field(&r.RunnerID, validation.Required, is.UUIDv4),
 	)
 }
 
-func HandleCreate(store core.ApplicationStore, service core.ApplicationService) http.HandlerFunc {
+func HandleCreate(store core.ApplicationStore, runnerStore core.RunnerStore, service core.ApplicationService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user := request.UserFrom(r.Context())
 
@@ -38,6 +54,17 @@ func HandleCreate(store core.ApplicationStore, service core.ApplicationService) 
 			return
 		}
 
+		runner, err := runnerStore.Find(r.Context(), uuid.FromStringOrNil(in.RunnerID))
+		if err != nil {
+			response.InternalServerError(w)
+			return
+		} else if runner == nil || runner.UserID != user.ID {
+			response.UnprocessableEntity(w, validation.Errors{
+				"runner_id": errors.New("not found"),
+			})
+			return
+		}
+
 		deployment := &core.Deployment{
 			ID:       uuid.NewV4(),
 			Image:    in.Image,
@@ -45,9 +72,10 @@ func HandleCreate(store core.ApplicationStore, service core.ApplicationService) 
 		}
 		application := &core.Application{
 			Name:                in.Name,
-			State:               core.ApplicationStateUnknown,
-			UserID:              user.ID,
+			Status:              core.ApplicationStatusUnknown,
 			CurrentDeploymentID: deployment.ID,
+			User:                user,
+			Runner:              runner,
 			Deployments:         []*core.Deployment{deployment},
 		}
 

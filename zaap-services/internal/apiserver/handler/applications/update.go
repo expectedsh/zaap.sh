@@ -18,7 +18,7 @@ type updateApplicationRequest struct {
 	Environment *core.Environment `json:"environment"`
 }
 
-func (r *updateApplicationRequest) Validate() error {
+func (r updateApplicationRequest) Validate() error {
 	return validation.ValidateStruct(r,
 		validation.Field(&r.Name, validation.Length(1, 0)),
 		validation.Field(&r.Image, validation.Length(1, 0)),

@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
+import Select from 'react-select'
 import PropTypes from 'prop-types'
 import classnames from 'classnames/bind'
-import style from './TextField.module.scss'
+import style from './SelectField.module.scss'
 
 const cx = classnames.bind(style)
 
-function TextField({ type = "text", input, meta, name, label, value, required, ...props }) {
+function SelectField({ input, meta, name, label, value, required, ...props }) {
   const fromArrayOrCurrent = s =>
     typeof s === 'string' ? s : s?.[0]
 
@@ -21,8 +22,8 @@ function TextField({ type = "text", input, meta, name, label, value, required, .
           {required && <span className={cx('required')}>*</span>}
         </label>
       )}
-      <input
-        type={type}
+      <Select
+        classNamePrefix="react-select"
         name={name}
         defaultValue={value}
         required={required}
@@ -38,8 +39,7 @@ function TextField({ type = "text", input, meta, name, label, value, required, .
   )
 }
 
-TextField.propTypes = {
-  type: PropTypes.string,
+SelectField.propTypes = {
   input: PropTypes.object,
   meta: PropTypes.object,
   name: PropTypes.string,
@@ -49,6 +49,7 @@ TextField.propTypes = {
   disabled: PropTypes.bool,
   required: PropTypes.bool,
   value: PropTypes.any,
+  options: PropTypes.any,
 }
 
-export default TextField
+export default SelectField

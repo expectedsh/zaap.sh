@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"regexp"
 	"time"
 )
 
@@ -26,11 +27,13 @@ type (
 	DeploymentStore interface {
 		Find(context.Context, uuid.UUID) (*Deployment, error)
 
-		List(context.Context, uuid.UUID) (*[]*Deployment, error)
+		ListByApplication(context.Context, uuid.UUID) (*[]*Deployment, error)
 
 		Create(context.Context, *Deployment) error
 	}
 )
+
+var DeploymentImageRegex = regexp.MustCompile("(?m)^(?:.+/)?([^:]+)(?::.+)?$")
 
 func (d *Deployment) BeforeCreate(scope *gorm.Scope) error {
 	if d.ID == uuid.Nil {

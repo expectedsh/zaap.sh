@@ -45,43 +45,6 @@ function ProfileForm() {
   )
 }
 
-function SchedulerForm() {
-  const dispatch = useDispatch()
-  const user = useSelector(state => state.user.user)
-
-  function onSubmit(values) {
-    return dispatch(updateUser({
-      schedulerUrl: values.schedulerUrl,
-      schedulerToken: values.schedulerToken,
-    }))
-      .then(() => {
-        toast.success("Scheduler updated.")
-      })
-      .catch(error => {
-        if (error.response.status === 422) {
-          return error.data
-        }
-        toast.error(error.response.statusText)
-      })
-  }
-
-  return (
-    <Form
-      onSubmit={onSubmit}
-      initialValues={user}
-      render={({ handleSubmit, pristine }) => (
-        <form onSubmit={handleSubmit}>
-          <Field component={TextField} name="schedulerUrl" label="Scheduler URL"/>
-          <Field component={TextField} name="schedulerToken" label="Scheduler token" disabled/>
-          <Button className="btn btn-success" type="submit" disabled={pristine}>
-            Update
-          </Button>
-        </form>
-      )}
-    />
-  )
-}
-
 function Settings() {
   return (
     <>
@@ -92,12 +55,6 @@ function Settings() {
           description="Your email address is your identity on Zaap and is used to log in."
         >
           <ProfileForm/>
-        </FormSection>
-        <FormSection
-          name="Scheduler"
-          description="Informations about your scheduler."
-        >
-          <SchedulerForm/>
         </FormSection>
       </div>
     </>

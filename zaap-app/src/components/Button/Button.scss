@@ -1,6 +1,7 @@
 @import "~stylesheets/variables";
 
 .btn {
+  position: relative;
   display: block;
   border-radius: 4px;
   font-size: $text-font-size-md;

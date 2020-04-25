@@ -3,45 +3,51 @@ import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import classnames from "classnames/bind"
 import moment from "moment"
-import { fetchApplications } from "~/store/applications/actions"
+import { fetchRunners } from "~/store/runners/actions"
 import Alert from "~/components/Alert"
+import RunnerStateBadge from "~/components/RunnerStatusBadge"
 import Header from "~/components/Header"
-import ApplicationStateBadge from "~/components/ApplicationStatusBadge"
 import Table from "~/components/Table"
-import style from "./ApplicationList.module.scss"
+import style from "./RunnerList.module.scss"
+import RunnerTypeLogo from "~/components/RunnerTypeLogo"
 
 const cx = classnames.bind(style)
 
 const tableConfig = [
   {
     renderHeader: () => "Name",
-    renderCell: app => app.name,
+    renderCell: runner => (
+      <>
+        <RunnerTypeLogo type={runner.type} className={cx('runner-logo')}/>
+        {runner.name}
+      </>
+    ),
     cellClassName: cx("cell-name"),
   },
   {
     renderHeader: () => "Status",
-    renderCell: app => <ApplicationStateBadge state={app.state}/>,
+    renderCell: runner => <RunnerStateBadge status={runner.status}/>,
     cellClassName: cx("cell-state"),
   },
   {
     renderHeader: () => "Endpoint",
-    renderCell: () => "My name",
-    cellClassName: cx("cell-endpoint"),
+    renderCell: runner => runner.url,
+    cellClassName: cx("cell-url"),
   },
   {
-    renderHeader: () => "Created",
-    renderCell: app => moment(app.createdAt).fromNow(),
+    renderHeader: () => "Last update",
+    renderCell: runner => moment(runner.updatedAt).fromNow(),
     cellClassName: cx("cell-created"),
   },
 ]
 
-function ApplicationList() {
+function RunnerList() {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { pending, applications, error } = useSelector(state => state.applications)
+  const { pending, runners, error } = useSelector(state => state.runners)
 
   useEffect(() => {
-    dispatch(fetchApplications())
+    dispatch(fetchRunners())
   }, [])
 
   function renderBody() {
@@ -51,18 +57,17 @@ function ApplicationList() {
     if (error) {
       return <Alert className="alert alert-error" error={error}/>
     }
-    return applications ? (
+    return runners ? (
       <Table
         config={tableConfig}
-        dataSource={applications}
-        onRowClick={app => history.push(`/apps/${app.id}`)}
+        dataSource={runners}
         noData={
-          <div className={cx('no-application')}>
+          <div className={cx('no-runner')}>
             <div className={cx('title')}>
-              You don't have application 😭
+              You don't have runner 😭
             </div>
             <div className={cx('description')}>
-              Create an application and it will show up here.
+              Register a runner and it will show up here.
             </div>
           </div>
         }
@@ -72,9 +77,9 @@ function ApplicationList() {
 
   return (
     <>
-      <Header preTitle="Overview" title="Applications">
-        <Link className="btn btn-secondary" to="/apps/new">
-          New application
+      <Header preTitle="Overview" title="Runners">
+        <Link className="btn btn-secondary" to="/runners/new">
+          Register runner
         </Link>
       </Header>
       <div className="container">
@@ -84,4 +89,4 @@ function ApplicationList() {
   )
 }
 
-export default ApplicationList
+export default RunnerList

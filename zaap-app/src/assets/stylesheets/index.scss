@@ -68,3 +68,17 @@ body {
 .Toastify__toast--error {
   background: $color-red;
 }
+
+.react-select__control {
+  border-color: $color-border !important;
+
+  &:hover {
+    border-color: $color-border !important;
+  }
+}
+
+.react-select__control--menu-is-focused:focus,
+.react-select__control--menu-is-open:hover {
+  border-color: $color-blue !important;
+  box-shadow: none;
+}
