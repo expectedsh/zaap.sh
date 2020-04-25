@@ -23,7 +23,7 @@ func HandleLogin(store core.UserStore, service core.UserService) http.HandlerFun
 	return func(w http.ResponseWriter, r *http.Request) {
 		in := new(loginRequest)
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
-			response.UnprocessableEntity(w, err)
+			response.BadRequest(w)
 			return
 		}
 

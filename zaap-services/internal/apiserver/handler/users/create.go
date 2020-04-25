@@ -28,7 +28,7 @@ func HandleCreate(store core.UserStore, service core.UserService) http.HandlerFu
 	return func(w http.ResponseWriter, r *http.Request) {
 		in := new(createUserRequest)
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
-			response.UnprocessableEntity(w, err)
+			response.BadRequest(w)
 			return
 		}
 

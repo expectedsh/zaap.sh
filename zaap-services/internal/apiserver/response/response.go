@@ -13,19 +13,14 @@ func Created(w http.ResponseWriter, v interface{}) {
 	WriteResponse(w, http.StatusCreated, v)
 }
 
-func UnprocessableEntity(w http.ResponseWriter, err error) {
-	WriteResponse(w, http.StatusUnprocessableEntity, err)
+func NoContent(w http.ResponseWriter) {
+	w.Header().Add("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusNoContent)
 }
 
-func InternalServerError(w http.ResponseWriter) {
-	WriteResponse(w, http.StatusInternalServerError, map[string]string{
-		"message": "Something went wrong.",
-	})
-}
-
-func NotFound(w http.ResponseWriter) {
-	WriteResponse(w, http.StatusNotFound, map[string]string{
-		"message": "Resource not found.",
+func BadRequest(w http.ResponseWriter) {
+	WriteResponse(w, http.StatusBadRequest, map[string]string{
+		"message": "Invalid payload.",
 	})
 }
 
@@ -35,9 +30,20 @@ func Forbidden(w http.ResponseWriter) {
 	})
 }
 
-func NoContent(w http.ResponseWriter) {
-	w.Header().Add("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusNoContent)
+func NotFound(w http.ResponseWriter) {
+	WriteResponse(w, http.StatusNotFound, map[string]string{
+		"message": "Resource not found.",
+	})
+}
+
+func UnprocessableEntity(w http.ResponseWriter, err error) {
+	WriteResponse(w, http.StatusUnprocessableEntity, err)
+}
+
+func InternalServerError(w http.ResponseWriter) {
+	WriteResponse(w, http.StatusInternalServerError, map[string]string{
+		"message": "Something went wrong.",
+	})
 }
 
 func WriteResponse(w http.ResponseWriter, status int, v interface{}) {

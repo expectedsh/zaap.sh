@@ -29,7 +29,7 @@ func HandleCreate(store core.ApplicationStore, service core.ApplicationService) 
 
 		in := new(createApplicationRequest)
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
-			response.UnprocessableEntity(w, err)
+			response.BadRequest(w)
 			return
 		}
 

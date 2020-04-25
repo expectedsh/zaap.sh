@@ -31,7 +31,7 @@ func HandleUpdate(store core.UserStore, service core.UserService) http.HandlerFu
 		in := new(userUpdateRequest)
 
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
-			response.UnprocessableEntity(w, err)
+			response.BadRequest(w)
 			return
 		}
 

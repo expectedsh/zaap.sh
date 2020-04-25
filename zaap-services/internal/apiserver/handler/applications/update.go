@@ -41,7 +41,7 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 
 		in := new(updateApplicationRequest)
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
-			response.UnprocessableEntity(w, err)
+			response.BadRequest(w)
 			return
 		} else if err := in.Validate(); err != nil {
 			response.UnprocessableEntity(w, err)
