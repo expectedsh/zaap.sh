@@ -23,8 +23,8 @@ type Server struct {
 
 func New(config *config.Config) *Server {
 	return &Server{
-		config:  config,
-		context: context.TODO(),
+		config:   config,
+		context:  context.TODO(),
 		notifier: notifiers.NewDiscordNotifier("https://discordapp.com/api/webhooks/702952793115459764/TQo8AVcYaTiEUJVv1Zg0gfmImHacjv6ciAlOBKvrs3F0Sb8HAJNmqZyKGmwGn6c264g5"),
 	}
 }
@@ -45,8 +45,8 @@ func (s *Server) Start() error {
 	s.applicationStore = store.NewApplicationStore(db)
 	s.applicationService = service.NewApplicationService(amqpConn)
 
-	queueConfig := messaging.NewSimpleWorkingQueue(service.ApplicationEventsExchange, "notifier")
-	subscriber := messaging.NewSubscriber(amqpConn, queueConfig)
+	queueConfig := messaging.NewSimpleWorkingQueue(service.ApplicationEventsExchange.Name(), "notifier")
+	subscriber := messaging.NewSubscriber(amqpConn, service.ApplicationEventsExchange, queueConfig)
 	subscriber.RegisterHandler(s.HandleApplicationDeploymentRequested)
 	subscriber.RegisterHandler(s.HandleApplicationDeleted)
 

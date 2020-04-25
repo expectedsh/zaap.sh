@@ -44,8 +44,8 @@ func (s *Server) Start() error {
 	s.applicationStore = store.NewApplicationStore(db)
 	s.applicationService = service.NewApplicationService(amqpConn)
 
-	queueConfig := messaging.NewSimpleWorkingQueue(service.ApplicationEventsExchange, "deployer")
-	subscriber := messaging.NewSubscriber(amqpConn, queueConfig)
+	queueConfig := messaging.NewSimpleWorkingQueue(service.ApplicationEventsExchange.Name(), "deployer")
+	subscriber := messaging.NewSubscriber(amqpConn, service.ApplicationEventsExchange, queueConfig)
 	subscriber.RegisterHandler(s.DeploymentHandler)
 
 	return subscriber.Subscribe(s.context)
