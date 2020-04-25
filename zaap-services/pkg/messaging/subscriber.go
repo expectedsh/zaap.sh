@@ -3,7 +3,6 @@ package messaging
 import (
 	"context"
 	"github.com/golang/protobuf/proto"
-	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 	"reflect"
 )
@@ -14,7 +13,13 @@ type Subscriber struct {
 	queueConfig     QueueConfig
 	messageTypes    map[string]reflect.Type
 	messageHandlers map[string]interface{}
+	ErrorHandler    func(error, interface{}) bool
 }
+
+var (
+	contextType = reflect.TypeOf(context.TODO())
+	errorType   = reflect.TypeOf((*error)(nil)).Elem()
+)
 
 func NewSubscriber(conn *amqp.Connection, exchangeConfig ExchangeConfig, queueConfig QueueConfig) *Subscriber {
 	return &Subscriber{
@@ -34,8 +39,11 @@ func (s *Subscriber) RegisterHandler(v interface{}) {
 	if function.NumIn() != 2 {
 		panic("subscriber handler function must take 2 arguments")
 	}
-	if function.In(0).Kind() == reflect.TypeOf(context.TODO()).Kind() {
+	if function.In(0).Kind() == contextType.Kind() {
 		panic("subscriber handler function first argument must be the context")
+	}
+	if function.NumOut() != 1 || !function.Out(0).Implements(errorType) {
+		panic("subscriber handler function must return an error type")
 	}
 	messageType := function.In(1).Elem()
 	s.messageTypes[messageType.Name()] = messageType
@@ -84,13 +92,13 @@ func (s *Subscriber) Subscribe(ctx context.Context) error {
 
 			payload := reflect.New(messageType).Interface().(proto.Message)
 			if err = proto.Unmarshal(message.Body, payload); err != nil {
-				logrus.WithError(err).Warn("could not unmarshal message")
 				_ = message.Nack(false, true)
 				continue
 			}
 
 			handler := s.messageHandlers[message.RoutingKey]
 			if handler == nil {
+				_ = message.Nack(false, true)
 				continue
 			}
 
@@ -99,12 +107,15 @@ func (s *Subscriber) Subscribe(ctx context.Context) error {
 				reflect.ValueOf(payload),
 			})
 
-			logrus.Info(values)
-			//if err = s.Handler(ctx, payload); err != nil {
-			//	_ = message.Nack(false, true)
-			//} else {
-			//	_ = message.Ack(false)
-			//}
+			if values[0].Interface() == nil {
+				_ = message.Ack(false)
+			} else {
+				requeue := true
+				if s.ErrorHandler != nil {
+					requeue = s.ErrorHandler(err, payload)
+				}
+				_ = message.Nack(false, requeue)
+			}
 		}
 	}
 }
