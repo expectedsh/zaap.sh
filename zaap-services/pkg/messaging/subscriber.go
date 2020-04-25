@@ -10,14 +10,16 @@ import (
 
 type Subscriber struct {
 	conn            *amqp.Connection
-	queueConfig     QueueConfiguration
+	exchangeConfig  ExchangeConfig
+	queueConfig     QueueConfig
 	messageTypes    map[string]reflect.Type
 	messageHandlers map[string]interface{}
 }
 
-func NewSubscriber(conn *amqp.Connection, queueConfig QueueConfiguration) *Subscriber {
+func NewSubscriber(conn *amqp.Connection, exchangeConfig ExchangeConfig, queueConfig QueueConfig) *Subscriber {
 	return &Subscriber{
 		conn:            conn,
+		exchangeConfig:  exchangeConfig,
 		queueConfig:     queueConfig,
 		messageTypes:    make(map[string]reflect.Type),
 		messageHandlers: make(map[string]interface{}),
@@ -47,7 +49,12 @@ func (s *Subscriber) Subscribe(ctx context.Context) error {
 	}
 	defer ch.Close()
 
-	queue, err := s.queueConfig.Initialise(ch)
+	err = s.exchangeConfig.Declare(ch)
+	if err != nil {
+		return err
+	}
+
+	queue, err := s.queueConfig.Declare(ch)
 	if err != nil {
 		return err
 	}

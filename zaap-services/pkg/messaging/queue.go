@@ -3,8 +3,10 @@ package messaging
 import "github.com/streadway/amqp"
 
 type (
-	QueueConfiguration interface {
-		Initialise(*amqp.Channel) (*amqp.Queue, error)
+	QueueConfig interface {
+		Name() string
+
+		Declare(*amqp.Channel) (*amqp.Queue, error)
 
 		Bind(*amqp.Channel, amqp.Queue, string) error
 
@@ -17,14 +19,18 @@ type (
 	}
 )
 
-func NewSimpleWorkingQueue(exchangeName string, queueName string) QueueConfiguration {
+func NewSimpleWorkingQueue(exchangeName string, queueName string) QueueConfig {
 	return &simpleWorkingQueue{
 		exchangeName: exchangeName,
 		queueName:    queueName,
 	}
 }
 
-func (s simpleWorkingQueue) Initialise(ch *amqp.Channel) (*amqp.Queue, error) {
+func (s simpleWorkingQueue) Name() string {
+	return s.queueName
+}
+
+func (s simpleWorkingQueue) Declare(ch *amqp.Channel) (*amqp.Queue, error) {
 	err := ch.ExchangeDeclare(s.exchangeName, amqp.ExchangeTopic, true, false, false, false, nil)
 	if err != nil {
 		return nil, err
