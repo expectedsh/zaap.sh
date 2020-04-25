@@ -30,9 +30,7 @@ func HandleCreate(store core.UserStore, service core.UserService) http.HandlerFu
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
 			response.BadRequest(w)
 			return
-		}
-
-		if err := in.Validate(); err != nil {
+		} else if err := in.Validate(); err != nil {
 			response.UnprocessableEntity(w, err)
 			return
 		}

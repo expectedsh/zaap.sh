@@ -56,4 +56,14 @@
       border-color: $color-green;
     }
   }
+
+  &.btn-outline-danger {
+    color: $color-red;
+    background: $color-white;
+    border-color: $color-red;
+
+    &:hover {
+      background: lighten($color-red, 35);
+    }
+  }
 }

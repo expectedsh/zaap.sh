@@ -23,6 +23,7 @@ func (r *createApplicationRequest) Validate() error {
 	return validation.ValidateStruct(r,
 		validation.Field(
 			&r.Name,
+			validation.Required,
 			validation.Length(3, 50),
 			validation.
 				Match(core.ApplicationNameRegex).
@@ -47,9 +48,7 @@ func HandleCreate(store core.ApplicationStore, runnerStore core.RunnerStore, ser
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
 			response.BadRequest(w)
 			return
-		}
-
-		if err := in.Validate(); err != nil {
+		} else if err := in.Validate(); err != nil {
 			response.UnprocessableEntity(w, err)
 			return
 		}

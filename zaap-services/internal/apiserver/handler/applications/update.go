@@ -18,10 +18,21 @@ type updateApplicationRequest struct {
 	Environment *core.Environment `json:"environment"`
 }
 
-func (r updateApplicationRequest) Validate() error {
+func (r *updateApplicationRequest) Validate() error {
 	return validation.ValidateStruct(r,
-		validation.Field(&r.Name, validation.Length(1, 0)),
-		validation.Field(&r.Image, validation.Length(1, 0)),
+		validation.Field(
+			&r.Name,
+			validation.Length(3, 50),
+			validation.
+				Match(core.ApplicationNameRegex).
+				Error("should only contain letters, numbers, and dashes"),
+		),
+		validation.Field(
+			&r.Image,
+			validation.
+				Match(core.DeploymentImageRegex).
+				Error("invalid image"),
+		),
 		validation.Field(&r.Replicas, validation.Min(1)),
 	)
 }

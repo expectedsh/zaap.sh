@@ -18,14 +18,15 @@ function ApplicationNew() {
   const history = useHistory()
   const dispatch = useDispatch()
   const { pending: runnersPending, runners } = useSelector(state => state.runners)
-  const runnersOptions = useMemo(() =>
-    runners?.map(runner => ({ label: runner.name, value: runner.id })),
-    [runners]
+  const { pending: isLoading } = useSelector(state => state.applications)
+  const runnersOptions = useMemo(
+    () => runners?.map(runner => ({ label: runner.name, value: runner.id })),
+    [runners],
   )
 
   useEffect(() => {
     dispatch(fetchRunners())
-      .catch(() => toast.error('Could not fetch runners.'))
+      .catch(() => toast.error("Could not fetch runners."))
   }, [])
 
   function validate(values) {
@@ -34,15 +35,15 @@ function ApplicationNew() {
     if (!values.name) {
       errors.name = "can't be blank"
     } else if (values.name.length < 3 || values.name.length > 50) {
-      errors.name = 'the length must be between 3 and 50'
+      errors.name = "the length must be between 3 and 50"
     } else if (!values.name.match(/^[-a-zA-Z0-9]+$/m)) {
-      errors.name = 'should only contain letters, numbers, and dashes'
+      errors.name = "should only contain letters, numbers, and dashes"
     }
 
     if (!values.image) {
       errors.image = "can't be blank"
     } else if (!values.image.match(/^(?:.+\/)?([^:]+)(?::.+)?$/m)) {
-      errors.description = 'invalid image'
+      errors.description = "invalid image"
     }
 
     if (!values.runnerId) {
@@ -58,32 +59,33 @@ function ApplicationNew() {
       runnerId: values.runnerId.value,
     }))
       .then(() => {
-        toast.success('Application created.')
-        history.push('/apps')
+        toast.success("Application created.")
+        history.push("/apps")
       })
       .catch(error => {
         if (error.response.status === 422) {
           return error.data
         }
-        toast.error(error.response.statusText);
+        toast.error(error.response.statusText)
       })
   }
 
   return (
     <>
-      <Header title="Create new application" centered />
-      <div className={cx('root')}>
+      <Header title="Create new application" centered/>
+      <div className={cx("root")}>
         <Form
           validate={validate}
           onSubmit={onSubmit}
-          render={({ handleSubmit }) => (
+          render={({ handleSubmit, pristine }) => (
             <form onSubmit={handleSubmit}>
               <Field component={TextField} name="name" label="Name" placeholder="my-app" required/>
               <Field component={TextField} name="image" label="Image" placeholder="nginx:latest"
                      required/>
               <Field component={SelectField} name="runnerId" label="Runner" required
                      isLoading={runnersPending} options={runnersOptions}/>
-              <Button className="btn btn-success" type="submit">
+              <Button loading={isLoading} disabled={pristine} className="btn btn-success"
+                      type="submit">
                 Create app
               </Button>
             </form>

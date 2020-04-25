@@ -1,0 +1,29 @@
+@import "~stylesheets/variables";
+
+.env-var-line {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: 24px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .env-var-input {
+    flex: 3;
+    margin-right: 16px;
+  }
+
+  .env-var-button {
+    width: 72px;
+  }
+}
+
+.env-var-delete-button {
+  color: $color-red;
+}
+
+.section-delete h3 {
+  color: $color-red;
+}

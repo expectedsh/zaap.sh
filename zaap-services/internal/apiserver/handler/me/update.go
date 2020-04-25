@@ -30,9 +30,7 @@ func HandleUpdate(store core.UserStore) http.HandlerFunc {
 		if err := json.NewDecoder(r.Body).Decode(in); err != nil {
 			response.BadRequest(w)
 			return
-		}
-
-		if err := in.Validate(); err != nil {
+		} else if err := in.Validate(); err != nil {
 			response.UnprocessableEntity(w, err)
 			return
 		}

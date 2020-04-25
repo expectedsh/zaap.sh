@@ -5,9 +5,9 @@ import style from './FormSection.module.scss'
 
 const cx = classnames.bind(style)
 
-function FormSection({ name, description, children }) {
+function FormSection({ name, description, className, children }) {
   return (
-    <div className={cx('root')}>
+    <div className={cx('root', className)}>
       <div className={cx('left-pane')}>
         <h3 className={cx('title')}>{name}</h3>
         {description && (
@@ -26,6 +26,7 @@ function FormSection({ name, description, children }) {
 FormSection.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string,
+  className: PropTypes.string,
   children: PropTypes.node,
 }
 

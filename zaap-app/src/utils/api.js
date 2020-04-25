@@ -1,8 +1,10 @@
 import axios from "axios"
-import humps from "humps"
 import store from "~/store"
+import { camelizeKeys, decamelizeKeys } from "./formatter"
 
 export const ENDPOINT = process.env.API_ENDPOINT || "http://localhost:3000"
+
+const FORMATTER_OPTIONS = { exclude: path => path.includes('environment') }
 
 const client = axios.create({
   baseURL: ENDPOINT,
@@ -11,7 +13,7 @@ const client = axios.create({
     "Accept": "application/json",
   },
   transformRequest: [
-    data => humps.decamelizeKeys(data),
+    data => decamelizeKeys(data, FORMATTER_OPTIONS),
     ...axios.defaults.transformRequest,
   ],
 })
@@ -26,12 +28,12 @@ client.interceptors.request.use(res => {
 
 client.interceptors.response.use(
   (res) => {
-    res.data = humps.camelizeKeys(res.data)
+    res.data = camelizeKeys(res.data, FORMATTER_OPTIONS)
     return res
   },
   (err) => {
     if (err.response.data) {
-      err.data = humps.camelizeKeys(err.response.data)
+      err.data = camelizeKeys(err.response.data, FORMATTER_OPTIONS)
     }
     return Promise.reject(err)
   },
