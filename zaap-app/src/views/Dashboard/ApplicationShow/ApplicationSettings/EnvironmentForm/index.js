@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from "react-redux"
 import React, { useMemo, useState } from "react"
-import { updateApplication } from "~/store/application/actions"
-import { toast } from "react-toastify"
 import classnames from "classnames/bind"
+import { useDispatch, useSelector } from "react-redux"
+import { toast } from "react-toastify"
+import { updateApplication } from "~/store/application/actions"
 import TextField from "~/components/TextField"
 import Button from "~/components/Button"
 import style from "./EnvironmentForm.module.scss"
@@ -57,11 +57,11 @@ function EnvironmentForm() {
   return (
     <>
       {environment.length ? environment.map(([key, value], index) => (
-        <div className={cx("env-var-line")} key={index}>
+        <div className={cx("env-var")} key={index}>
           <TextField className={cx("env-var-input")} value={key} disabled/>
           <TextField className={cx("env-var-input")} value={value} disabled/>
-          <div className={cx("env-var-button")}>
-            <Button className={cx("btn", "material-icons", "env-var-delete-button")}
+          <div className={cx("env-var-actions")}>
+            <Button className={cx("btn", "material-icons", "delete-button")}
                     disabled={isLoading} onClick={() => deleteVariable(key)}>
               close
             </Button>
@@ -72,12 +72,12 @@ function EnvironmentForm() {
           You don't have environment variable
         </div>
       )}
-      <form className={cx("env-var-line")} onSubmit={onSubmit}>
+      <form className={cx("env-var")} onSubmit={onSubmit}>
         <TextField className={cx("env-var-input")} placeholder="KEY" value={key}
                    onChange={e => setKey(e.target.value)}/>
         <TextField className={cx("env-var-input")} placeholder="VALUE" value={value}
                    onChange={e => setValue(e.target.value)}/>
-        <div className={cx("env-var-button")}>
+        <div className={cx("env-var-actions")}>
           <Button className="btn btn-success" type="submit" disabled={!key} loading={isLoading}>
             Add
           </Button>

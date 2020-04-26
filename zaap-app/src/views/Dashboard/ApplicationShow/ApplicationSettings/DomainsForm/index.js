@@ -1,9 +1,9 @@
-import React, { useMemo } from "react"
+import React from "react"
+import classnames from "classnames/bind"
 import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
 import { Field, Form } from "react-final-form"
-import classnames from "classnames/bind"
-import { addDomain, removeDomain, updateApplication } from "~/store/application/actions"
+import { addDomain, deleteDomain } from "~/store/application/actions"
 import TextField from "~/components/TextField"
 import Button from "~/components/Button"
 import style from "./DomainsForm.module.scss"
@@ -12,9 +12,14 @@ const cx = classnames.bind(style)
 
 function DomainsForm() {
   const dispatch = useDispatch()
-  const application = useSelector(state => state.application.application)
+  const { defaultDomain, domains } = useSelector(state => state.application.application)
   const isLoading = useSelector(state => state.application.updatePending)
-  const domains = useMemo(() => application.domains, [application])
+
+  function validate(values) {
+    if (values.domain && !values.domain.match(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/gi)) {
+      return { domain: "must be a valid domain" }
+    }
+  }
 
   function handleResponse(res) {
     return res
@@ -26,13 +31,11 @@ function DomainsForm() {
       })
   }
 
-  function validate(values) {
-    if (values.domain && !values.domain.match(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/gi)) {
-      return { domain: "must be a valid domain" }
-    }
+  function handleDelete(domain) {
+    return handleResponse(dispatch(deleteDomain({ domain })))
   }
 
-  function onSubmit(values) {
+  function handleCreate(values) {
     return handleResponse(dispatch(addDomain(values)))
   }
 
@@ -40,8 +43,8 @@ function DomainsForm() {
     <>
       <div className={cx("default-domain")}>
         Default domain:{" "}
-        <a href={`https://${application.defaultDomain}`} target="_blank">
-          {application.defaultDomain}
+        <a href={`https://${defaultDomain}`} target="_blank">
+          {defaultDomain}
         </a>
       </div>
       {domains?.length ? domains.map((domain, index) => (
@@ -49,7 +52,7 @@ function DomainsForm() {
           <TextField className={cx("domain-name")} value={domain} disabled/>
           <div className={cx("domain-action")}>
             <Button className={cx("btn", "material-icons", "delete-button")} disabled={isLoading}
-              onClick={() => handleResponse(dispatch(removeDomain({ domain })))}>
+                    onClick={handleDelete}>
               close
             </Button>
           </div>
@@ -61,8 +64,8 @@ function DomainsForm() {
       )}
       <Form
         validate={validate}
-        onSubmit={onSubmit}
-        render={({ handleSubmit, pristine, form  }) => (
+        onSubmit={handleCreate}
+        render={({ handleSubmit, pristine, form }) => (
           <form onSubmit={e => handleSubmit(e)?.then(form.reset)} className={cx("domain")}>
             <Field component={TextField} className={cx("domain-name")} name="domain"
                    placeholder="Domain name"/>

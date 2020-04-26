@@ -92,7 +92,7 @@ export function addDomain({ domain }) {
   }
 }
 
-export function removeDomain({ domain }) {
+export function deleteDomain({ domain }) {
   return (dispatch, getState) => {
     const application = getState().application.application
     const domains = application.domains

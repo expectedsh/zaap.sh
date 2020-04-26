@@ -7,9 +7,9 @@ import Alert from "~/components/Alert"
 import Button from "~/components/Button"
 import Header from "~/components/Header"
 import NavigationBar from "~/components/NavigationBar"
-import Activity from "~/views/Dashboard/ApplicationShow/Activity"
-import ApplicationSettings from "~/views/Dashboard/ApplicationShow/ApplicationSettings"
-import ApplicationLogs from "~/views/Dashboard/ApplicationShow/ApplicationLogs"
+import ApplicationOverview from "./ApplicationOverview"
+import ApplicationSettings from "./ApplicationSettings"
+import ApplicationLogs from "./ApplicationLogs"
 
 function ApplicationShow() {
   const dispatch = useDispatch()
@@ -29,10 +29,10 @@ function ApplicationShow() {
     }
     return application ? (
       <Switch>
-        <Route path="/apps/:id/activity" component={Activity}/>
+        <Route path="/apps/:id/overview" component={ApplicationOverview}/>
         <Route path="/apps/:id/logs" component={ApplicationLogs}/>
         <Route path="/apps/:id/settings" component={ApplicationSettings}/>
-        <Redirect from="/apps/:id" to={`/apps/${params.id}/activity`}/>
+        <Redirect from="/apps/:id" to={`/apps/${params.id}/overview`}/>
       </Switch>
     ) : null
   }
@@ -53,11 +53,8 @@ function ApplicationShow() {
         </Button>
       </Header>
       <NavigationBar style={{ marginTop: -32 }}>
-        <NavigationBar.Link to={`/apps/${params.id}/activity`}>
-          Activity
-        </NavigationBar.Link>
-        <NavigationBar.Link to={`/apps/${params.id}/resources`}>
-          Resources
+        <NavigationBar.Link to={`/apps/${params.id}/overview`}>
+          Overview
         </NavigationBar.Link>
         <NavigationBar.Link to={`/apps/${params.id}/logs`}>
           Logs

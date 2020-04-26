@@ -9,7 +9,7 @@
   margin-bottom: 24px;
 }
 
-.env-var-line {
+.env-var {
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid $color-border;
@@ -20,15 +20,15 @@
   }
 
   .env-var-input {
-    flex: 3;
+    flex: 1;
     margin-right: 16px;
   }
 
-  .env-var-button {
+  .env-var-actions {
     width: 72px;
   }
-}
 
-.env-var-delete-button {
-  color: $color-red;
+  .delete-button {
+    color: $color-red;
+  }
 }
