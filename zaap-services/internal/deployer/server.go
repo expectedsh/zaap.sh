@@ -9,6 +9,7 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/store"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 )
 
@@ -18,6 +19,9 @@ type Server struct {
 	amqpConn           *amqp.Connection
 	applicationStore   core.ApplicationStore
 	applicationService core.ApplicationService
+	runnerStore        core.RunnerStore
+	runnerService      core.RunnerService
+	deploymentStore    core.DeploymentStore
 }
 
 func New(config *config.Config) *Server {
@@ -43,10 +47,20 @@ func (s *Server) Start() error {
 
 	s.applicationStore = store.NewApplicationStore(db)
 	s.applicationService = service.NewApplicationService(amqpConn)
+	s.runnerStore = store.NewRunnerStore(db)
+	s.runnerService = service.NewRunnerService(amqpConn)
+	s.deploymentStore = store.NewDeploymentStore(db)
 
 	queueConfig := messaging.NewSimpleWorkingQueue(service.ApplicationEventsExchange.Name(), "deployer")
 	subscriber := messaging.NewSubscriber(amqpConn, service.ApplicationEventsExchange, queueConfig)
+	subscriber.ErrorHandler = func(err error, i interface{}) bool {
+		logrus.WithError(err).Warn("an error occurred")
+		return false
+	}
 	subscriber.RegisterHandler(s.DeploymentHandler)
+	subscriber.RegisterHandler(s.ApplicationCreatedHandler)
+	subscriber.RegisterHandler(s.ApplicationUpdatedHandler)
+	subscriber.RegisterHandler(s.ApplicationDeletedHandler)
 
 	return subscriber.Subscribe(s.context)
 }

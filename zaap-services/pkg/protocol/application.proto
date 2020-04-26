@@ -9,11 +9,13 @@ message ApplicationCreated {
 
 message ApplicationUpdated {
     string id = 1;
+    string deploymentId = 2;
 }
 
 message ApplicationDeleted {
     string id = 1;
-    string name = 2;
+    string runnerId = 2;
+    string name = 3;
 }
 
 message ApplicationStatusChanged {

@@ -35,6 +35,8 @@ type (
 	ApplicationStore interface {
 		Find(context.Context, uuid.UUID) (*Application, error)
 
+		FindWithRunner(context.Context, uuid.UUID) (*Application, error)
+
 		ListByUser(context.Context, uuid.UUID) (*[]Application, error)
 
 		Create(context.Context, *Application) error

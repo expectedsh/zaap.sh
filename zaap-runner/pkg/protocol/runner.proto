@@ -37,11 +37,12 @@ enum ApplicationState {
 
 message Application {
   string id = 1;
-  string name = 2;
-  string image = 3;
-  uint32 replicas = 4;
-  repeated string domains = 5;
-  map<string, string> environment = 6;
+  string deploymentId = 2;
+  string name = 3;
+  string image = 4;
+  uint32 replicas = 5;
+  repeated string domains = 6;
+  map<string, string> environment = 7;
 }
 
 message DeployApplicationRequest {

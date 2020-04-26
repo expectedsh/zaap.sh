@@ -27,6 +27,18 @@ func (s applicationStore) Find(ctx context.Context, id uuid.UUID) (*core.Applica
 	return application, nil
 }
 
+func (s applicationStore) FindWithRunner(ctx context.Context, id uuid.UUID) (*core.Application, error) {
+	application := new(core.Application)
+	if err := s.db.Preload("User").Preload("Runner").First(application, "id = ?", id.String()).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return nil, nil
+		} else {
+			return nil, err
+		}
+	}
+	return application, nil
+}
+
 func (s applicationStore) ListByUser(ctx context.Context, userId uuid.UUID) (*[]core.Application, error) {
 	applications := new([]core.Application)
 	if err := s.db.Find(applications, "user_id = ?", userId).Error; err != nil {
