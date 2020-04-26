@@ -17,13 +17,14 @@ func (r *Runner) DeployApplication(ctx context.Context, req *protocol.DeployAppl
 
 	if currentApp == nil {
 		log.Info("application does not exists, creating")
-		err = r.dockerClient.ServiceCreate(ctx, docker.ToSwarmSpec(req.Application))
+		err = r.dockerClient.ServiceCreate(ctx, docker.ToSwarmSpec(r.config.TraefikNetwork, req.Application))
 	} else {
 		log.Info("application already exists, updating")
-		err = r.dockerClient.ServiceUpdate(ctx, docker.ToSwarmSpec(req.Application), currentApp)
+		err = r.dockerClient.ServiceUpdate(ctx, docker.ToSwarmSpec(r.config.TraefikNetwork, req.Application), currentApp)
 	}
 
 	if err != nil {
+
 		return nil, err
 	}
 	return &protocol.DeployApplicationResponse{}, nil

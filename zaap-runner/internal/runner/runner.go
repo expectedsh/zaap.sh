@@ -11,9 +11,10 @@ import (
 )
 
 type Config struct {
-	Addr        string   `required:"true" envconfig:"ADDR" default:":8090"`
-	Token       string   `required:"true" envconfig:"EXTERNAL_IPS"`
-	ExternalIps []string `required:"true" split_words:"true" envconfig:"EXTERNAL_IPS"`
+	Addr           string   `required:"true" envconfig:"ADDR" default:":8090"`
+	Token          string   `required:"true" envconfig:"EXTERNAL_IPS"`
+	TraefikNetwork string   `required:"true" envconfig:"TRAEFIK_NETWORK" default:"traefik"`
+	ExternalIps    []string `required:"true" split_words:"true" envconfig:"EXTERNAL_IPS"`
 }
 
 type Runner struct {

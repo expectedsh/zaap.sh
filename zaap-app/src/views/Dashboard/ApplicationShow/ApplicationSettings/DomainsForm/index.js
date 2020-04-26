@@ -52,7 +52,7 @@ function DomainsForm() {
           <TextField className={cx("domain-name")} value={domain} disabled/>
           <div className={cx("domain-action")}>
             <Button className={cx("btn", "material-icons", "delete-button")} disabled={isLoading}
-                    onClick={handleDelete}>
+                    onClick={() => handleDelete(domain)}>
               close
             </Button>
           </div>

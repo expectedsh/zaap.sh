@@ -16,11 +16,16 @@ func (s *Server) DeploymentHandler(ctx context.Context, message *protocol.Applic
 }
 
 func (s *Server) ApplicationCreatedHandler(ctx context.Context, message *protocol.ApplicationCreated) error {
-	logrus.
-		WithField("application-id", message.Id).
-		WithField("deployment-id", message.DeploymentId).
-		Info("handling application creation")
-	return s.deployApplication(ctx, uuid.FromStringOrNil(message.Id), uuid.FromStringOrNil(message.DeploymentId))
+	log := logrus.WithField("application-id", message.Id).WithField("deployment-id", message.DeploymentId)
+	log.Info("handling application creation")
+
+	applicationId := uuid.FromStringOrNil(message.Id)
+
+	if err := s.createDnsEntry(ctx, applicationId); err != nil {
+		log.WithError(err).Error("could not create dns entries")
+	}
+
+	return s.deployApplication(ctx, applicationId, uuid.FromStringOrNil(message.DeploymentId))
 }
 
 func (s *Server) ApplicationUpdatedHandler(ctx context.Context, message *protocol.ApplicationUpdated) error {
@@ -33,5 +38,8 @@ func (s *Server) ApplicationUpdatedHandler(ctx context.Context, message *protoco
 
 func (s *Server) ApplicationDeletedHandler(ctx context.Context, message *protocol.ApplicationDeleted) error {
 	logrus.WithField("application-id", message.Id).Info("handling application deletion")
-	return s.deleteApplication(ctx, uuid.FromStringOrNil(message.Id), uuid.FromStringOrNil(message.RunnerId))
+
+	applicationId := uuid.FromStringOrNil(message.Id)
+
+	return s.deleteApplication(ctx, applicationId, uuid.FromStringOrNil(message.RunnerId))
 }

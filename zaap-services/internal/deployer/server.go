@@ -2,6 +2,7 @@ package deployer
 
 import (
 	"context"
+	"github.com/cloudflare/cloudflare-go"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployer/config"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/messaging"
@@ -17,6 +18,7 @@ type Server struct {
 	config             *config.Config
 	context            context.Context
 	amqpConn           *amqp.Connection
+	cloudflareClient   *cloudflare.API
 	applicationStore   core.ApplicationStore
 	applicationService core.ApplicationService
 	runnerStore        core.RunnerStore
@@ -44,6 +46,12 @@ func (s *Server) Start() error {
 	}
 	defer amqpConn.Close()
 	s.amqpConn = amqpConn
+
+	cloudflareClient, err := cloudflare.NewWithAPIToken(s.config.CloudflareToken)
+	if err != nil {
+		return err
+	}
+	s.cloudflareClient = cloudflareClient
 
 	s.applicationStore = store.NewApplicationStore(db)
 	s.applicationService = service.NewApplicationService(amqpConn)

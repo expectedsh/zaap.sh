@@ -41,7 +41,7 @@ func (s *Server) deployApplication(ctx context.Context, applicationId uuid.UUID,
 			Name:         application.Name,
 			Image:        deployment.Image,
 			Replicas:     uint32(deployment.Replicas),
-			Domains:      application.Domains,
+			Domains:      append(application.Domains, application.DefaultDomain),
 			Environment:  deployment.Environment,
 		},
 	})
