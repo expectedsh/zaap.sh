@@ -2,16 +2,25 @@ syntax = "proto3";
 
 package protocol;
 
+message ApplicationCreated {
+    string id = 1;
+    string deploymentId = 2;
+}
+
+message ApplicationUpdated {
+    string id = 1;
+}
+
 message ApplicationDeleted {
     string id = 1;
     string name = 2;
 }
 
-message ApplicationStateChanged {
+message ApplicationStatusChanged {
     string id = 1;
 }
 
 message ApplicationDeploymentRequest {
-    string applicationId = 1;
+    string id = 1;
     string deploymentId = 2;
 }

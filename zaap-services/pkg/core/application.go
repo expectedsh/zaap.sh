@@ -47,7 +47,11 @@ type (
 	ApplicationService interface {
 		Deploy(*Application) error
 
-		NotifyDeletion(*Application) error
+		NotifyCreated(*Application) error
+
+		NotifyUpdated(*Application) error
+
+		NotifyDeleted(*Application) error
 	}
 )
 

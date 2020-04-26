@@ -1,34 +1,33 @@
 package main
 
 import (
-	"github.com/docker/docker/client"
-	"github.com/expected.sh/zaap.sh/zaap-runner/internal/scheduler"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/docker"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/internal/runner"
 	"github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
-	"net"
+	"os"
+	"os/signal"
 )
 
 func main() {
-	dockerClient, err := client.NewEnvClient()
+
+
+	config, err := runner.ConfigFromEnv()
 	if err != nil {
-		logrus.WithError(err).Fatal("could not initialize docker client")
+		logrus.WithError(err).Fatal("could not parse configuration")
 		return
 	}
 
-	addr := ":8090"
-	server := grpc.NewServer()
-	protocol.RegisterRunnerServer(server, scheduler.New(&docker.Docker{Client: dockerClient}))
+	r := runner.New(config)
 
-	lis, err := net.Listen("tcp", addr)
-	if err != nil {
-		logrus.WithError(err).Fatalf("could not listen on %v", addr)
-		return
-	}
+	go func() {
+		if err := r.Start(); err != nil {
+			logrus.WithError(err).Fatal("could not start runner")
+		}
+	}()
 
-	logrus.Infof("listening on %v", addr)
-	if err = server.Serve(lis); err != nil {
-		logrus.WithError(err).Fatal("failed to start the server")
-	}
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
+
+	<-stop
+	logrus.Info("shutting down")
+	r.Shutdown()
 }

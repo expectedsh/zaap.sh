@@ -2,12 +2,12 @@ package runners
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/runnerutils"
+	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -33,8 +33,7 @@ func HandleCreate(store core.RunnerStore, service core.RunnerService) http.Handl
 			Name:   in.Name,
 			Url:    in.Url,
 			Token:  in.Token,
-			Status: core.RunnerStatusUnknown,
-			Type:   core.RunnerTypeDockerSwarm,
+			Status: core.RunnerStatusOnline,
 			User:   user,
 		}
 		if in.Description != "" {
@@ -55,20 +54,15 @@ func HandleCreate(store core.RunnerStore, service core.RunnerService) http.Handl
 		}
 		defer conn.Close()
 
-		res, err := client.TestConnection(r.Context(), &protocol.TestConnectionRequest{
-			Token: runner.Token,
-		})
+		res, err := client.GetConfiguration(r.Context(), &protocol.GetConfigurationRequest{})
 		if err != nil {
 			response.UnprocessableEntity(w, validation.Errors{
 				"url": err,
 			})
 			return
-		} else if !res.Ok {
-			response.UnprocessableEntity(w, validation.Errors{
-				"token": errors.New("bad token"),
-			})
-			return
 		}
+		runner.Type = runnerutils.ConvertType(res.Type)
+		runner.ExternalIps = res.ExternalIps
 
 		if err := store.Create(r.Context(), runner); err != nil {
 			logrus.WithError(err).Warn("could not create runner")

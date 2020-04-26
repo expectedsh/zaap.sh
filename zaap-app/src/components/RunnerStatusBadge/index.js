@@ -20,7 +20,7 @@ function getClassName(status) {
 function RunnerStatusBadge({ status }) {
   return (
     <div className={cx("root", getClassName(status))}>
-      <RunnerStatusName state={status}/>
+      <RunnerStatusName status={status}/>
     </div>
   )
 }

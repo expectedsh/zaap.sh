@@ -9,10 +9,10 @@ import (
 	"io"
 )
 
-func (d *Docker) ServiceGetFromApplication(ctx context.Context, id string) (*swarm.Service, error) {
+func (c *Client) ServiceGetFromApplication(ctx context.Context, id string) (*swarm.Service, error) {
 	args := filters.NewArgs()
 	args.Add("label", fmt.Sprintf("zaap-app-id=%s", id))
-	services, err := d.Client.ServiceList(ctx, types.ServiceListOptions{
+	services, err := c.client.ServiceList(ctx, types.ServiceListOptions{
 		Filters: args,
 	})
 	if err != nil {
@@ -24,22 +24,22 @@ func (d *Docker) ServiceGetFromApplication(ctx context.Context, id string) (*swa
 	return &services[0], nil
 }
 
-func (d *Docker) ServiceCreate(ctx context.Context, spec swarm.ServiceSpec) error {
-	_, err := d.Client.ServiceCreate(ctx, spec, types.ServiceCreateOptions{})
+func (c *Client) ServiceCreate(ctx context.Context, spec swarm.ServiceSpec) error {
+	_, err := c.client.ServiceCreate(ctx, spec, types.ServiceCreateOptions{})
 	return err
 }
 
-func (d *Docker) ServiceUpdate(ctx context.Context, spec swarm.ServiceSpec, service *swarm.Service) error {
-	_, err := d.Client.ServiceUpdate(ctx, service.ID, service.Version, spec, types.ServiceUpdateOptions{})
+func (c *Client) ServiceUpdate(ctx context.Context, spec swarm.ServiceSpec, service *swarm.Service) error {
+	_, err := c.client.ServiceUpdate(ctx, service.ID, service.Version, spec, types.ServiceUpdateOptions{})
 	return err
 }
 
-func (d *Docker) ServiceDelete(ctx context.Context, service *swarm.Service) error {
-	return d.Client.ServiceRemove(ctx, service.ID)
+func (c *Client) ServiceDelete(ctx context.Context, service *swarm.Service) error {
+	return c.client.ServiceRemove(ctx, service.ID)
 }
 
-func (d *Docker) ServiceGetLogs(ctx context.Context, service *swarm.Service) (io.ReadCloser, error) {
-	return d.Client.ServiceLogs(ctx, service.ID, types.ContainerLogsOptions{
+func (c *Client) ServiceGetLogs(ctx context.Context, service *swarm.Service) (io.ReadCloser, error) {
+	return c.client.ServiceLogs(ctx, service.ID, types.ContainerLogsOptions{
 		ShowStdout: true,
 		ShowStderr: true,
 		Follow:     true,

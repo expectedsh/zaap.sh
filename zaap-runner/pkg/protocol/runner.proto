@@ -3,7 +3,7 @@ syntax = "proto3";
 package protocol;
 
 service Runner {
-  rpc TestConnection (TestConnectionRequest) returns (TestConnectionResponse) {
+  rpc GetConfiguration (GetConfigurationRequest) returns (GetConfigurationResponse) {
   }
 
   rpc DeployApplication (DeployApplicationRequest) returns (DeployApplicationResponse) {
@@ -16,12 +16,16 @@ service Runner {
   }
 }
 
-message TestConnectionRequest {
-  string token = 1;
+enum RunnerType {
+  DOCKER_SWARM = 0;
+  KUBERNETES = 1;
 }
 
-message TestConnectionResponse {
-  bool ok = 1;
+message GetConfigurationRequest {}
+
+message GetConfigurationResponse {
+  RunnerType type = 1;
+  repeated string externalIps = 2;
 }
 
 enum ApplicationState {
@@ -36,22 +40,21 @@ message Application {
   string name = 2;
   string image = 3;
   uint32 replicas = 4;
-  map<string, string> environment = 5;
+  repeated string domains = 5;
+  map<string, string> environment = 6;
 }
 
 message DeployApplicationRequest {
   Application application = 1;
 }
 
-message DeployApplicationResponse {
-}
+message DeployApplicationResponse {}
 
 message DeleteApplicationRequest {
   string id = 1;
 }
 
-message DeleteApplicationResponse {
-}
+message DeleteApplicationResponse {}
 
 message GetApplicationLogsRequest {
   string id = 1;

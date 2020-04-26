@@ -40,7 +40,7 @@ func (r *updateApplicationRequest) Validate() error {
 	)
 }
 
-func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentStore) http.HandlerFunc {
+func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentStore, service core.ApplicationService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		application := request.ApplicationFrom(r.Context())
 
@@ -95,6 +95,10 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			logrus.WithError(err).Warn("could not update application")
 			response.InternalServerError(w)
 			return
+		}
+
+		if err := service.NotifyUpdated(application); err != nil {
+			logrus.WithError(err).Warn("could not notify updated")
 		}
 
 		response.Ok(w, map[string]interface{}{

@@ -84,9 +84,8 @@ func HandleCreate(store core.ApplicationStore, runnerStore core.RunnerStore, ser
 			return
 		}
 
-		if err := service.Deploy(application); err != nil {
-			logrus.WithError(err).Warn("could not deploy application")
-			return
+		if err := service.NotifyCreated(application); err != nil {
+			logrus.WithError(err).Warn("could not notify created")
 		}
 
 		response.Created(w, map[string]interface{}{

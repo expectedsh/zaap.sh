@@ -17,9 +17,8 @@ func HandleDelete(store core.ApplicationStore, service core.ApplicationService) 
 			return
 		}
 
-		if err := service.NotifyDeletion(application); err != nil {
-			logrus.WithError(err).Warn("could not notify deletion")
-			return
+		if err := service.NotifyDeleted(application); err != nil {
+			logrus.WithError(err).Warn("could not notify deleted")
 		}
 
 		response.NoContent(w)

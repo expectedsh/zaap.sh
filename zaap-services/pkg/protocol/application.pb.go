@@ -20,6 +20,92 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type ApplicationCreated struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DeploymentId         string   `protobuf:"bytes,2,opt,name=deploymentId,proto3" json:"deploymentId,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ApplicationCreated) Reset()         { *m = ApplicationCreated{} }
+func (m *ApplicationCreated) String() string { return proto.CompactTextString(m) }
+func (*ApplicationCreated) ProtoMessage()    {}
+func (*ApplicationCreated) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fc846aced8fe6ea6, []int{0}
+}
+
+func (m *ApplicationCreated) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ApplicationCreated.Unmarshal(m, b)
+}
+func (m *ApplicationCreated) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ApplicationCreated.Marshal(b, m, deterministic)
+}
+func (m *ApplicationCreated) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApplicationCreated.Merge(m, src)
+}
+func (m *ApplicationCreated) XXX_Size() int {
+	return xxx_messageInfo_ApplicationCreated.Size(m)
+}
+func (m *ApplicationCreated) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplicationCreated.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApplicationCreated proto.InternalMessageInfo
+
+func (m *ApplicationCreated) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *ApplicationCreated) GetDeploymentId() string {
+	if m != nil {
+		return m.DeploymentId
+	}
+	return ""
+}
+
+type ApplicationUpdated struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ApplicationUpdated) Reset()         { *m = ApplicationUpdated{} }
+func (m *ApplicationUpdated) String() string { return proto.CompactTextString(m) }
+func (*ApplicationUpdated) ProtoMessage()    {}
+func (*ApplicationUpdated) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fc846aced8fe6ea6, []int{1}
+}
+
+func (m *ApplicationUpdated) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ApplicationUpdated.Unmarshal(m, b)
+}
+func (m *ApplicationUpdated) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ApplicationUpdated.Marshal(b, m, deterministic)
+}
+func (m *ApplicationUpdated) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApplicationUpdated.Merge(m, src)
+}
+func (m *ApplicationUpdated) XXX_Size() int {
+	return xxx_messageInfo_ApplicationUpdated.Size(m)
+}
+func (m *ApplicationUpdated) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplicationUpdated.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApplicationUpdated proto.InternalMessageInfo
+
+func (m *ApplicationUpdated) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
 type ApplicationDeleted struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
@@ -32,7 +118,7 @@ func (m *ApplicationDeleted) Reset()         { *m = ApplicationDeleted{} }
 func (m *ApplicationDeleted) String() string { return proto.CompactTextString(m) }
 func (*ApplicationDeleted) ProtoMessage()    {}
 func (*ApplicationDeleted) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fc846aced8fe6ea6, []int{0}
+	return fileDescriptor_fc846aced8fe6ea6, []int{2}
 }
 
 func (m *ApplicationDeleted) XXX_Unmarshal(b []byte) error {
@@ -67,39 +153,39 @@ func (m *ApplicationDeleted) GetName() string {
 	return ""
 }
 
-type ApplicationStateChanged struct {
+type ApplicationStatusChanged struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ApplicationStateChanged) Reset()         { *m = ApplicationStateChanged{} }
-func (m *ApplicationStateChanged) String() string { return proto.CompactTextString(m) }
-func (*ApplicationStateChanged) ProtoMessage()    {}
-func (*ApplicationStateChanged) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fc846aced8fe6ea6, []int{1}
+func (m *ApplicationStatusChanged) Reset()         { *m = ApplicationStatusChanged{} }
+func (m *ApplicationStatusChanged) String() string { return proto.CompactTextString(m) }
+func (*ApplicationStatusChanged) ProtoMessage()    {}
+func (*ApplicationStatusChanged) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fc846aced8fe6ea6, []int{3}
 }
 
-func (m *ApplicationStateChanged) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ApplicationStateChanged.Unmarshal(m, b)
+func (m *ApplicationStatusChanged) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ApplicationStatusChanged.Unmarshal(m, b)
 }
-func (m *ApplicationStateChanged) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ApplicationStateChanged.Marshal(b, m, deterministic)
+func (m *ApplicationStatusChanged) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ApplicationStatusChanged.Marshal(b, m, deterministic)
 }
-func (m *ApplicationStateChanged) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ApplicationStateChanged.Merge(m, src)
+func (m *ApplicationStatusChanged) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApplicationStatusChanged.Merge(m, src)
 }
-func (m *ApplicationStateChanged) XXX_Size() int {
-	return xxx_messageInfo_ApplicationStateChanged.Size(m)
+func (m *ApplicationStatusChanged) XXX_Size() int {
+	return xxx_messageInfo_ApplicationStatusChanged.Size(m)
 }
-func (m *ApplicationStateChanged) XXX_DiscardUnknown() {
-	xxx_messageInfo_ApplicationStateChanged.DiscardUnknown(m)
+func (m *ApplicationStatusChanged) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplicationStatusChanged.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ApplicationStateChanged proto.InternalMessageInfo
+var xxx_messageInfo_ApplicationStatusChanged proto.InternalMessageInfo
 
-func (m *ApplicationStateChanged) GetId() string {
+func (m *ApplicationStatusChanged) GetId() string {
 	if m != nil {
 		return m.Id
 	}
@@ -107,7 +193,7 @@ func (m *ApplicationStateChanged) GetId() string {
 }
 
 type ApplicationDeploymentRequest struct {
-	ApplicationId        string   `protobuf:"bytes,1,opt,name=applicationId,proto3" json:"applicationId,omitempty"`
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	DeploymentId         string   `protobuf:"bytes,2,opt,name=deploymentId,proto3" json:"deploymentId,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -118,7 +204,7 @@ func (m *ApplicationDeploymentRequest) Reset()         { *m = ApplicationDeploym
 func (m *ApplicationDeploymentRequest) String() string { return proto.CompactTextString(m) }
 func (*ApplicationDeploymentRequest) ProtoMessage()    {}
 func (*ApplicationDeploymentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fc846aced8fe6ea6, []int{2}
+	return fileDescriptor_fc846aced8fe6ea6, []int{4}
 }
 
 func (m *ApplicationDeploymentRequest) XXX_Unmarshal(b []byte) error {
@@ -139,9 +225,9 @@ func (m *ApplicationDeploymentRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ApplicationDeploymentRequest proto.InternalMessageInfo
 
-func (m *ApplicationDeploymentRequest) GetApplicationId() string {
+func (m *ApplicationDeploymentRequest) GetId() string {
 	if m != nil {
-		return m.ApplicationId
+		return m.Id
 	}
 	return ""
 }
@@ -154,24 +240,26 @@ func (m *ApplicationDeploymentRequest) GetDeploymentId() string {
 }
 
 func init() {
+	proto.RegisterType((*ApplicationCreated)(nil), "protocol.ApplicationCreated")
+	proto.RegisterType((*ApplicationUpdated)(nil), "protocol.ApplicationUpdated")
 	proto.RegisterType((*ApplicationDeleted)(nil), "protocol.ApplicationDeleted")
-	proto.RegisterType((*ApplicationStateChanged)(nil), "protocol.ApplicationStateChanged")
+	proto.RegisterType((*ApplicationStatusChanged)(nil), "protocol.ApplicationStatusChanged")
 	proto.RegisterType((*ApplicationDeploymentRequest)(nil), "protocol.ApplicationDeploymentRequest")
 }
 
 func init() { proto.RegisterFile("application.proto", fileDescriptor_fc846aced8fe6ea6) }
 
 var fileDescriptor_fc846aced8fe6ea6 = []byte{
-	// 163 bytes of a gzipped FileDescriptorProto
+	// 174 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4c, 0x2c, 0x28, 0xc8,
 	0xc9, 0x4c, 0x4e, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x00,
-	0x53, 0xc9, 0xf9, 0x39, 0x4a, 0x16, 0x5c, 0x42, 0x8e, 0x08, 0x69, 0x97, 0xd4, 0x9c, 0xd4, 0x92,
+	0x53, 0xc9, 0xf9, 0x39, 0x4a, 0x1e, 0x5c, 0x42, 0x8e, 0x08, 0x69, 0xe7, 0xa2, 0xd4, 0xc4, 0x92,
 	0xd4, 0x14, 0x21, 0x3e, 0x2e, 0xa6, 0xcc, 0x14, 0x09, 0x46, 0x05, 0x46, 0x0d, 0xce, 0x20, 0xa6,
-	0xcc, 0x14, 0x21, 0x21, 0x2e, 0x96, 0xbc, 0xc4, 0xdc, 0x54, 0x09, 0x26, 0xb0, 0x08, 0x98, 0xad,
-	0xa4, 0xc9, 0x25, 0x8e, 0xa4, 0x33, 0xb8, 0x24, 0xb1, 0x24, 0xd5, 0x39, 0x23, 0x31, 0x2f, 0x1d,
-	0x53, 0xbb, 0x52, 0x06, 0x97, 0x0c, 0x8a, 0x25, 0x05, 0x39, 0xf9, 0x95, 0xb9, 0xa9, 0x79, 0x25,
-	0x41, 0xa9, 0x85, 0xa5, 0xa9, 0xc5, 0x25, 0x42, 0x2a, 0x5c, 0xbc, 0x48, 0x6e, 0xf4, 0x84, 0x69,
-	0x45, 0x15, 0x14, 0x52, 0xe2, 0xe2, 0x49, 0x81, 0x6b, 0xf5, 0x4c, 0x81, 0x3a, 0x06, 0x45, 0x2c,
-	0x89, 0x0d, 0xec, 0x31, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd4, 0xe7, 0x1a, 0x80, 0xf4,
-	0x00, 0x00, 0x00,
+	0xcc, 0x14, 0x21, 0x25, 0x2e, 0x9e, 0x94, 0xd4, 0x82, 0x9c, 0xfc, 0xca, 0xdc, 0xd4, 0xbc, 0x12,
+	0xcf, 0x14, 0x09, 0x26, 0xb0, 0x0c, 0x8a, 0x98, 0x92, 0x0a, 0x8a, 0x49, 0xa1, 0x05, 0x29, 0xd8,
+	0x4c, 0x52, 0xb2, 0x40, 0x51, 0xe5, 0x92, 0x9a, 0x93, 0x8a, 0xcd, 0x3e, 0x21, 0x2e, 0x96, 0xbc,
+	0xc4, 0xdc, 0x54, 0xa8, 0x3d, 0x60, 0xb6, 0x92, 0x16, 0x97, 0x04, 0x92, 0xce, 0xe0, 0x92, 0xc4,
+	0x92, 0xd2, 0x62, 0xe7, 0x8c, 0xc4, 0xbc, 0x74, 0x2c, 0xb6, 0x04, 0x71, 0xc9, 0xa0, 0xd8, 0x02,
+	0x73, 0x66, 0x50, 0x6a, 0x61, 0x69, 0x6a, 0x71, 0x09, 0x39, 0xfe, 0x4b, 0x62, 0x03, 0x87, 0x99,
+	0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xd7, 0xc9, 0xa0, 0x25, 0x4f, 0x01, 0x00, 0x00,
 }

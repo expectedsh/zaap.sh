@@ -5,6 +5,7 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/jinzhu/gorm"
+	"github.com/lib/pq"
 	"github.com/satori/go.uuid"
 	"google.golang.org/grpc"
 	"regexp"
@@ -17,16 +18,17 @@ type (
 	RunnerStatus string
 
 	Runner struct {
-		ID          uuid.UUID    `gorm:"primary_key" json:"id"`
-		Name        string       `gorm:"type:varchar;not null" json:"name"`
-		Description *string      `gorm:"type:varchar" json:"description"`
-		Type        RunnerType   `gorm:"type:varchar;not null" json:"type"`
-		Status      RunnerStatus `gorm:"type:varchar;not null" json:"status"`
-		Url         string       `gorm:"type:varchar;not null" json:"url"`
-		Token       string       `gorm:"type:varchar;not null" json:"token"`
-		UserID      uuid.UUID    `json:"user_id"`
-		CreatedAt   time.Time    `json:"created_at"`
-		UpdatedAt   time.Time    `json:"updated_at"`
+		ID          uuid.UUID      `gorm:"primary_key" json:"id"`
+		Name        string         `gorm:"type:varchar;not null" json:"name"`
+		Description *string        `gorm:"type:varchar" json:"description"`
+		Type        RunnerType     `gorm:"type:varchar;not null" json:"type"`
+		ExternalIps pq.StringArray `gorm:"type:varchar[];not null" json:"external_ips"`
+		Status      RunnerStatus   `gorm:"type:varchar;not null" json:"status"`
+		Url         string         `gorm:"type:varchar;not null" json:"url"`
+		Token       string         `gorm:"type:varchar;not null" json:"token"`
+		UserID      uuid.UUID      `json:"user_id"`
+		CreatedAt   time.Time      `json:"created_at"`
+		UpdatedAt   time.Time      `json:"updated_at"`
 
 		User *User `json:"-"`
 	}
@@ -51,6 +53,7 @@ type (
 const (
 	RunnerTypeDockerSwarm RunnerType   = "docker_swarm"
 	RunnerTypeKubernetes               = "kubernetes"
+	RunnerTypeUnknown                  = "unknown"
 	RunnerStatusUnknown   RunnerStatus = "unknown"
 	RunnerStatusOnline                 = "online"
 	RunnerStatusOffline                = "offline"
@@ -58,6 +61,13 @@ const (
 
 func (r *Runner) BeforeCreate(scope *gorm.Scope) error {
 	r.ID = uuid.NewV4()
+	return nil
+}
+
+func (r *Runner) BeforeSave(scope *gorm.Scope) error {
+	if r.ExternalIps == nil {
+		r.ExternalIps = pq.StringArray{}
+	}
 	return nil
 }
 

@@ -5,7 +5,7 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 )
 
-func ConvertApplication(application *protocol.Application) swarm.ServiceSpec {
+func ToSwarmSpec(application *protocol.Application) swarm.ServiceSpec {
 	replicas := uint64(application.Replicas)
 	return swarm.ServiceSpec{
 		Annotations: swarm.Annotations{
