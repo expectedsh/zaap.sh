@@ -39,6 +39,10 @@ func (d *Deployment) BeforeCreate(scope *gorm.Scope) error {
 	if d.ID == uuid.Nil {
 		d.ID = uuid.NewV4()
 	}
+	return nil
+}
+
+func (d *Deployment) BeforeSave(scope *gorm.Scope) error {
 	if d.Environment == nil {
 		d.Environment = make(Environment)
 	}

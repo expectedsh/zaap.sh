@@ -2,10 +2,12 @@ package core
 
 import (
 	"context"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/lib/pq"
 	uuid "github.com/satori/go.uuid"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -16,6 +18,8 @@ type (
 		ID                  uuid.UUID         `gorm:"primary_key" json:"id"`
 		Name                string            `gorm:"type:varchar;not null" json:"name"`
 		Status              ApplicationStatus `gorm:"type:varchar;not null" json:"state"`
+		DefaultDomain       string            `gorm:"type:varchar;unique;not null" json:"default_domain"`
+		Domains             pq.StringArray    `gorm:"type:varchar[];not null" json:"domains"`
 		UserID              uuid.UUID         `json:"user_id"`
 		RunnerID            uuid.UUID         `json:"runner_id"`
 		CurrentDeploymentID uuid.UUID         `json:"current_deployment_id"`
@@ -23,7 +27,7 @@ type (
 		UpdatedAt           time.Time         `json:"updated_at"`
 
 		User              *User         `json:"-"`
-		Runner            *Runner       `json:"runner"`
+		Runner            *Runner       `json:"-"`
 		CurrentDeployment *Deployment   `json:"-"`
 		Deployments       []*Deployment `json:"deployments,omitempty"`
 	}
@@ -57,18 +61,18 @@ const (
 var ApplicationNameRegex = regexp.MustCompile("(?m)^[-a-zA-Z0-9]+$")
 
 func (a *Application) BeforeCreate(scope *gorm.Scope) error {
-	a.ID = uuid.NewV4()
+	if a.ID == uuid.Nil {
+		a.ID = uuid.NewV4()
+	}
+	if a.DefaultDomain == "" {
+		a.DefaultDomain = fmt.Sprintf("%v.gtw.zaap.sh", strings.ReplaceAll(a.ID.String(), "-", ""))
+	}
 	return nil
 }
 
-func (a *Application) Validate() error {
-	return validation.ValidateStruct(a,
-		validation.Field(
-			&a.Name,
-			validation.Required,
-			validation.Length(3, 50),
-			validation.Match(regexp.MustCompile("(?m)^[-a-zA-Z0-9]+$")).
-				Error("should only contain letters, numbers, and dashes"),
-		),
-	)
+func (a *Application) BeforeSave(scope *gorm.Scope) error {
+	if a.Domains == nil {
+		a.Domains = pq.StringArray{}
+	}
+	return nil
 }

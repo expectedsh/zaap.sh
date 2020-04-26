@@ -29,8 +29,8 @@ const tableConfig = [
     cellClassName: cx("cell-endpoint"),
   },
   {
-    renderHeader: () => "Created",
-    renderCell: app => moment(app.createdAt).fromNow(),
+    renderHeader: () => "Last update",
+    renderCell: app => moment(app.updatedAt).fromNow(),
     cellClassName: cx("cell-created"),
   },
 ]

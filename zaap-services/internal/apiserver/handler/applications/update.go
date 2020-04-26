@@ -6,6 +6,7 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -16,6 +17,7 @@ type updateApplicationRequest struct {
 	Image       *string           `json:"image"`
 	Replicas    *int              `json:"replicas"`
 	Environment *core.Environment `json:"environment"`
+	Domains     []string          `json:"domains"`
 }
 
 func (r *updateApplicationRequest) Validate() error {
@@ -34,6 +36,7 @@ func (r *updateApplicationRequest) Validate() error {
 				Error("invalid image"),
 		),
 		validation.Field(&r.Replicas, validation.Min(1)),
+		validation.Field(&r.Domains, validation.Each(is.Domain)),
 	)
 }
 
@@ -55,6 +58,7 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			response.BadRequest(w)
 			return
 		} else if err := in.Validate(); err != nil {
+			logrus.Info(err)
 			response.UnprocessableEntity(w, err)
 			return
 		}
@@ -83,6 +87,9 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			application.Deployments = append(application.Deployments, deployment)
 			application.CurrentDeploymentID = deployment.ID
 		}
+		if in.Domains != nil {
+			application.Domains = removeDuplicates(in.Domains)
+		}
 
 		if err := store.Update(r.Context(), application); err != nil {
 			logrus.WithError(err).Warn("could not update application")
@@ -94,4 +101,16 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			"application": application,
 		})
 	}
+}
+
+func removeDuplicates(slice []string) []string {
+	var list []string
+	keys := make(map[string]bool)
+	for _, entry := range slice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }

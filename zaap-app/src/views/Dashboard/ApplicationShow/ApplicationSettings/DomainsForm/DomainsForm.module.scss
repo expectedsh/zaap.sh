@@ -1,0 +1,49 @@
+@import "~stylesheets/variables";
+
+.default-domain {
+  font-weight: $text-font-weight-bold;
+  margin-bottom: 24px;
+
+  a {
+    font-weight: $text-font-weight-regular;
+    color: $color-blue;
+    text-decoration: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.empty-state {
+  background: $color-grey-light;
+  text-align: center;
+  padding: 32px 0;
+  font-size: $text-font-size-lg;
+  font-weight: $text-font-weight-bold;
+  margin-bottom: 24px;
+}
+
+.domain {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: 24px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .domain-name {
+    flex: 1;
+    margin-right: 16px;
+  }
+
+  .domain-action {
+    width: 72px;
+  }
+
+  .delete-button {
+    color: $color-red;
+  }
+}

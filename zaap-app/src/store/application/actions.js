@@ -77,6 +77,33 @@ export function fetchApplicationLogs({ id }) {
   }
 }
 
+export function addDomain({ domain }) {
+  return (dispatch, getState) => {
+    const application = getState().application.application
+    const domains = application.domains
+
+    return dispatch(updateApplication({
+      id: application.id,
+      domains: [
+        ...domains,
+        domain,
+      ]
+    }))
+  }
+}
+
+export function removeDomain({ domain }) {
+  return (dispatch, getState) => {
+    const application = getState().application.application
+    const domains = application.domains
+
+    return dispatch(updateApplication({
+      id: application.id,
+      domains: domains.filter(v => v !== domain)
+    }))
+  }
+}
+
 export function fetchApplicationPending() {
   return {
     type: FETCH_APPLICATION_PENDING,
