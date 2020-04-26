@@ -112,7 +112,7 @@ func (s *Subscriber) Subscribe(ctx context.Context) error {
 			} else {
 				requeue := true
 				if s.ErrorHandler != nil {
-					requeue = s.ErrorHandler(err, payload)
+					requeue = s.ErrorHandler(values[0].Interface().(error), payload)
 				}
 				_ = message.Nack(false, requeue)
 			}
