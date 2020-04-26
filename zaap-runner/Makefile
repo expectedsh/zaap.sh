@@ -1,4 +1,4 @@
-PROTO_FILES=pkg/protocol/scheduler.proto
+PROTO_FILES=pkg/protocol/runner.proto
 PROTO_FLAGS=-Ipkg/protocol -I/usr/local/include
 
 make-protocol:

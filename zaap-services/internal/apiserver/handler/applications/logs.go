@@ -4,41 +4,49 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
+	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"net/http"
 )
 
-func HandleLogs(userService core.UserService) http.HandlerFunc {
+func HandleLogs(runnerStore core.RunnerStore, runnerService core.RunnerService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		//application := request.ApplicationFrom(r.Context())
+		application := request.ApplicationFrom(r.Context())
 
-		//client, conn, err := userService.NewSchedulerConnection(application.User)
-		//if err != nil {
-		//	response.InternalServerError(w)
-		//	return
-		//}
-		//defer conn.Close()
-		//
-		//logs, err := client.GetApplicationLogs(r.Context(), &protocol.GetApplicationLogsRequest{Id: application.ID.String()})
-		//if err != nil {
-		//	response.InternalServerError(w)
-		//	return
-		//}
-		//defer logs.CloseSend()
-		//
-		//w.Header().Add("Content-Type", "text/event-stream")
-		//w.Header().Add("Connection", "keep-alive")
-		//
-		//for {
-		//	log, err := logs.Recv()
-		//	if err != nil {
-		//		break
-		//	}
-		//	if err := sendLogLine(w, log); err != nil {
-		//		break
-		//	}
-		//}
+		runner, err := runnerStore.Find(r.Context(), application.RunnerID)
+		if err != nil {
+			response.InternalServerError(w)
+			return
+		}
+
+		client, conn, err := runnerService.NewConnection(runner)
+		if err != nil {
+			response.InternalServerError(w)
+			return
+		}
+		defer conn.Close()
+
+		logs, err := client.GetApplicationLogs(r.Context(), &protocol.GetApplicationLogsRequest{Id: application.ID.String()})
+		if err != nil {
+			response.InternalServerError(w)
+			return
+		}
+		defer logs.CloseSend()
+
+		w.Header().Add("Content-Type", "text/event-stream")
+		w.Header().Add("Connection", "keep-alive")
+
+		for {
+			log, err := logs.Recv()
+			if err != nil {
+				break
+			}
+			if err := sendLogLine(w, log); err != nil {
+				break
+			}
+		}
 	}
 }
 

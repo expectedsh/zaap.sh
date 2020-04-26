@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"context"
 	"errors"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/docker"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/docker"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/sirupsen/logrus"
 	"os"
 	"time"
@@ -67,7 +67,7 @@ func (s *Server) DeleteApplication(ctx context.Context, r *protocol.DeleteApplic
 	return &protocol.DeleteApplicationResponse{}, nil
 }
 
-func (s *Server) GetApplicationLogs(r *protocol.GetApplicationLogsRequest, srv protocol.Scheduler_GetApplicationLogsServer) error {
+func (s *Server) GetApplicationLogs(r *protocol.GetApplicationLogsRequest, srv protocol.Runner_GetApplicationLogsServer) error {
 	log := logrus.WithField("application", r.Id)
 	log.Info("getting logs application")
 

@@ -2,8 +2,8 @@ package core
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/jinzhu/gorm"
 	"github.com/satori/go.uuid"
 	"google.golang.org/grpc"
@@ -44,7 +44,7 @@ type (
 	}
 
 	RunnerService interface {
-		NewConnection(*Runner) (protocol.SchedulerClient, *grpc.ClientConn, error)
+		NewConnection(*Runner) (protocol.RunnerClient, *grpc.ClientConn, error)
 	}
 )
 

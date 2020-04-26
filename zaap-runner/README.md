@@ -1,4 +1,4 @@
-# zaap-scheduler
+# zaap-runner
 
 ### Requirements
 
@@ -17,7 +17,7 @@ curl https://get.docker.com | sh
 
 ```
 
-### Install zaap scheduler
+### Install runner
 
 ```bash
 # Used to configure forward our dns entries to your server
@@ -25,8 +25,5 @@ curl https://get.docker.com | sh
 export EXTERNAL_IPS=127.0.0.1
 
 # Used for authentication things
-# You can find it in settings > scheduler > scheduler token
-export SCHEDULER_TOKEN=my-token
-
-
+export RUNNER_TOKEN=my-token
 ```

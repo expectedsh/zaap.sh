@@ -3,7 +3,7 @@ package runners
 import (
 	"encoding/json"
 	"errors"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"

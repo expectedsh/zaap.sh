@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/docker/docker/client"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/internal/scheduler"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/docker"
-	"github.com/expected.sh/zaap.sh/zaap-scheduler/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/internal/scheduler"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/docker"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
@@ -19,7 +19,7 @@ func main() {
 
 	addr := ":8090"
 	server := grpc.NewServer()
-	protocol.RegisterSchedulerServer(server, scheduler.New(&docker.Docker{Client: dockerClient}))
+	protocol.RegisterRunnerServer(server, scheduler.New(&docker.Docker{Client: dockerClient}))
 
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
