@@ -2,7 +2,7 @@ module github.com/expected.sh/zaap.sh/zaap-services
 
 go 1.14
 
-replace github.com/expected.sh/zaap.sh/zaap-runner => ../zaap-runner
+replace github.com/expected.sh/zaap.sh/zaap-runner => ../zaap-runner-old
 
 require (
 	github.com/cloudflare/cloudflare-go v0.11.6
