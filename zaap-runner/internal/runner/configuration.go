@@ -9,7 +9,7 @@ import (
 func (r *Runner) GetConfiguration(ctx context.Context, req *protocol.GetConfigurationRequest) (*protocol.GetConfigurationResponse, error) {
 	logrus.Info("configuration requested")
 	return &protocol.GetConfigurationResponse{
-		Type:        protocol.RunnerType_DOCKER_SWARM,
+		Type:        protocol.RunnerType_KUBERNETES,
 		ExternalIps: r.config.ExternalIps,
 	}, nil
 }
