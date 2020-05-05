@@ -9,19 +9,13 @@ import RunnerStateBadge from "~/components/RunnerStatusBadge"
 import Header from "~/components/Header"
 import Table from "~/components/Table"
 import style from "./RunnerList.module.scss"
-import RunnerTypeLogo from "~/components/RunnerTypeLogo"
 
 const cx = classnames.bind(style)
 
 const tableConfig = [
   {
     renderHeader: () => "Name",
-    renderCell: runner => (
-      <>
-        <RunnerTypeLogo type={runner.type} className={cx('runner-logo')}/>
-        {runner.name}
-      </>
-    ),
+    renderCell: runner => runner.name,
     cellClassName: cx("cell-name"),
   },
   {

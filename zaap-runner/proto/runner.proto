@@ -16,15 +16,9 @@ service Runner {
   }
 }
 
-enum RunnerType {
-  DOCKER_SWARM = 0;
-  KUBERNETES = 1;
-}
-
 message GetConfigurationRequest {}
 
 message GetConfigurationResponse {
-  RunnerType type = 1;
   repeated string externalIps = 2;
 }
 
@@ -62,13 +56,7 @@ message GetApplicationLogsRequest {
 }
 
 message GetApplicationLogsResponse {
-  enum Output {
-    STDOUT = 0;
-    STDERR = 1;
-  }
-
-  Output output = 1;
-  string time = 2;
-  string taskId = 3;
-  string message = 4;
+  string time = 1;
+  string pod = 2;
+  string message = 3;
 }

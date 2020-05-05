@@ -21,7 +21,6 @@ type (
 		ID          uuid.UUID      `gorm:"primary_key" json:"id"`
 		Name        string         `gorm:"type:varchar;not null" json:"name"`
 		Description *string        `gorm:"type:varchar" json:"description"`
-		Type        RunnerType     `gorm:"type:varchar;not null" json:"type"`
 		ExternalIps pq.StringArray `gorm:"type:varchar[];not null" json:"external_ips"`
 		Status      RunnerStatus   `gorm:"type:varchar;not null" json:"status"`
 		Url         string         `gorm:"type:varchar;not null" json:"url"`
@@ -51,12 +50,9 @@ type (
 )
 
 const (
-	RunnerTypeDockerSwarm RunnerType   = "docker_swarm"
-	RunnerTypeKubernetes               = "kubernetes"
-	RunnerTypeUnknown                  = "unknown"
-	RunnerStatusUnknown   RunnerStatus = "unknown"
-	RunnerStatusOnline                 = "online"
-	RunnerStatusOffline                = "offline"
+	RunnerStatusUnknown RunnerStatus = "unknown"
+	RunnerStatusOnline               = "online"
+	RunnerStatusOffline              = "offline"
 )
 
 func (r *Runner) BeforeCreate(scope *gorm.Scope) error {

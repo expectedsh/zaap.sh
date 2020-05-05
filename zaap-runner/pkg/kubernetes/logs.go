@@ -5,14 +5,19 @@ import (
 	"context"
 	"fmt"
 	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
-	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
+	"strings"
+	"time"
 )
 
 type (
-	LogEntry struct{}
+	LogEntry struct {
+		Time    time.Time
+		Pod     string
+		Message string
+	}
 
 	logWatcher struct {
 		parent context.Context
@@ -63,15 +68,11 @@ func (w *logWatcher) listenEvents(ctx context.Context, application *protocol.App
 
 			switch event.Type {
 			case watch.Added:
-				curr, cancel := context.WithCancel(ctx)
-				go w.podLogs(curr, pod, logs)
-				pods[pod.Name] = cancel
+				go w.addPod(pod)
 			case watch.Modified:
 				switch pod.Status.Phase {
 				case corev1.PodRunning:
-					curr, cancel := context.WithCancel(ctx)
-					go c.podLogs(curr, pod, logs)
-					pods[pod.Name] = cancel
+					go w.addPod(pod)
 				case corev1.PodSucceeded, corev1.PodFailed:
 					if cancel := w.pods[pod.Name]; cancel != nil {
 						cancel()
@@ -87,7 +88,10 @@ func (w *logWatcher) listenEvents(ctx context.Context, application *protocol.App
 }
 
 func (w *logWatcher) addPod(pod *corev1.Pod) error {
-	stream, err := c.client.CoreV1().Pods(c.namespace).GetLogs(pod.Name, &corev1.PodLogOptions{
+	ctx, cancel := context.WithCancel(w.parent)
+	w.pods[pod.Name] = cancel
+
+	stream, err := w.client.client.CoreV1().Pods(w.client.namespace).GetLogs(pod.Name, &corev1.PodLogOptions{
 		Follow:     true,
 		Timestamps: true,
 	}).Stream()
@@ -104,7 +108,17 @@ func (w *logWatcher) addPod(pod *corev1.Pod) error {
 	sc := bufio.NewScanner(stream)
 
 	for sc.Scan() {
-		logrus.Info(sc.Text())
+		args := strings.SplitN(sc.Text(), " ", 2)
+		t, err := time.Parse(time.RFC3339Nano, args[0])
+		if err != nil {
+			continue
+		}
+
+		w.logs <- LogEntry{
+			Time:    t,
+			Pod:     pod.Name,
+			Message: args[1],
+		}
 	}
 
 	return nil

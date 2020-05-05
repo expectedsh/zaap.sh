@@ -9,47 +9,21 @@ func (r *Runner) GetApplicationLogs(req *protocol.GetApplicationLogsRequest, srv
 	log := logrus.WithField("application", req.Id)
 	log.Info("getting logs application")
 
+	logs, err := r.client.Logs(srv.Context(), &protocol.Application{Id: req.Id})
+	if err != nil {
+		return err
+	}
 
-
-	logrus.Info(r.client.Logs(srv.Context(), &protocol.Application{Name: "my-app"}))
-
+	for log := range logs {
+		err = srv.Send(&protocol.GetApplicationLogsResponse{
+			Time:    log.Time.String(),
+			Pod:     log.Pod,
+			Message: log.Message,
+		})
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
-
-	//currentApp, err := r.dockerClient.ServiceGetFromApplication(srv.Context(), req.Id)
-	//if err != nil {
-	//	return err
-	//} else if currentApp == nil {
-	//	return errors.New("application not found")
-	//}
-	//
-	//logs, err := r.dockerClient.ServiceGetLogs(srv.Context(), currentApp)
-	//if err != nil {
-	//	return err
-	//}
-	//defer logs.Close()
-	//
-	//reader := docker.NewLogReader(logs)
-	//scanner := bufio.NewScanner(reader)
-	//for scanner.Scan() {
-	//	if err := srv.Send(readLogLine(reader)); err != nil {
-	//		return err
-	//	}
-	//}
-	//
-	//return scanner.Err()
 }
-
-//func readLogLine(reader *docker.LogReader) *protocol.GetApplicationLogsResponse {
-//	output := protocol.GetApplicationLogsResponse_STDOUT
-//	if reader.Output == docker.OutputStderr {
-//		output = protocol.GetApplicationLogsResponse_STDERR
-//	}
-//
-//	return &protocol.GetApplicationLogsResponse{
-//		Output:  output,
-//		TaskId:  reader.Labels["com.docker.swarm.task.id"],
-//		Time:    reader.Time.Format(time.RFC3339),
-//		Message: reader.Message,
-//	}
-//}

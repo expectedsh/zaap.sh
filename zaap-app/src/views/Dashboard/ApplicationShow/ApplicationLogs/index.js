@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import moment from "moment"
 import classnames from "classnames/bind"
 import { fetchApplicationLogs } from "~/store/application/actions"
 import style from "./ApplicationLogs.module.scss"
@@ -44,12 +45,12 @@ function ApplicationLogs() {
       {state.map((v, index) => (
         <div key={index} className={cx('log-line')}>
           <div className={cx('info')}>
-            {v.time}
+            {moment(v.time).format("MMM DD HH:mm:ss.SSS")}
           </div>
           <div className={cx('info')}>
-            {v.taskId}
+            {v.pod}
           </div>
-          <div className={cx({ 'message-error': v.output === 1 })}>
+          <div>
             {v.message}
           </div>
         </div>

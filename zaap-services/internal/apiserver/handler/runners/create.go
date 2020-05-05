@@ -6,7 +6,6 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/runnerutils"
 	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -61,7 +60,6 @@ func HandleCreate(store core.RunnerStore, service core.RunnerService) http.Handl
 			})
 			return
 		}
-		runner.Type = runnerutils.ConvertType(res.Type)
 		runner.ExternalIps = res.ExternalIps
 
 		if err := store.Create(r.Context(), runner); err != nil {
