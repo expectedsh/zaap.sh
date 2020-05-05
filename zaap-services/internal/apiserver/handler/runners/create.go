@@ -2,10 +2,10 @@ package runners
 
 import (
 	"encoding/json"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/runnerutils"
 	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/sirupsen/logrus"

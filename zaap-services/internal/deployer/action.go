@@ -3,8 +3,8 @@ package deployer
 import (
 	"context"
 	"errors"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
-	uuid "github.com/satori/go.uuid"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
+	"github.com/satori/go.uuid"
 )
 
 var (

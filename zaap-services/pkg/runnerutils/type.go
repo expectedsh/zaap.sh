@@ -1,8 +1,8 @@
 package runnerutils
 
 import (
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 )
 
 func ConvertType(runnerType protocol.RunnerType) core.RunnerType {

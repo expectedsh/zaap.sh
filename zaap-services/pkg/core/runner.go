@@ -2,7 +2,7 @@ package core
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/jinzhu/gorm"
 	"github.com/lib/pq"

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/streadway/amqp"
 	"google.golang.org/grpc"
 )

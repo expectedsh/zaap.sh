@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"net/http"
 )
 
@@ -28,7 +28,9 @@ func HandleLogs(runnerStore core.RunnerStore, runnerService core.RunnerService) 
 		}
 		defer conn.Close()
 
-		logs, err := client.GetApplicationLogs(r.Context(), &protocol.GetApplicationLogsRequest{Id: application.ID.String()})
+		logs, err := client.GetApplicationLogs(r.Context(), &protocol.GetApplicationLogsRequest{
+			Id: application.ID.String(),
+		})
 		if err != nil {
 			response.InternalServerError(w)
 			return
