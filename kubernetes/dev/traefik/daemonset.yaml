@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik
+      hostNetwork: true
+      containers:
+        - name: traefik
+          image: traefik:2.2
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 9000
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 9000
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          ports:
+            - name: web
+              containerPort: 80
+              hostPort: 80
+              protocol: TCP
+            - name: websecure
+              containerPort: 443
+              hostPort: 443
+              protocol: TCP
+            - name: traefik
+              containerPort: 9000
+              hostPort: 9000
+              protocol: TCP
+          args:
+            - "--entryPoints.web.address=:80"
+            - "--entryPoints.websecure.address=:443"
+            - "--entryPoints.traefik.address=:9000"
+            - "--api.dashboard=true"
+            - "--api.insecure=true"
+            - "--ping=true"
+            - "--providers.kubernetesingress"

@@ -47,12 +47,14 @@ message DeployApplicationResponse {}
 
 message DeleteApplicationRequest {
   string id = 1;
+  string name = 2;
 }
 
 message DeleteApplicationResponse {}
 
 message GetApplicationLogsRequest {
   string id = 1;
+  string name = 2;
 }
 
 message GetApplicationLogsResponse {
