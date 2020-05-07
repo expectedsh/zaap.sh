@@ -36,7 +36,7 @@ function ApplicationNew() {
       errors.name = "can't be blank"
     } else if (values.name.length < 3 || values.name.length > 50) {
       errors.name = "the length must be between 3 and 50"
-    } else if (!values.name.match(/^[-a-zA-Z0-9]+$/m)) {
+    } else if (!values.name.match(/^[a-z]([-a-z0-9]*[a-z0-9])?$/m)) {
       errors.name = "should only contain letters, numbers, and dashes"
     }
 

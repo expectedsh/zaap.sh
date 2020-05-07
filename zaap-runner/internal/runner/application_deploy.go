@@ -7,23 +7,23 @@ import (
 )
 
 func (r *Runner) DeployApplication(_ context.Context, req *protocol.DeployApplicationRequest) (*protocol.DeployApplicationResponse, error) {
-	log := logrus.WithField("application", req.Application.Id)
+	log := logrus.WithField("application-id", req.Application.Id).WithField("application-name", req.Application.Name)
 	log.Info("deployment requested")
-	currentApp, err := r.client.DeploymentGet(req.Application)
-	if err != nil {
+
+	if err := r.client.DeploymentCreateOrUpdate(req.Application); err != nil {
+		log.WithError(err).Error("failed to create/update deployment")
 		return nil, err
 	}
 
-	if currentApp == nil {
-		log.Info("application does not exists, creating")
-		err = r.client.DeploymentCreate(req.Application)
-	} else {
-		log.Info("application already exists, updating")
-		err = r.client.DeploymentUpdate(req.Application)
-	}
-
-	if err != nil {
+	if err := r.client.ServiceCreateOrUpdate(req.Application); err != nil {
+		log.WithError(err).Error("failed to create/update service")
 		return nil, err
 	}
+
+	if err := r.client.IngressCreateOrUpdate(req.Application); err != nil {
+		log.WithError(err).Error("failed to create/update ingress")
+		return nil, err
+	}
+
 	return &protocol.DeployApplicationResponse{}, nil
 }

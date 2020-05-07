@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
@@ -27,7 +26,7 @@ type (
 	}
 )
 
-func (c *Client) Logs(ctx context.Context, application *protocol.Application) (<-chan LogEntry, error) {
+func (c *Client) Logs(ctx context.Context, applicationId string) (<-chan LogEntry, error) {
 	log := logWatcher{
 		parent: ctx,
 		client: c,
@@ -35,14 +34,14 @@ func (c *Client) Logs(ctx context.Context, application *protocol.Application) (<
 		pods:   make(map[string]context.CancelFunc),
 	}
 
-	go log.listenEvents(ctx, application)
+	go log.listenEvents(ctx, applicationId)
 
 	return log.logs, nil
 }
 
-func (w *logWatcher) listenEvents(ctx context.Context, application *protocol.Application) error {
+func (w *logWatcher) listenEvents(ctx context.Context, applicationId string) error {
 	watcher, err := w.client.client.CoreV1().Pods(w.client.namespace).Watch(metav1.ListOptions{
-		LabelSelector: fmt.Sprintf("app-id=%v", application.Id),
+		LabelSelector: fmt.Sprintf("zaap-application-id=%v", applicationId),
 	})
 	if err != nil {
 		return err

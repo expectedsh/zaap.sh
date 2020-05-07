@@ -7,10 +7,20 @@ import (
 )
 
 func (r *Runner) DeleteApplication(_ context.Context, req *protocol.DeleteApplicationRequest) (*protocol.DeleteApplicationResponse, error) {
-	log := logrus.WithField("application", req.Id)
+	log := logrus.WithField("application-id", req.Id).WithField("application-name", req.Name)
 	log.Info("deletion requested")
+
 	if err := r.client.DeploymentDelete(req.Name); err != nil {
-		return nil, err
+		log.WithError(err).Error("failed to delete deployment")
 	}
+
+	if err := r.client.ServiceDelete(req.Name); err != nil {
+		log.WithError(err).Error("failed to delete service")
+	}
+
+	if err := r.client.IngressDelete(req.Name); err != nil {
+		log.WithError(err).Error("failed to delete ingress")
+	}
+
 	return &protocol.DeleteApplicationResponse{}, nil
 }

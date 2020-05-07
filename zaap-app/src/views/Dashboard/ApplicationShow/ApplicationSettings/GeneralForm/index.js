@@ -21,14 +21,6 @@ function GeneralForm() {
   function validate(values) {
     const errors = {}
 
-    if (!values.name) {
-      errors.name = "can't be blank"
-    } else if (values.name.length < 3 || values.name.length > 50) {
-      errors.name = "the length must be between 3 and 50"
-    } else if (!values.name.match(/^[-a-zA-Z0-9]+$/m)) {
-      errors.name = "should only contain letters, numbers, and dashes"
-    }
-
     if (!values.image) {
       errors.image = "can't be blank"
     } else if (!values.image.match(/^(?:.+\/)?([^:]+)(?::.+)?$/m)) {
@@ -46,7 +38,6 @@ function GeneralForm() {
   function onSubmit(values) {
     return dispatch(updateApplication({
       id: application.id,
-      name: values.name,
       image: values.image,
       replicas: parseInt(values.replicas, 10),
     }))
@@ -68,7 +59,7 @@ function GeneralForm() {
       initialValues={initialValues}
       render={({ handleSubmit, pristine }) => (
         <form onSubmit={handleSubmit}>
-          <Field component={TextField} name="name" label="Application Name"/>
+          <Field component={TextField} name="name" label="Application Name" disabled/>
           <Field component={TextField} name="image" label="Image"/>
           <Field component={TextField} type="number" name="replicas" label="Replicas"/>
           <Button className="btn btn-success" type="submit" disabled={pristine}>

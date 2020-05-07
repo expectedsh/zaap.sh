@@ -5,15 +5,14 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 type updateApplicationRequest struct {
-	Name        *string           `json:"name"`
 	Image       *string           `json:"image"`
 	Replicas    *int              `json:"replicas"`
 	Environment *core.Environment `json:"environment"`
@@ -22,13 +21,6 @@ type updateApplicationRequest struct {
 
 func (r *updateApplicationRequest) Validate() error {
 	return validation.ValidateStruct(r,
-		validation.Field(
-			&r.Name,
-			validation.Length(3, 50),
-			validation.
-				Match(core.ApplicationNameRegex).
-				Error("should only contain letters, numbers, and dashes"),
-		),
 		validation.Field(
 			&r.Image,
 			validation.
@@ -63,9 +55,6 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			return
 		}
 
-		if in.Name != nil {
-			application.Name = *in.Name
-		}
 		if in.Image != nil || in.Replicas != nil || in.Environment != nil {
 			deployment := &core.Deployment{
 				ID:          uuid.NewV4(),

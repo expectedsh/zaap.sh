@@ -7,3 +7,4 @@
 build
 node_modules
 /zaap-runner/target/
+/expected-ui

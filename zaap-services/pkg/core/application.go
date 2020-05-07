@@ -64,7 +64,7 @@ const (
 	ApplicationStatusCrashed                     = "crashed"
 )
 
-var ApplicationNameRegex = regexp.MustCompile("(?m)^[-a-zA-Z0-9]+$")
+var ApplicationNameRegex = regexp.MustCompile("(?m)^[a-z]([-a-z0-9]*[a-z0-9])?$")
 
 func (a *Application) BeforeCreate(scope *gorm.Scope) error {
 	if a.ID == uuid.Nil {

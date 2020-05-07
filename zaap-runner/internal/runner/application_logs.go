@@ -9,7 +9,7 @@ func (r *Runner) GetApplicationLogs(req *protocol.GetApplicationLogsRequest, srv
 	log := logrus.WithField("application", req.Id)
 	log.Info("getting logs application")
 
-	logs, err := r.client.Logs(srv.Context(), &protocol.Application{Id: req.Id})
+	logs, err := r.client.Logs(srv.Context(), req.Id)
 	if err != nil {
 		return err
 	}
