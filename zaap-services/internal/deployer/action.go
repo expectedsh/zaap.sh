@@ -48,7 +48,7 @@ func (s *Server) deployApplication(ctx context.Context, applicationId uuid.UUID,
 	return err
 }
 
-func (s *Server) deleteApplication(ctx context.Context, applicationId uuid.UUID, runnerId uuid.UUID) error {
+func (s *Server) deleteApplication(ctx context.Context, applicationId uuid.UUID, applicationName string, runnerId uuid.UUID) error {
 	runner, err := s.runnerStore.Find(ctx, runnerId)
 	if err != nil {
 		return err
@@ -63,7 +63,8 @@ func (s *Server) deleteApplication(ctx context.Context, applicationId uuid.UUID,
 	defer conn.Close()
 
 	_, err = client.DeleteApplication(ctx, &protocol.DeleteApplicationRequest{
-		Id: applicationId.String(),
+		Id:   applicationId.String(),
+		Name: applicationName,
 	})
 	return err
 }

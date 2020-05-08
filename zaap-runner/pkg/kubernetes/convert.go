@@ -66,6 +66,7 @@ func (c *Client) toService(application *protocol.Application) *apiv1.Service {
 			Type: apiv1.ServiceTypeClusterIP,
 			Ports: []apiv1.ServicePort{
 				{
+					Name:       "http",
 					Port:       80,
 					TargetPort: intstr.FromString("http"),
 					Protocol:   apiv1.ProtocolTCP,
@@ -84,22 +85,31 @@ func (c *Client) toIngress(application *protocol.Application) *networkv1.Ingress
 	for _, domain := range application.Domains {
 		rules = append(rules, networkv1.IngressRule{
 			Host: domain,
+			IngressRuleValue: networkv1.IngressRuleValue{
+				HTTP: &networkv1.HTTPIngressRuleValue{
+					Paths: []networkv1.HTTPIngressPath{
+						{
+							Path: "/",
+							Backend: networkv1.IngressBackend{
+								ServiceName: application.Name,
+								ServicePort: intstr.FromString("http"),
+							},
+						},
+					},
+				},
+			},
 		})
 	}
 
 	meta := c.toObjectMeta(application)
 	meta.Annotations = map[string]string{
-		"traefik.ingress.kubernetes.io/router.entrypoints": "web,websecure",
+		"traefik.ingress.kubernetes.io/router.entrypoints": "web",
 	}
 
 	return &networkv1.Ingress{
 		ObjectMeta: meta,
 		Spec: networkv1.IngressSpec{
 			Rules: rules,
-			Backend: &networkv1.IngressBackend{
-				ServiceName: application.Name,
-				ServicePort: intstr.FromString("http"),
-			},
 		},
 	}
 }

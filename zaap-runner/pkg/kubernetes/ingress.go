@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) IngressCreateOrUpdate(application *protocol.Application) error {
-	_, err := c.client.NetworkingV1beta1().Ingresses(c.namespace).Get(application.Id, metav1.GetOptions{})
+	_, err := c.client.NetworkingV1beta1().Ingresses(c.namespace).Get(application.Name, metav1.GetOptions{})
 	if errors.IsNotFound(err) {
 		return c.IngressCreate(application)
 	} else if err != nil {

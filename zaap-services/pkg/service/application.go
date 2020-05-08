@@ -44,8 +44,9 @@ func (s applicationService) NotifyUpdated(application *core.Application) error {
 
 func (s applicationService) NotifyDeleted(application *core.Application) error {
 	return s.publisher.Publish(messaging.DeliveryModeTransient, &protocol.ApplicationDeleted{
-		Id:       application.ID.String(),
-		RunnerId: application.RunnerID.String(),
-		Name:     application.Name,
+		Id:            application.ID.String(),
+		RunnerId:      application.RunnerID.String(),
+		Name:          application.Name,
+		DefaultDomain: application.DefaultDomain,
 	})
 }

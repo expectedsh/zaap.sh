@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) DeploymentCreateOrUpdate(application *protocol.Application) error {
-	_, err := c.client.AppsV1().Deployments(c.namespace).Get(application.Id, metav1.GetOptions{})
+	_, err := c.client.AppsV1().Deployments(c.namespace).Get(application.Name, metav1.GetOptions{})
 	if errors.IsNotFound(err) {
 		return c.DeploymentCreate(application)
 	} else if err != nil {

@@ -28,3 +28,20 @@ func (s *Server) createDnsEntry(ctx context.Context, applicationId uuid.UUID) er
 
 	return nil
 }
+
+func (s *Server) deleteDnsEntry(domain string) error {
+	records, err := s.cloudflareClient.DNSRecords(s.config.CloudflareZoneId, cloudflare.DNSRecord{
+		Name: domain,
+	})
+	if err != nil {
+		return err
+	}
+
+	for _, record := range records {
+		if err = s.cloudflareClient.DeleteDNSRecord(s.config.CloudflareZoneId, record.ID); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

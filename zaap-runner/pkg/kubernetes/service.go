@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) ServiceCreateOrUpdate(application *protocol.Application) error {
-	service, err := c.client.CoreV1().Services(c.namespace).Get(application.Id, metav1.GetOptions{})
+	service, err := c.client.CoreV1().Services(c.namespace).Get(application.Name, metav1.GetOptions{})
 	if errors.IsNotFound(err) {
 		return c.ServiceCreate(application)
 	} else if err != nil {

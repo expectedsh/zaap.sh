@@ -37,9 +37,14 @@ func (s *Server) ApplicationUpdatedHandler(ctx context.Context, message *protoco
 }
 
 func (s *Server) ApplicationDeletedHandler(ctx context.Context, message *protocol.ApplicationDeleted) error {
-	logrus.WithField("application-id", message.Id).Info("handling application deletion")
+	log := logrus.WithField("application-id", message.Id)
+	log.Info("handling application deletion")
 
 	applicationId := uuid.FromStringOrNil(message.Id)
 
-	return s.deleteApplication(ctx, applicationId, uuid.FromStringOrNil(message.RunnerId))
+	if err := s.deleteDnsEntry(message.DefaultDomain); err != nil {
+		log.WithError(err).Error("could not delete dns entries")
+	}
+
+	return s.deleteApplication(ctx, applicationId, message.Name, uuid.FromStringOrNil(message.RunnerId))
 }

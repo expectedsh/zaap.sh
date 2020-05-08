@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: traefik
-  namespace: traefik
+  namespace: zaap
 spec:
   selector:
     matchLabels:
@@ -56,3 +56,4 @@ spec:
             - "--api.insecure=true"
             - "--ping=true"
             - "--providers.kubernetesingress"
+            - "--log.level=DEBUG"

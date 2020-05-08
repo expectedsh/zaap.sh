@@ -16,6 +16,7 @@ message ApplicationDeleted {
     string id = 1;
     string runnerId = 2;
     string name = 3;
+    string defaultDomain = 4;
 }
 
 message ApplicationStatusChanged {
