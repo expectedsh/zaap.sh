@@ -27,6 +27,14 @@ func (s runnerStore) Find(ctx context.Context, id uuid.UUID) (*core.Runner, erro
 	return runner, nil
 }
 
+func (s runnerStore) List(ctx context.Context) (*[]core.Runner, error) {
+	runners := new([]core.Runner)
+	if err := s.db.Find(runners).Error; err != nil {
+		return nil, err
+	}
+	return runners, nil
+}
+
 func (s runnerStore) ListByUser(ctx context.Context, userId uuid.UUID) (*[]core.Runner, error) {
 	runners := new([]core.Runner)
 	if err := s.db.Find(runners, "user_id = ?", userId).Error; err != nil {

@@ -14,6 +14,9 @@ service Runner {
 
   rpc GetApplicationLogs (GetApplicationLogsRequest) returns (stream GetApplicationLogsResponse) {
   }
+
+  rpc Events (GetEventsRequest) returns (stream GetEventsResponse) {
+  }
 }
 
 message GetConfigurationRequest {}
@@ -61,4 +64,17 @@ message GetApplicationLogsResponse {
   string time = 1;
   string pod = 2;
   string message = 3;
+}
+
+message GetEventsRequest {}
+
+message GetEventsResponse {
+  oneof event {
+    ApplicationEvent applicationEvent = 1;
+  }
+}
+
+message ApplicationEvent {
+  string reason = 1;
+  string message = 2;
 }

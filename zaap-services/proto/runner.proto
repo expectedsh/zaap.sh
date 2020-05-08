@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package protocol;
+
+enum RunnerStatus {
+    UNKNOWN = 0;
+    ONLINE = 1;
+    OFFLINE = 2;
+}
+
+message RunnerCreated {
+    string id = 1;
+}
+
+message RunnerUpdated {
+    string id = 1;
+}
+
+message RunnerDeleted {
+    string id = 1;
+    string name = 2;
+}
+
+message RunnerStatusChanged {
+    string id = 1;
+    RunnerStatus status = 2;
+}

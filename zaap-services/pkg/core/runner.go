@@ -35,6 +35,8 @@ type (
 	RunnerStore interface {
 		Find(context.Context, uuid.UUID) (*Runner, error)
 
+		List(context.Context) (*[]Runner, error)
+
 		ListByUser(context.Context, uuid.UUID) (*[]Runner, error)
 
 		Create(context.Context, *Runner) error
