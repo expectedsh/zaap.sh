@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zaap-runner
+  namespace: zaap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zaap-runner
+  template:
+    metadata:
+      labels:
+        app: zaap-runner
+    spec:
+      serviceAccountName: zaap-runner
+      containers:
+        - name: runner
+          image: docker.pkg.github.com/expectedsh/zaap.sh/runner:latest
+          ports:
+            - name: grpc
+              containerPort: 8090
+              protocol: TCP
+          env:
+            - name: TOKEN
+              value: h2oi069a1awtc142kx7sd9pygjqqj3l
+            - name: EXTERNAL_IPS
+              value: 51.159.74.8
+      imagePullSecrets:
+        - name: regcred
