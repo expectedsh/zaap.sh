@@ -2,12 +2,14 @@ package kubernetes
 
 import (
 	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/sirupsen/logrus"
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
 	networkv1 "k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/utils/pointer"
+	"strconv"
 )
 
 func (c *Client) labels(application *protocol.Application) map[string]string {
@@ -26,6 +28,26 @@ func (c *Client) toObjectMeta(application *protocol.Application) metav1.ObjectMe
 }
 
 func (c *Client) toDeployment(application *protocol.Application) *appsv1.Deployment {
+	port := 80
+
+	if value, ok := application.Environment["PORT"]; ok {
+		i, err := strconv.Atoi(value)
+		if err != nil {
+			logrus.WithField("port", value).WithError(err).Warn("failed to convert port to int, fallbacking to 80")
+		} else {
+			port = i
+		}
+	}
+
+	var env []apiv1.EnvVar
+
+	for key, value := range application.Environment {
+		env = append(env, apiv1.EnvVar{
+			Name:  key,
+			Value: value,
+		})
+	}
+
 	return &appsv1.Deployment{
 		ObjectMeta: c.toObjectMeta(application),
 		Spec: appsv1.DeploymentSpec{
@@ -48,9 +70,15 @@ func (c *Client) toDeployment(application *protocol.Application) *appsv1.Deploym
 								{
 									Name:          "http",
 									Protocol:      apiv1.ProtocolTCP,
-									ContainerPort: 80, // todo: use "PORT" env or 80
+									ContainerPort: int32(port),
 								},
 							},
+							Env: env,
+						},
+					},
+					ImagePullSecrets: []apiv1.LocalObjectReference{
+						{
+							Name: "regcred",
 						},
 					},
 				},

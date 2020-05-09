@@ -6,5 +6,5 @@
 *.log
 build
 node_modules
-/zaap-runner/target/
+/target
 /expected-ui

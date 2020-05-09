@@ -1,3 +1,4 @@
+const { EnvironmentPlugin } = require("webpack")
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const {join} = require('path')
@@ -106,6 +107,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new EnvironmentPlugin(["NODE_ENV", "API_ENDPOINT"]),
     new HtmlWebPackPlugin({
       template: join(__dirname, 'public', 'index.html'),
     }),

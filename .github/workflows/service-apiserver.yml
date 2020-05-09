@@ -1,0 +1,20 @@
+name: Service apiserver
+on: [push]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build and deploy
+        if: github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v1
+        with:
+          username: remicaumette
+          password: ${{ secrets.REMICAUMETTE_GH_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: expectedsh/zaap.sh/apiserver
+          path: zaap-services
+          dockerfile: zaap-services/cmd/zaap-apiserver/Dockerfile
+          tags: latest
