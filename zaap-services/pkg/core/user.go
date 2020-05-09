@@ -3,7 +3,7 @@ package core
 import (
 	"context"
 	"github.com/jinzhu/gorm"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"strings"
 	"time"
 )

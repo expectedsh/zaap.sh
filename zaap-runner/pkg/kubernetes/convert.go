@@ -12,7 +12,7 @@ import (
 
 func (c *Client) labels(application *protocol.Application) map[string]string {
 	return map[string]string{
-		"zaap-application-id":   application.Name,
+		"zaap-application-id":   application.Id,
 		"zaap-application-name": application.Name,
 		"zaap-deployment-id":    application.DeploymentId,
 	}

@@ -47,6 +47,14 @@ func (s applicationStore) ListByUser(ctx context.Context, userId uuid.UUID) (*[]
 	return applications, nil
 }
 
+func (s applicationStore) ListByRunner(ctx context.Context, runnerId uuid.UUID) (*[]core.Application, error) {
+	applications := new([]core.Application)
+	if err := s.db.Find(applications, "runner_id = ?", runnerId).Error; err != nil {
+		return nil, err
+	}
+	return applications, nil
+}
+
 func (s applicationStore) Create(ctx context.Context, application *core.Application) error {
 	return s.db.Create(application).Error
 }

@@ -3,9 +3,10 @@ package core
 import (
 	"context"
 	"fmt"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/jinzhu/gorm"
 	"github.com/lib/pq"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"regexp"
 	"strings"
 	"time"
@@ -17,7 +18,7 @@ type (
 	Application struct {
 		ID                  uuid.UUID         `gorm:"primary_key" json:"id"`
 		Name                string            `gorm:"type:varchar;not null" json:"name"`
-		Status              ApplicationStatus `gorm:"type:varchar;not null" json:"state"`
+		Status              ApplicationStatus `gorm:"type:varchar;not null" json:"status"`
 		DefaultDomain       string            `gorm:"type:varchar;unique;not null" json:"default_domain"`
 		Domains             pq.StringArray    `gorm:"type:varchar[];not null" json:"domains"`
 		UserID              uuid.UUID         `json:"user_id"`
@@ -38,6 +39,8 @@ type (
 		FindWithRunner(context.Context, uuid.UUID) (*Application, error)
 
 		ListByUser(context.Context, uuid.UUID) (*[]Application, error)
+
+		ListByRunner(context.Context, uuid.UUID) (*[]Application, error)
 
 		Create(context.Context, *Application) error
 
@@ -62,6 +65,7 @@ const (
 	ApplicationStatusDeploying                   = "deploying"
 	ApplicationStatusRunning                     = "running"
 	ApplicationStatusCrashed                     = "crashed"
+	ApplicationStatusFailed                      = "failed"
 )
 
 var ApplicationNameRegex = regexp.MustCompile("(?m)^[a-z]([-a-z0-9]*[a-z0-9])?$")
@@ -81,4 +85,19 @@ func (a *Application) BeforeSave(scope *gorm.Scope) error {
 		a.Domains = pq.StringArray{}
 	}
 	return nil
+}
+
+func ApplicationStatusFromRunner(status protocol.ApplicationStatus) ApplicationStatus {
+	switch status {
+	case protocol.ApplicationStatus_DEPLOYING:
+		return ApplicationStatusDeploying
+	case protocol.ApplicationStatus_RUNNING:
+		return ApplicationStatusRunning
+	case protocol.ApplicationStatus_CRASHED:
+		return ApplicationStatusCrashed
+	case protocol.ApplicationStatus_FAILED:
+		return ApplicationStatusFailed
+	default:
+		return ApplicationStatusUnknown
+	}
 }

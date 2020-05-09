@@ -9,6 +9,8 @@ function ApplicationStatusName({ status }) {
     return "Running"
   case "crashed":
     return "Crashed"
+  case "failed":
+    return "Failed"
   default:
     return "Unknown"
   }

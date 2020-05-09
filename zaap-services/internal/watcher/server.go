@@ -4,32 +4,29 @@ import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/watcher/config"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/messaging"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/service"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/store"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
-	uuid "github.com/satori/go.uuid"
 	"github.com/streadway/amqp"
-	"sync"
+	"time"
 )
 
 type Server struct {
 	config             *config.Config
 	context            context.Context
+	done               bool
 	runnerStore        core.RunnerStore
 	runnerService      core.RunnerService
 	applicationStore   core.ApplicationStore
 	applicationService core.ApplicationService
-	watcherMutex       sync.Mutex
-	watchers           map[uuid.UUID]*Watcher
 }
 
 func New(config *config.Config) *Server {
 	return &Server{
-		config:   config,
-		context:  context.TODO(),
-		watchers: map[uuid.UUID]*Watcher{},
+		config:  config,
+		done:    false,
+		context: context.TODO(),
 	}
 }
 
@@ -51,21 +48,24 @@ func (s *Server) Start() error {
 	s.applicationStore = store.NewApplicationStore(db)
 	s.applicationService = service.NewApplicationService(amqpConn)
 
-	queueConfig := messaging.NewSimpleWorkingQueue(service.ApplicationEventsExchange.Name(), "watcher")
-	subscriber := messaging.NewSubscriber(amqpConn, service.ApplicationEventsExchange, queueConfig)
+	for !s.done {
+		runners, err := s.runnerStore.List(s.context)
+		if err != nil {
+			return err
+		}
 
-	runners, err := s.runnerStore.List(s.context)
-	if err != nil {
-		return err
-	}
-	for _, runner := range *runners {
-		go s.watchRunner(runner)
+		for _, runner := range *runners {
+			go s.updateRunner(runner)
+		}
+
+		time.Sleep(time.Second * 15)
 	}
 
-	return subscriber.Subscribe(s.context)
+	return nil
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
-	//context.WithTimeout(m.context, 15*time.Second)
+	s.done = true
+	s.context = ctx
 	return nil
 }

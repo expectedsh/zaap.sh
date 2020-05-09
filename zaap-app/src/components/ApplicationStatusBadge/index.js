@@ -12,6 +12,7 @@ function getClassName(status) {
   case "running":
     return "green"
   case "crashed":
+  case "failed":
     return "red"
   default:
     return "grey"

@@ -6,7 +6,7 @@ import moment from "moment"
 import { fetchApplications } from "~/store/applications/actions"
 import Alert from "~/components/Alert"
 import Header from "~/components/Header"
-import ApplicationStateBadge from "~/components/ApplicationStatusBadge"
+import ApplicationStatusBadge from "~/components/ApplicationStatusBadge"
 import Table from "~/components/Table"
 import style from "./ApplicationList.module.scss"
 
@@ -20,7 +20,7 @@ const tableConfig = [
   },
   {
     renderHeader: () => "Status",
-    renderCell: app => <ApplicationStateBadge state={app.state}/>,
+    renderCell: app => <ApplicationStatusBadge status={app.status}/>,
     cellClassName: cx("cell-state"),
   },
   {
