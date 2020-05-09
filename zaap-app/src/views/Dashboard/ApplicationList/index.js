@@ -24,8 +24,8 @@ const tableConfig = [
     cellClassName: cx("cell-state"),
   },
   {
-    renderHeader: () => "Endpoint",
-    renderCell: () => "My name",
+    renderHeader: () => "Runner",
+    renderCell: app => app.runnerId,
     cellClassName: cx("cell-endpoint"),
   },
   {
