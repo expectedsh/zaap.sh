@@ -15,7 +15,6 @@ jobs:
           password: ${{ secrets.REMICAUMETTE_GH_TOKEN }}
           registry: docker.pkg.github.com
           repository: expectedsh/zaap.sh/watcher
-          path: zaap-services
           dockerfile: zaap-services/cmd/zaap-watcher/Dockerfile
           tags: latest
 
