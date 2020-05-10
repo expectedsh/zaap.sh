@@ -61,6 +61,14 @@ func toDeployment(application *runnerpb.Application) *appsv1.Deployment {
 		})
 	}
 
+	var imagePullSecrets []corev1.LocalObjectReference
+
+	for _, secret := range application.ImagePullSecrets {
+		imagePullSecrets = append(imagePullSecrets, corev1.LocalObjectReference{
+			Name: secret,
+		})
+	}
+
 	return &appsv1.Deployment{
 		ObjectMeta: toObjectMeta(application),
 		Spec: appsv1.DeploymentSpec{
@@ -90,11 +98,7 @@ func toDeployment(application *runnerpb.Application) *appsv1.Deployment {
 							Env: env,
 						},
 					},
-					ImagePullSecrets: []corev1.LocalObjectReference{
-						{
-							Name: "regcred", // todo : flex
-						},
-					},
+					ImagePullSecrets: imagePullSecrets,
 				},
 			},
 		},

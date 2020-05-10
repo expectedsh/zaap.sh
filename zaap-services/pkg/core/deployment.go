@@ -15,13 +15,14 @@ type (
 	Environment map[string]string
 
 	Deployment struct {
-		ID            uuid.UUID      `gorm:"primary_key" json:"id"`
-		Image         string         `gorm:"type:varchar;not null" json:"image"`
-		Replicas      int            `gorm:"type:integer;not null" json:"replicas"`
-		Environment   Environment    `gorm:"type:json;not null" json:"environment"`
-		Roles         pq.StringArray `gorm:"type:varchar[]" json:"roles"`
-		ApplicationID uuid.UUID      `json:"application_id"`
-		CreatedAt     time.Time      `json:"created_at"`
+		ID               uuid.UUID      `gorm:"primary_key" json:"id"`
+		Image            string         `gorm:"type:varchar;not null" json:"image"`
+		Replicas         int            `gorm:"type:integer;not null" json:"replicas"`
+		Environment      Environment    `gorm:"type:json;not null" json:"environment"`
+		Roles            pq.StringArray `gorm:"type:varchar[];not null" json:"roles"`
+		ImagePullSecrets pq.StringArray `gorm:"type:varchar[]" json:"image_pull_secrets"`
+		ApplicationID    uuid.UUID      `json:"application_id"`
+		CreatedAt        time.Time      `json:"created_at"`
 
 		Application *Application `json:"-"`
 	}
@@ -50,6 +51,9 @@ func (d *Deployment) BeforeSave(scope *gorm.Scope) error {
 	}
 	if d.Roles == nil {
 		d.Roles = pq.StringArray{}
+	}
+	if d.ImagePullSecrets == nil {
+		d.ImagePullSecrets = pq.StringArray{}
 	}
 	return nil
 }

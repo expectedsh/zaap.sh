@@ -67,6 +67,7 @@ func New(config *config.Config, db *gorm.DB, amqpConn *rabbitmq.Connection) chi.
 				r.Use(InjectRunner(runnerStore))
 
 				r.Get("/cluster_roles", runners.HandleListClusterRoles(runnerService))
+				r.Get("/image_pull_secrets", runners.HandleListImagePullSecrets(runnerService))
 			})
 		})
 	})

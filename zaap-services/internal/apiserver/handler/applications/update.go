@@ -13,11 +13,12 @@ import (
 )
 
 type updateApplicationRequest struct {
-	Image       *string           `json:"image"`
-	Replicas    *int              `json:"replicas"`
-	Environment *core.Environment `json:"environment"`
-	Domains     []string          `json:"domains"`
-	Roles       []string          `json:"roles"`
+	Image            *string           `json:"image"`
+	Replicas         *int              `json:"replicas"`
+	Environment      *core.Environment `json:"environment"`
+	Domains          []string          `json:"domains"`
+	Roles            []string          `json:"roles"`
+	ImagePullSecrets []string          `json:"image_pull_secrets"`
 }
 
 func (r *updateApplicationRequest) Validate() error {
@@ -56,13 +57,14 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			return
 		}
 
-		if in.Image != nil || in.Replicas != nil || in.Environment != nil || in.Roles != nil {
+		if in.Image != nil || in.Replicas != nil || in.Environment != nil || in.Roles != nil || in.ImagePullSecrets != nil {
 			deployment := &core.Deployment{
-				ID:          uuid.NewV4(),
-				Image:       currentDeployment.Image,
-				Replicas:    currentDeployment.Replicas,
-				Environment: currentDeployment.Environment,
-				Roles:       currentDeployment.Roles,
+				ID:               uuid.NewV4(),
+				Image:            currentDeployment.Image,
+				Replicas:         currentDeployment.Replicas,
+				Environment:      currentDeployment.Environment,
+				Roles:            currentDeployment.Roles,
+				ImagePullSecrets: currentDeployment.ImagePullSecrets,
 			}
 
 			if in.Image != nil {
@@ -76,6 +78,9 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			}
 			if in.Roles != nil {
 				deployment.Roles = removeDuplicates(in.Roles)
+			}
+			if in.ImagePullSecrets != nil {
+				deployment.ImagePullSecrets = removeDuplicates(in.ImagePullSecrets)
 			}
 
 			application.Deployments = append(application.Deployments, deployment)

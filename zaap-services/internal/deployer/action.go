@@ -36,14 +36,15 @@ func (s *Server) deployApplication(ctx context.Context, applicationId uuid.UUID,
 
 	_, err = client.DeployApplication(ctx, &runnerpb.DeployApplicationRequest{
 		Application: &runnerpb.Application{
-			Id:           application.ID.String(),
-			DeploymentId: deployment.ID.String(),
-			Name:         application.Name,
-			Image:        deployment.Image,
-			Replicas:     uint32(deployment.Replicas),
-			Domains:      append(application.Domains, application.DefaultDomain),
-			Environment:  deployment.Environment,
-			Roles:        deployment.Roles,
+			Id:               application.ID.String(),
+			DeploymentId:     deployment.ID.String(),
+			Name:             application.Name,
+			Image:            deployment.Image,
+			Replicas:         uint32(deployment.Replicas),
+			Domains:          append(application.Domains, application.DefaultDomain),
+			Environment:      deployment.Environment,
+			Roles:            deployment.Roles,
+			ImagePullSecrets: deployment.ImagePullSecrets,
 		},
 	})
 	return err

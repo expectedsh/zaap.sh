@@ -12,6 +12,9 @@ service Runner {
     rpc GetClusterRoles (GetClusterRolesRequest) returns (GetClusterRolesReply) {
     }
 
+    rpc GetImagePullSecrets (GetImagePullSecretsRequest) returns (GetImagePullSecretsReply) {
+    }
+
     rpc DeployApplication (DeployApplicationRequest) returns (DeployApplicationReply) {
     }
 
@@ -51,6 +54,17 @@ message ClusterRole {
     string name = 1;
 }
 
+message GetImagePullSecretsRequest {
+}
+
+message GetImagePullSecretsReply {
+    repeated ImagePullSecret secrets = 1;
+}
+
+message ImagePullSecret {
+    string name = 1;
+}
+
 enum ApplicationStatus {
     UNKNOWN = 0;
     DEPLOYING = 1;
@@ -68,6 +82,7 @@ message Application {
     repeated string domains = 6;
     map<string, string> environment = 7;
     repeated string roles = 8;
+    repeated string imagePullSecrets = 9;
 }
 
 message DeployApplicationRequest {
