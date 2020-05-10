@@ -2,11 +2,11 @@ package runner
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) DeployApplication(_ context.Context, req *protocol.DeployApplicationRequest) (*protocol.DeployApplicationResponse, error) {
+func (r *Runner) DeployApplication(_ context.Context, req *runnerpb.DeployApplicationRequest) (*runnerpb.DeployApplicationResponse, error) {
 	log := logrus.WithField("application-id", req.Application.Id).WithField("application-name", req.Application.Name)
 	log.Info("deployment requested")
 
@@ -25,5 +25,5 @@ func (r *Runner) DeployApplication(_ context.Context, req *protocol.DeployApplic
 		return nil, err
 	}
 
-	return &protocol.DeployApplicationResponse{}, nil
+	return &runnerpb.DeployApplicationResponse{}, nil
 }

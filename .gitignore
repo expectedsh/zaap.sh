@@ -6,5 +6,6 @@
 *.log
 build
 node_modules
-/target
+target
 /expected-ui
+bins

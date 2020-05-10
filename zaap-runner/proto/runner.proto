@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package protocol;
+package runnerpb;
 
 service Runner {
     rpc Ping(PingRequest) returns (PingResponse) {

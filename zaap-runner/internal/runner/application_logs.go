@@ -1,11 +1,11 @@
 package runner
 
 import (
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) GetApplicationLogs(req *protocol.GetApplicationLogsRequest, srv protocol.Runner_GetApplicationLogsServer) error {
+func (r *Runner) GetApplicationLogs(req *runnerpb.GetApplicationLogsRequest, srv runnerpb.Runner_GetApplicationLogsServer) error {
 	log := logrus.WithField("application", req.Id)
 	log.Info("getting logs application")
 
@@ -15,7 +15,7 @@ func (r *Runner) GetApplicationLogs(req *protocol.GetApplicationLogsRequest, srv
 	}
 
 	for log := range logs {
-		err = srv.Send(&protocol.GetApplicationLogsResponse{
+		err = srv.Send(&runnerpb.GetApplicationLogsResponse{
 			Time:    log.Time.String(),
 			Pod:     log.Pod,
 			Message: log.Message,

@@ -2,11 +2,11 @@ package runner
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) GetApplicationStatus(ctx context.Context, req *protocol.GetApplicationStatusRequest) (*protocol.GetApplicationStatusResponse, error) {
+func (r *Runner) GetApplicationStatus(ctx context.Context, req *runnerpb.GetApplicationStatusRequest) (*runnerpb.GetApplicationStatusResponse, error) {
 	log := logrus.
 		WithField("application-id", req.Id).
 		WithField("deployment-id", req.DeploymentId).
@@ -19,7 +19,7 @@ func (r *Runner) GetApplicationStatus(ctx context.Context, req *protocol.GetAppl
 		return nil, err
 	}
 
-	return &protocol.GetApplicationStatusResponse{
+	return &runnerpb.GetApplicationStatusResponse{
 		Status: status,
 	}, nil
 }

@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/jinzhu/gorm"
@@ -47,7 +48,9 @@ type (
 	}
 
 	RunnerService interface {
-		NewConnection(*Runner) (protocol.RunnerClient, *grpc.ClientConn, error)
+		NewConnection(*Runner) (runnerpb.RunnerClient, *grpc.ClientConn, error)
+
+		NotifyStatusChanged(*Runner) error
 	}
 )
 
@@ -82,4 +85,15 @@ func (r *Runner) Validate() error {
 		validation.Field(&r.Url, validation.Required),
 		validation.Field(&r.Token, validation.Required, validation.Length(8, 255)),
 	)
+}
+
+func (s RunnerStatus) ToMessagingFormat() protocol.RunnerStatus {
+	switch s {
+	case RunnerStatusOnline:
+		return protocol.RunnerStatus_R_ONLINE
+	case RunnerStatusOffline:
+		return protocol.RunnerStatus_R_OFFLINE
+	default:
+		return protocol.RunnerStatus_R_UNKNOWN
+	}
 }

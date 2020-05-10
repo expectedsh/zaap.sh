@@ -22,7 +22,7 @@ func NewApplicationService(amqpConn *rabbitmq.Connection) core.ApplicationServic
 }
 
 func (s applicationService) Deploy(application *core.Application) error {
-	return s.publisher.Publish(messaging.DeliveryModeTransient, &protocol.ApplicationDeploymentRequest{
+	return s.publisher.Publish(messaging.DeliveryModeTransient, &protocol.ApplicationDeploymentRequested{
 		Id:           application.ID.String(),
 		DeploymentId: application.CurrentDeploymentID.String(),
 	})
@@ -48,5 +48,12 @@ func (s applicationService) NotifyDeleted(application *core.Application) error {
 		RunnerId:      application.RunnerID.String(),
 		Name:          application.Name,
 		DefaultDomain: application.DefaultDomain,
+	})
+}
+
+func (s applicationService) NotifyStatusChanged(application *core.Application) error {
+	return s.publisher.Publish(messaging.DeliveryModeTransient, &protocol.ApplicationStatusChanged{
+		Id:     application.ID.String(),
+		Status: application.Status.ToMessagingFormat(),
 	})
 }

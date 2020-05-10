@@ -1,7 +1,7 @@
 package kubernetes
 
 import (
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/sirupsen/logrus"
 	appsv1 "k8s.io/api/apps/v1"
 	apiv1 "k8s.io/api/core/v1"
@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-func (c *Client) labels(application *protocol.Application) map[string]string {
+func (c *Client) labels(application *runnerpb.Application) map[string]string {
 	return map[string]string{
 		"zaap-application-id":   application.Id,
 		"zaap-application-name": application.Name,
@@ -20,14 +20,14 @@ func (c *Client) labels(application *protocol.Application) map[string]string {
 	}
 }
 
-func (c *Client) toObjectMeta(application *protocol.Application) metav1.ObjectMeta {
+func (c *Client) toObjectMeta(application *runnerpb.Application) metav1.ObjectMeta {
 	return metav1.ObjectMeta{
 		Name:   application.Name,
 		Labels: c.labels(application),
 	}
 }
 
-func (c *Client) toDeployment(application *protocol.Application) *appsv1.Deployment {
+func (c *Client) toDeployment(application *runnerpb.Application) *appsv1.Deployment {
 	port := 80
 
 	if value, ok := application.Environment["PORT"]; ok {
@@ -87,7 +87,7 @@ func (c *Client) toDeployment(application *protocol.Application) *appsv1.Deploym
 	}
 }
 
-func (c *Client) toService(application *protocol.Application) *apiv1.Service {
+func (c *Client) toService(application *runnerpb.Application) *apiv1.Service {
 	return &apiv1.Service{
 		ObjectMeta: c.toObjectMeta(application),
 		Spec: apiv1.ServiceSpec{
@@ -107,7 +107,7 @@ func (c *Client) toService(application *protocol.Application) *apiv1.Service {
 	}
 }
 
-func (c *Client) toIngress(application *protocol.Application) *networkv1.Ingress {
+func (c *Client) toIngress(application *runnerpb.Application) *networkv1.Ingress {
 	var rules []networkv1.IngressRule
 
 	for _, domain := range application.Domains {

@@ -2,22 +2,22 @@ package kubernetes
 
 import (
 	"fmt"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
 
-func (c *Client) GetStatus(applicationId, deploymentId string) (protocol.ApplicationStatus, error) {
+func (c *Client) GetStatus(applicationId, deploymentId string) (runnerpb.ApplicationStatus, error) {
 	rsl, err := c.client.AppsV1().ReplicaSets(c.namespace).List(metav1.ListOptions{
 		LabelSelector: fmt.Sprintf("zaap-application-id=%v,zaap-deployment-id=%v", applicationId, deploymentId),
 	})
 	if err != nil {
-		return protocol.ApplicationStatus_UNKNOWN, err
+		return runnerpb.ApplicationStatus_UNKNOWN, err
 	}
 
 	if len(rsl.Items) != 1 {
-		return protocol.ApplicationStatus_UNKNOWN, nil
+		return runnerpb.ApplicationStatus_UNKNOWN, nil
 	}
 
 	rs := rsl.Items[0]
@@ -27,13 +27,13 @@ func (c *Client) GetStatus(applicationId, deploymentId string) (protocol.Applica
 		LabelSelector: fmt.Sprintf("pod-template-hash=%v", hash),
 	})
 	if err != nil {
-		return protocol.ApplicationStatus_UNKNOWN, err
+		return runnerpb.ApplicationStatus_UNKNOWN, err
 	}
 	pods := podsl.Items
 
 	podEvents, err := c.getPodsLastEvent(pods)
 	if err != nil {
-		return protocol.ApplicationStatus_UNKNOWN, err
+		return runnerpb.ApplicationStatus_UNKNOWN, err
 	}
 
 	pending, running, failed := 0, 0, 0
@@ -54,14 +54,14 @@ func (c *Client) GetStatus(applicationId, deploymentId string) (protocol.Applica
 	}
 
 	if pending > running && pending > failed {
-		return protocol.ApplicationStatus_DEPLOYING, nil
+		return runnerpb.ApplicationStatus_DEPLOYING, nil
 	} else if running > pending && running > failed {
-		return protocol.ApplicationStatus_RUNNING, nil
+		return runnerpb.ApplicationStatus_RUNNING, nil
 	} else if failed > pending && failed > running {
-		return protocol.ApplicationStatus_FAILED, nil
+		return runnerpb.ApplicationStatus_FAILED, nil
 	}
 
-	return protocol.ApplicationStatus_RUNNING, nil
+	return runnerpb.ApplicationStatus_RUNNING, nil
 }
 
 func (c *Client) getPodsLastEvent(pods []corev1.Pod) (map[types.UID]*corev1.Event, error) {

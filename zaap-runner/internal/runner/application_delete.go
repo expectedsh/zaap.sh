@@ -2,11 +2,11 @@ package runner
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) DeleteApplication(_ context.Context, req *protocol.DeleteApplicationRequest) (*protocol.DeleteApplicationResponse, error) {
+func (r *Runner) DeleteApplication(_ context.Context, req *runnerpb.DeleteApplicationRequest) (*runnerpb.DeleteApplicationResponse, error) {
 	log := logrus.WithField("application-id", req.Id).WithField("application-name", req.Name)
 	log.Info("deletion requested")
 
@@ -22,5 +22,5 @@ func (r *Runner) DeleteApplication(_ context.Context, req *protocol.DeleteApplic
 		log.WithError(err).Error("failed to delete ingress")
 	}
 
-	return &protocol.DeleteApplicationResponse{}, nil
+	return &runnerpb.DeleteApplicationResponse{}, nil
 }

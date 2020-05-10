@@ -2,6 +2,14 @@ syntax = "proto3";
 
 package protocol;
 
+enum ApplicationStatus {
+    A_UNKNOWN = 0;
+    A_DEPLOYING = 1;
+    A_RUNNING = 2;
+    A_CRASHED = 3;
+    A_FAILED = 4;
+}
+
 message ApplicationCreated {
     string id = 1;
     string deploymentId = 2;
@@ -21,9 +29,10 @@ message ApplicationDeleted {
 
 message ApplicationStatusChanged {
     string id = 1;
+    ApplicationStatus status = 2;
 }
 
-message ApplicationDeploymentRequest {
+message ApplicationDeploymentRequested {
     string id = 1;
     string deploymentId = 2;
 }

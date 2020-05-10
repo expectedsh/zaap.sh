@@ -3,11 +3,11 @@ package deployer
 import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
-func (s *Server) DeploymentHandler(ctx context.Context, message *protocol.ApplicationDeploymentRequest) error {
+func (s *Server) DeploymentHandler(ctx context.Context, message *protocol.ApplicationDeploymentRequested) error {
 	logrus.
 		WithField("application-id", message.Id).
 		WithField("deployment-id", message.DeploymentId).

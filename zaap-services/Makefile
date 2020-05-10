@@ -1,5 +1,6 @@
 PROTO_FILES=\
-	proto/application.proto
+	proto/application_events.proto \
+	proto/runner_events.proto
 PROTO_FLAGS=-Iproto -I/usr/local/include
 
 make-protocol:

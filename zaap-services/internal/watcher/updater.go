@@ -1,8 +1,8 @@
 package watcher
 
 import (
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/sirupsen/logrus"
 	"time"
 )
@@ -16,6 +16,8 @@ func (s *Server) updateRunner(runner core.Runner) {
 		if oldStatus != runner.Status {
 			if err := s.runnerStore.Update(s.context, &runner); err != nil {
 				log.WithError(err).Error("failed to update runner status")
+			} else if err := s.runnerService.NotifyStatusChanged(&runner); err != nil {
+				log.WithError(err).Error("failed to notify runner status changed")
 			}
 		}
 	}()
@@ -27,8 +29,11 @@ func (s *Server) updateRunner(runner core.Runner) {
 	}
 	defer conn.Close()
 
-	_, err = client.Ping(s.context, &protocol.PingRequest{Time: time.Now().Unix()})
+	_, err = client.Ping(s.context, &runnerpb.PingRequest{
+		Time: time.Now().Unix(),
+	})
 	if err != nil {
+		logrus.Info(err)
 		runner.Status = core.RunnerStatusOffline
 		return
 	}
@@ -43,7 +48,7 @@ func (s *Server) updateRunner(runner core.Runner) {
 		appLog := log.WithField("application-id", application.ID)
 		appOldStatus := application.Status
 
-		res, err := client.GetApplicationStatus(s.context, &protocol.GetApplicationStatusRequest{
+		res, err := client.GetApplicationStatus(s.context, &runnerpb.GetApplicationStatusRequest{
 			Id:           application.ID.String(),
 			DeploymentId: application.CurrentDeploymentID.String(),
 			Name:         application.Name,
@@ -56,7 +61,9 @@ func (s *Server) updateRunner(runner core.Runner) {
 
 		if appOldStatus != application.Status {
 			if err = s.applicationStore.Update(s.context, &application); err != nil {
-				appLog.WithError(err).Error("failed to update runner status")
+				appLog.WithError(err).Error("failed to update application status")
+			} else if err = s.applicationService.NotifyStatusChanged(&application); err != nil {
+				appLog.WithError(err).Error("failed to notify application status changed")
 			}
 		}
 	}

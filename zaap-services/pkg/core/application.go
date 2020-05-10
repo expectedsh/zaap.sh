@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"fmt"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/jinzhu/gorm"
 	"github.com/lib/pq"
@@ -57,6 +58,8 @@ type (
 		NotifyUpdated(*Application) error
 
 		NotifyDeleted(*Application) error
+
+		NotifyStatusChanged(*Application) error
 	}
 )
 
@@ -87,17 +90,32 @@ func (a *Application) BeforeSave(scope *gorm.Scope) error {
 	return nil
 }
 
-func ApplicationStatusFromRunner(status protocol.ApplicationStatus) ApplicationStatus {
+func ApplicationStatusFromRunner(status runnerpb.ApplicationStatus) ApplicationStatus {
 	switch status {
-	case protocol.ApplicationStatus_DEPLOYING:
+	case runnerpb.ApplicationStatus_DEPLOYING:
 		return ApplicationStatusDeploying
-	case protocol.ApplicationStatus_RUNNING:
+	case runnerpb.ApplicationStatus_RUNNING:
 		return ApplicationStatusRunning
-	case protocol.ApplicationStatus_CRASHED:
+	case runnerpb.ApplicationStatus_CRASHED:
 		return ApplicationStatusCrashed
-	case protocol.ApplicationStatus_FAILED:
+	case runnerpb.ApplicationStatus_FAILED:
 		return ApplicationStatusFailed
 	default:
 		return ApplicationStatusUnknown
+	}
+}
+
+func (s ApplicationStatus) ToMessagingFormat() protocol.ApplicationStatus {
+	switch s {
+	case ApplicationStatusDeploying:
+		return protocol.ApplicationStatus_A_DEPLOYING
+	case ApplicationStatusRunning:
+		return protocol.ApplicationStatus_A_RUNNING
+	case ApplicationStatusCrashed:
+		return protocol.ApplicationStatus_A_CRASHED
+	case ApplicationStatusFailed:
+		return protocol.ApplicationStatus_A_FAILED
+	default:
+		return protocol.ApplicationStatus_A_UNKNOWN
 	}
 }

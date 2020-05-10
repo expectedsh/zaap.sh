@@ -2,6 +2,8 @@ module github.com/expected.sh/zaap.sh/zaap-services
 
 go 1.14
 
+replace github.com/expected.sh/zaap.sh/zaap-runner => ../zaap-runner
+
 require (
 	github.com/cloudflare/cloudflare-go v0.11.6
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -10,6 +12,7 @@ require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.1.0
 	github.com/golang/protobuf v1.4.0
 	github.com/jinzhu/gorm v1.9.12
+	github.com/expected.sh/zaap.sh/zaap-runner v1.0.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lib/pq v1.3.0

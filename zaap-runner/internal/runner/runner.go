@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/expected.sh/zaap.sh/zaap-runner/internal/runner/config"
 	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/kubernetes"
-	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -34,7 +34,7 @@ func (r *Runner) Start() error {
 	r.client = kClient
 
 	r.grpcServer = grpc.NewServer(grpc.ChainUnaryInterceptor(r.AuthHandler))
-	protocol.RegisterRunnerServer(r.grpcServer, r)
+	runnerpb.RegisterRunnerServer(r.grpcServer, r)
 
 	lis, err := net.Listen("tcp", r.config.Addr)
 	if err != nil {

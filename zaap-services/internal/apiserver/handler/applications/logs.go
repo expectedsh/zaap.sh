@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"net/http"
 )
 
@@ -28,7 +28,7 @@ func HandleLogs(runnerStore core.RunnerStore, runnerService core.RunnerService) 
 		}
 		defer conn.Close()
 
-		logs, err := client.GetApplicationLogs(r.Context(), &protocol.GetApplicationLogsRequest{
+		logs, err := client.GetApplicationLogs(r.Context(), &runnerpb.GetApplicationLogsRequest{
 			Id: application.ID.String(),
 		})
 		if err != nil {
@@ -52,7 +52,7 @@ func HandleLogs(runnerStore core.RunnerStore, runnerService core.RunnerService) 
 	}
 }
 
-func sendLogLine(w http.ResponseWriter, log *protocol.GetApplicationLogsResponse) error {
+func sendLogLine(w http.ResponseWriter, log *runnerpb.GetApplicationLogsResponse) error {
 	data, err := json.Marshal(log)
 	if err != nil {
 		return err

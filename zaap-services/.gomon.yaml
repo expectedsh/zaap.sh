@@ -1,0 +1,11 @@
+- name: apiserver
+  path: "cmd/zaap-apiserver/main.go"
+  color: red
+
+- name: deployer
+  path: "cmd/zaap-deployer/main.go"
+  color: cyan
+
+- name: watcher
+  path: "cmd/zaap-watcher/main.go"
+  color: green

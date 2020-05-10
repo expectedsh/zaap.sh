@@ -3,7 +3,7 @@ package deployer
 import (
 	"context"
 	"errors"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/satori/go.uuid"
 )
 
@@ -34,8 +34,8 @@ func (s *Server) deployApplication(ctx context.Context, applicationId uuid.UUID,
 	}
 	defer conn.Close()
 
-	_, err = client.DeployApplication(ctx, &protocol.DeployApplicationRequest{
-		Application: &protocol.Application{
+	_, err = client.DeployApplication(ctx, &runnerpb.DeployApplicationRequest{
+		Application: &runnerpb.Application{
 			Id:           application.ID.String(),
 			DeploymentId: deployment.ID.String(),
 			Name:         application.Name,
@@ -62,7 +62,7 @@ func (s *Server) deleteApplication(ctx context.Context, applicationId uuid.UUID,
 	}
 	defer conn.Close()
 
-	_, err = client.DeleteApplication(ctx, &protocol.DeleteApplicationRequest{
+	_, err = client.DeleteApplication(ctx, &runnerpb.DeleteApplicationRequest{
 		Id:   applicationId.String(),
 		Name: applicationName,
 	})

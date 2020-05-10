@@ -2,10 +2,10 @@ package runners
 
 import (
 	"encoding/json"
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/request"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/response"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
 	"github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -53,7 +53,7 @@ func HandleCreate(store core.RunnerStore, service core.RunnerService) http.Handl
 		}
 		defer conn.Close()
 
-		res, err := client.GetConfiguration(r.Context(), &protocol.GetConfigurationRequest{})
+		res, err := client.GetConfiguration(r.Context(), &runnerpb.GetConfigurationRequest{})
 		if err != nil {
 			response.UnprocessableEntity(w, validation.Errors{
 				"url": err,
