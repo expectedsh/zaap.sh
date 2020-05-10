@@ -6,6 +6,18 @@ import style from "./Table.module.scss"
 const cx = classnames.bind(style)
 
 function Table({ config, dataSource, onRowClick, noData = null }) {
+  function onClick(row) {
+    return event => {
+      if (!onRowClick) {
+        return
+      }
+      if (["a", "button"].includes(event.nativeEvent.path[0].tagName.toLowerCase())) {
+        return
+      }
+      onRowClick(row, event)
+    }
+  }
+
   return (
     <div className={cx("root")}>
       {dataSource.length ? (
@@ -19,8 +31,8 @@ function Table({ config, dataSource, onRowClick, noData = null }) {
           </div>
           <div>
             {dataSource.map((row, rIndex) => (
-              <div key={rIndex} className={cx("row")} onClick={e => onRowClick?.(row, e)}
-                   style={onRowClick ? { cursor: 'pointer' } : {}}>
+              <div key={rIndex} className={cx("row")} onClick={onClick(row)}
+                   style={onRowClick ? { cursor: "pointer" } : {}}>
                 {config.map((item, index) => (
                   <div key={index} className={cx("cell", item.cellClassName)}>
                     {item.renderCell(row)}

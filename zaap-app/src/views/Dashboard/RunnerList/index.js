@@ -58,7 +58,7 @@ function RunnerList() {
         noData={
           <div className={cx('no-runner')}>
             <div className={cx('title')}>
-              You don't have runner 😭
+              You don't have runner
             </div>
             <div className={cx('description')}>
               Register a runner and it will show up here.

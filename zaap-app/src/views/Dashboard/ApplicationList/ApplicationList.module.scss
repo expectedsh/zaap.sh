@@ -27,3 +27,13 @@
     margin-top: 16px;
   }
 }
+
+.runner-link {
+  font-weight: $text-font-weight-regular;
+  color: $color-blue;
+  text-decoration: none;
+
+  &:focus {
+    outline: none;
+  }
+}

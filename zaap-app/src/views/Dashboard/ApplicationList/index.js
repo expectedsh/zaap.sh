@@ -9,10 +9,11 @@ import Header from "~/components/Header"
 import ApplicationStatusBadge from "~/components/ApplicationStatusBadge"
 import Table from "~/components/Table"
 import style from "./ApplicationList.module.scss"
+import { fetchRunners } from "~/store/runners/actions"
 
 const cx = classnames.bind(style)
 
-const tableConfig = [
+const tableConfig = runners => [
   {
     renderHeader: () => "Name",
     renderCell: app => app.name,
@@ -25,7 +26,12 @@ const tableConfig = [
   },
   {
     renderHeader: () => "Runner",
-    renderCell: app => app.runnerId,
+    renderCell: app => {
+      const runner = runners?.find(r => r.id === app.runnerId)
+      return runner
+        ? <Link to={`/runners`} className={cx('runner-link')}>{runner.name}</Link>
+        : "Not found"
+    },
     cellClassName: cx("cell-endpoint"),
   },
   {
@@ -39,29 +45,34 @@ function ApplicationList() {
   const dispatch = useDispatch()
   const history = useHistory()
   const { pending, applications, error } = useSelector(state => state.applications)
+  const runners = useSelector(state => state.runners.runners)
 
   useEffect(() => {
     dispatch(fetchApplications())
+    dispatch(fetchRunners())
   }, [])
 
   function renderBody() {
     if (pending) {
       return <div>Loading...</div>
     }
+
     if (error) {
       return <Alert className="alert alert-error" error={error}/>
     }
+
+
     return applications ? (
       <Table
-        config={tableConfig}
+        config={tableConfig(runners)}
         dataSource={applications}
         onRowClick={app => history.push(`/apps/${app.id}`)}
         noData={
-          <div className={cx('no-application')}>
-            <div className={cx('title')}>
-              You don't have application 😭
+          <div className={cx("no-application")}>
+            <div className={cx("title")}>
+              You don't have application
             </div>
-            <div className={cx('description')}>
+            <div className={cx("description")}>
               Create an application and it will show up here.
             </div>
           </div>
