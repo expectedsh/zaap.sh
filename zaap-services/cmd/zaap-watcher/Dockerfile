@@ -9,6 +9,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o zaap-watc
 
 FROM scratch
 
-COPY --from=builder /go/src/app/zaap-watcher /zaap-watcher
+COPY --from=builder /go/src/app/zaap-services/zaap-watcher /zaap-watcher
 
 ENTRYPOINT ["/zaap-watcher"]

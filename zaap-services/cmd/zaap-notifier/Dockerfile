@@ -9,6 +9,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o zaap-noti
 
 FROM scratch
 
-COPY --from=builder /go/src/app/zaap-notifier /zaap-notifier
+COPY --from=builder /go/src/app/zaap-services/zaap-notifier /zaap-notifier
 
 ENTRYPOINT ["/zaap-notifier"]
