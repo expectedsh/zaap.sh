@@ -7,10 +7,10 @@ import { deleteApplication } from "~/store/application/actions"
 import FormSection from "~/components/FormSection"
 import Button from "~/components/Button"
 import GeneralForm from "./GeneralForm"
+import AdvancedForm from "./AdvancedForm"
 import EnvironmentForm from "./EnvironmentForm"
 import DomainsForm from "./DomainsForm"
 import style from "./ApplicationSettings.module.scss"
-
 
 const cx = classnames.bind(style)
 
@@ -34,6 +34,9 @@ function ApplicationSettings() {
     <>
       <FormSection name="General">
         <GeneralForm/>
+      </FormSection>
+      <FormSection name="Advanced Options">
+        <AdvancedForm/>
       </FormSection>
       <FormSection
         name="Environment"

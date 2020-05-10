@@ -6,9 +6,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) DeployApplication(_ context.Context, req *runnerpb.DeployApplicationRequest) (*runnerpb.DeployApplicationResponse, error) {
+func (r *Runner) DeployApplication(_ context.Context, req *runnerpb.DeployApplicationRequest) (*runnerpb.DeployApplicationReply, error) {
 	log := logrus.WithField("application-id", req.Application.Id).WithField("application-name", req.Application.Name)
 	log.Info("deployment requested")
+
+	if err := r.client.ServiceAccountCreateOrUpdate(req.Application); err != nil {
+		log.WithError(err).Error("failed to create/update service account")
+		return nil, err
+	}
 
 	if err := r.client.DeploymentCreateOrUpdate(req.Application); err != nil {
 		log.WithError(err).Error("failed to create/update deployment")
@@ -25,5 +30,5 @@ func (r *Runner) DeployApplication(_ context.Context, req *runnerpb.DeployApplic
 		return nil, err
 	}
 
-	return &runnerpb.DeployApplicationResponse{}, nil
+	return &runnerpb.DeployApplicationReply{}, nil
 }

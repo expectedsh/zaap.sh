@@ -33,7 +33,6 @@ func (s *Server) updateRunner(runner core.Runner) {
 		Time: time.Now().Unix(),
 	})
 	if err != nil {
-		logrus.Info(err)
 		runner.Status = core.RunnerStatusOffline
 		return
 	}

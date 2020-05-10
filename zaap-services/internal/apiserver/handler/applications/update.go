@@ -17,6 +17,7 @@ type updateApplicationRequest struct {
 	Replicas    *int              `json:"replicas"`
 	Environment *core.Environment `json:"environment"`
 	Domains     []string          `json:"domains"`
+	Roles       []string          `json:"roles"`
 }
 
 func (r *updateApplicationRequest) Validate() error {
@@ -55,12 +56,13 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			return
 		}
 
-		if in.Image != nil || in.Replicas != nil || in.Environment != nil {
+		if in.Image != nil || in.Replicas != nil || in.Environment != nil || in.Roles != nil {
 			deployment := &core.Deployment{
 				ID:          uuid.NewV4(),
 				Image:       currentDeployment.Image,
 				Replicas:    currentDeployment.Replicas,
 				Environment: currentDeployment.Environment,
+				Roles:       currentDeployment.Roles,
 			}
 
 			if in.Image != nil {
@@ -71,6 +73,9 @@ func HandleUpdate(store core.ApplicationStore, deploymentStore core.DeploymentSt
 			}
 			if in.Environment != nil {
 				deployment.Environment = *in.Environment
+			}
+			if in.Roles != nil {
+				deployment.Roles = removeDuplicates(in.Roles)
 			}
 
 			application.Deployments = append(application.Deployments, deployment)

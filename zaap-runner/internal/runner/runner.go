@@ -54,9 +54,11 @@ func (r *Runner) AuthHandler(ctx context.Context, req interface{}, _ *grpc.Unary
 	if !ok {
 		return nil, ErrUnauthorized
 	}
+
 	header, ok := md["authorization"]
 	if !ok || len(header) == 0 || header[0] != r.config.Token {
 		return nil, ErrUnauthorized
 	}
+
 	return handler(ctx, req)
 }

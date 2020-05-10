@@ -56,7 +56,7 @@ function ApplicationNew() {
   function onSubmit(values) {
     return dispatch(createApplication({
       ...values,
-      runnerId: values.runnerId.value,
+      runnerId: values.runnerId,
     }))
       .then(() => {
         toast.success("Application created.")

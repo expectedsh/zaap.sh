@@ -5,6 +5,7 @@ import user from './user/reducer'
 import applications from './applications/reducer'
 import application from './application/reducer'
 import runners from './runners/reducer'
+import runner from './runner/reducer'
 
 const reducer = combineReducers({
   authentication,
@@ -12,6 +13,7 @@ const reducer = combineReducers({
   applications,
   application,
   runners,
+  runner,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

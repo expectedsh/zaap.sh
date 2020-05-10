@@ -43,6 +43,7 @@ func (s *Server) deployApplication(ctx context.Context, applicationId uuid.UUID,
 			Replicas:     uint32(deployment.Replicas),
 			Domains:      append(application.Domains, application.DefaultDomain),
 			Environment:  deployment.Environment,
+			Roles:        deployment.Roles,
 		},
 	})
 	return err

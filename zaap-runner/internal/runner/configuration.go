@@ -6,9 +6,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) GetConfiguration(ctx context.Context, req *runnerpb.GetConfigurationRequest) (*runnerpb.GetConfigurationResponse, error) {
+func (r *Runner) GetConfiguration(ctx context.Context, req *runnerpb.GetConfigurationRequest) (*runnerpb.GetConfigurationReply, error) {
 	logrus.Info("configuration requested")
-	return &runnerpb.GetConfigurationResponse{
+	return &runnerpb.GetConfigurationReply{
 		ExternalIps: r.config.ExternalIps,
 	}, nil
 }

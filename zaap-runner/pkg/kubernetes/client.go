@@ -1,6 +1,7 @@
 package kubernetes
 
 import (
+	"github.com/expected.sh/zaap.sh/zaap-runner/pkg/runnerpb"
 	apiv1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -9,7 +10,7 @@ import (
 )
 
 type Client struct {
-	client    *kubernetes.Clientset
+	client    kubernetes.Interface
 	namespace string
 }
 
@@ -37,4 +38,19 @@ func NewClient(namespace string, config *rest.Config) (*Client, error) {
 		namespace: namespace,
 		client:    client,
 	}, nil
+}
+
+func toLabels(application *runnerpb.Application) map[string]string {
+	return map[string]string{
+		"zaap-application-id":   application.Id,
+		"zaap-application-name": application.Name,
+		"zaap-deployment-id":    application.DeploymentId,
+	}
+}
+
+func toObjectMeta(application *runnerpb.Application) metav1.ObjectMeta {
+	return metav1.ObjectMeta{
+		Name:   application.Name,
+		Labels: toLabels(application),
+	}
 }

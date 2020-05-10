@@ -5,6 +5,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 func (c *Client) ServiceCreateOrUpdate(application *runnerpb.Application) error {
@@ -34,4 +35,24 @@ func (c *Client) ServiceUpdate(application *runnerpb.Application, current *corev
 
 func (c *Client) ServiceDelete(name string) error {
 	return c.client.CoreV1().Services(c.namespace).Delete(name, &metav1.DeleteOptions{})
+}
+
+func (c *Client) toService(application *runnerpb.Application) *corev1.Service {
+	return &corev1.Service{
+		ObjectMeta: toObjectMeta(application),
+		Spec: corev1.ServiceSpec{
+			Type: corev1.ServiceTypeClusterIP,
+			Ports: []corev1.ServicePort{
+				{
+					Name:       "http",
+					Port:       80,
+					TargetPort: intstr.FromString("http"),
+					Protocol:   corev1.ProtocolTCP,
+				},
+			},
+			Selector: map[string]string{
+				"zaap-application-name": application.Name,
+			},
+		},
+	}
 }

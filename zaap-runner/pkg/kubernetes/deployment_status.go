@@ -8,7 +8,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 )
 
-func (c *Client) GetStatus(applicationId, deploymentId string) (runnerpb.ApplicationStatus, error) {
+func (c *Client) DeploymentStatus(applicationId, deploymentId string) (runnerpb.ApplicationStatus, error) {
 	rsl, err := c.client.AppsV1().ReplicaSets(c.namespace).List(metav1.ListOptions{
 		LabelSelector: fmt.Sprintf("zaap-application-id=%v,zaap-deployment-id=%v", applicationId, deploymentId),
 	})

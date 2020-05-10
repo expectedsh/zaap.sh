@@ -75,3 +75,32 @@ func InjectApplication(store core.ApplicationStore) func(http.Handler) http.Hand
 		})
 	}
 }
+
+func InjectRunner(store core.RunnerStore) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			user := request.UserFrom(r.Context())
+
+			id, err := uuid.FromString(chi.URLParam(r, "id"))
+			if err != nil {
+				response.NotFound(w)
+				return
+			}
+
+			runner, err := store.Find(r.Context(), id)
+			if err != nil {
+				response.InternalServerError(w)
+				return
+			}
+
+			if runner == nil || user.ID.String() != runner.UserID.String() {
+				response.NotFound(w)
+				return
+			}
+
+			next.ServeHTTP(w, r.WithContext(
+				request.WithRunner(r.Context(), runner),
+			))
+		})
+	}
+}

@@ -6,13 +6,28 @@ import style from './SelectField.module.scss'
 
 const cx = classnames.bind(style)
 
-function SelectField({ input, meta, name, label, value, required, ...props }) {
+function SelectField({ input, meta, name, label, required, ...props }) {
   const fromArrayOrCurrent = s =>
     typeof s === 'string' ? s : s?.[0]
+
+  const value = useMemo(() => {
+    const curr = input.value || value
+    if (!curr || !props.options) {
+      return undefined
+    }
+    return props.isMulti
+      ? curr.map(v => props.options.find(o => o.value === v)).filter(v => !!v)
+      : props.options.find(o => o.value === curr)
+  }, [input?.value, props.value, props.options, props.isMulti])
 
   const error = useMemo(() => {
     return meta?.touched && (fromArrayOrCurrent(meta.error) || fromArrayOrCurrent(meta.submitError))
   }, [meta])
+
+  function onChange(event) {
+    const handler = input.onChange || props.onChange
+    handler?.(props.isMulti ? (event?.map(v => v.value) ?? []) : event?.value)
+  }
 
   return (
     <div className={cx('root')}>
@@ -25,10 +40,11 @@ function SelectField({ input, meta, name, label, value, required, ...props }) {
       <Select
         classNamePrefix="react-select"
         name={name}
-        defaultValue={value}
         required={required}
         {...props}
         {...input}
+        onChange={onChange}
+        value={value}
       />
       {error && (
         <div className={cx('error')}>
@@ -48,6 +64,8 @@ SelectField.propTypes = {
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
+  isMulti: PropTypes.bool,
+  loadOptions: PropTypes.func,
   value: PropTypes.any,
   options: PropTypes.any,
 }

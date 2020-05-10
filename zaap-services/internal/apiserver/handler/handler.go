@@ -62,6 +62,12 @@ func New(config *config.Config, db *gorm.DB, amqpConn *rabbitmq.Connection) chi.
 		r.Route("/runners", func(r chi.Router) {
 			r.Get("/", runners.HandleList(runnerStore))
 			r.Post("/", runners.HandleCreate(runnerStore, runnerService))
+
+			r.Route("/{id}", func(r chi.Router) {
+				r.Use(InjectRunner(runnerStore))
+
+				r.Get("/cluster_roles", runners.HandleListClusterRoles(runnerService))
+			})
 		})
 	})
 

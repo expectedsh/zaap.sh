@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) DeleteApplication(_ context.Context, req *runnerpb.DeleteApplicationRequest) (*runnerpb.DeleteApplicationResponse, error) {
+func (r *Runner) DeleteApplication(_ context.Context, req *runnerpb.DeleteApplicationRequest) (*runnerpb.DeleteApplicationReply, error) {
 	log := logrus.WithField("application-id", req.Id).WithField("application-name", req.Name)
 	log.Info("deletion requested")
 
@@ -22,5 +22,5 @@ func (r *Runner) DeleteApplication(_ context.Context, req *runnerpb.DeleteApplic
 		log.WithError(err).Error("failed to delete ingress")
 	}
 
-	return &runnerpb.DeleteApplicationResponse{}, nil
+	return &runnerpb.DeleteApplicationReply{}, nil
 }

@@ -52,7 +52,7 @@ func HandleLogs(runnerStore core.RunnerStore, runnerService core.RunnerService) 
 	}
 }
 
-func sendLogLine(w http.ResponseWriter, log *runnerpb.GetApplicationLogsResponse) error {
+func sendLogLine(w http.ResponseWriter, log *runnerpb.GetApplicationLogsReply) error {
 	data, err := json.Marshal(log)
 	if err != nil {
 		return err

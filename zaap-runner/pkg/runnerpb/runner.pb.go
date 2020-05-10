@@ -97,39 +97,39 @@ func (m *PingRequest) GetTime() int64 {
 	return 0
 }
 
-type PingResponse struct {
+type PingReply struct {
 	Time                 int64    `protobuf:"varint,1,opt,name=time,proto3" json:"time,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PingResponse) Reset()         { *m = PingResponse{} }
-func (m *PingResponse) String() string { return proto.CompactTextString(m) }
-func (*PingResponse) ProtoMessage()    {}
-func (*PingResponse) Descriptor() ([]byte, []int) {
+func (m *PingReply) Reset()         { *m = PingReply{} }
+func (m *PingReply) String() string { return proto.CompactTextString(m) }
+func (*PingReply) ProtoMessage()    {}
+func (*PingReply) Descriptor() ([]byte, []int) {
 	return fileDescriptor_48eceea7e2abc593, []int{1}
 }
 
-func (m *PingResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PingResponse.Unmarshal(m, b)
+func (m *PingReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PingReply.Unmarshal(m, b)
 }
-func (m *PingResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PingResponse.Marshal(b, m, deterministic)
+func (m *PingReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PingReply.Marshal(b, m, deterministic)
 }
-func (m *PingResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PingResponse.Merge(m, src)
+func (m *PingReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PingReply.Merge(m, src)
 }
-func (m *PingResponse) XXX_Size() int {
-	return xxx_messageInfo_PingResponse.Size(m)
+func (m *PingReply) XXX_Size() int {
+	return xxx_messageInfo_PingReply.Size(m)
 }
-func (m *PingResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_PingResponse.DiscardUnknown(m)
+func (m *PingReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_PingReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PingResponse proto.InternalMessageInfo
+var xxx_messageInfo_PingReply proto.InternalMessageInfo
 
-func (m *PingResponse) GetTime() int64 {
+func (m *PingReply) GetTime() int64 {
 	if m != nil {
 		return m.Time
 	}
@@ -167,43 +167,152 @@ func (m *GetConfigurationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetConfigurationRequest proto.InternalMessageInfo
 
-type GetConfigurationResponse struct {
+type GetConfigurationReply struct {
 	ExternalIps          []string `protobuf:"bytes,2,rep,name=externalIps,proto3" json:"externalIps,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetConfigurationResponse) Reset()         { *m = GetConfigurationResponse{} }
-func (m *GetConfigurationResponse) String() string { return proto.CompactTextString(m) }
-func (*GetConfigurationResponse) ProtoMessage()    {}
-func (*GetConfigurationResponse) Descriptor() ([]byte, []int) {
+func (m *GetConfigurationReply) Reset()         { *m = GetConfigurationReply{} }
+func (m *GetConfigurationReply) String() string { return proto.CompactTextString(m) }
+func (*GetConfigurationReply) ProtoMessage()    {}
+func (*GetConfigurationReply) Descriptor() ([]byte, []int) {
 	return fileDescriptor_48eceea7e2abc593, []int{3}
 }
 
-func (m *GetConfigurationResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetConfigurationResponse.Unmarshal(m, b)
+func (m *GetConfigurationReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetConfigurationReply.Unmarshal(m, b)
 }
-func (m *GetConfigurationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetConfigurationResponse.Marshal(b, m, deterministic)
+func (m *GetConfigurationReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetConfigurationReply.Marshal(b, m, deterministic)
 }
-func (m *GetConfigurationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetConfigurationResponse.Merge(m, src)
+func (m *GetConfigurationReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetConfigurationReply.Merge(m, src)
 }
-func (m *GetConfigurationResponse) XXX_Size() int {
-	return xxx_messageInfo_GetConfigurationResponse.Size(m)
+func (m *GetConfigurationReply) XXX_Size() int {
+	return xxx_messageInfo_GetConfigurationReply.Size(m)
 }
-func (m *GetConfigurationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetConfigurationResponse.DiscardUnknown(m)
+func (m *GetConfigurationReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetConfigurationReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetConfigurationResponse proto.InternalMessageInfo
+var xxx_messageInfo_GetConfigurationReply proto.InternalMessageInfo
 
-func (m *GetConfigurationResponse) GetExternalIps() []string {
+func (m *GetConfigurationReply) GetExternalIps() []string {
 	if m != nil {
 		return m.ExternalIps
 	}
 	return nil
+}
+
+type GetClusterRolesRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetClusterRolesRequest) Reset()         { *m = GetClusterRolesRequest{} }
+func (m *GetClusterRolesRequest) String() string { return proto.CompactTextString(m) }
+func (*GetClusterRolesRequest) ProtoMessage()    {}
+func (*GetClusterRolesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_48eceea7e2abc593, []int{4}
+}
+
+func (m *GetClusterRolesRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetClusterRolesRequest.Unmarshal(m, b)
+}
+func (m *GetClusterRolesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetClusterRolesRequest.Marshal(b, m, deterministic)
+}
+func (m *GetClusterRolesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetClusterRolesRequest.Merge(m, src)
+}
+func (m *GetClusterRolesRequest) XXX_Size() int {
+	return xxx_messageInfo_GetClusterRolesRequest.Size(m)
+}
+func (m *GetClusterRolesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetClusterRolesRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetClusterRolesRequest proto.InternalMessageInfo
+
+type GetClusterRolesReply struct {
+	Roles                []*ClusterRole `protobuf:"bytes,1,rep,name=roles,proto3" json:"roles,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *GetClusterRolesReply) Reset()         { *m = GetClusterRolesReply{} }
+func (m *GetClusterRolesReply) String() string { return proto.CompactTextString(m) }
+func (*GetClusterRolesReply) ProtoMessage()    {}
+func (*GetClusterRolesReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_48eceea7e2abc593, []int{5}
+}
+
+func (m *GetClusterRolesReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetClusterRolesReply.Unmarshal(m, b)
+}
+func (m *GetClusterRolesReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetClusterRolesReply.Marshal(b, m, deterministic)
+}
+func (m *GetClusterRolesReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetClusterRolesReply.Merge(m, src)
+}
+func (m *GetClusterRolesReply) XXX_Size() int {
+	return xxx_messageInfo_GetClusterRolesReply.Size(m)
+}
+func (m *GetClusterRolesReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetClusterRolesReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetClusterRolesReply proto.InternalMessageInfo
+
+func (m *GetClusterRolesReply) GetRoles() []*ClusterRole {
+	if m != nil {
+		return m.Roles
+	}
+	return nil
+}
+
+type ClusterRole struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ClusterRole) Reset()         { *m = ClusterRole{} }
+func (m *ClusterRole) String() string { return proto.CompactTextString(m) }
+func (*ClusterRole) ProtoMessage()    {}
+func (*ClusterRole) Descriptor() ([]byte, []int) {
+	return fileDescriptor_48eceea7e2abc593, []int{6}
+}
+
+func (m *ClusterRole) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClusterRole.Unmarshal(m, b)
+}
+func (m *ClusterRole) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClusterRole.Marshal(b, m, deterministic)
+}
+func (m *ClusterRole) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClusterRole.Merge(m, src)
+}
+func (m *ClusterRole) XXX_Size() int {
+	return xxx_messageInfo_ClusterRole.Size(m)
+}
+func (m *ClusterRole) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClusterRole.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClusterRole proto.InternalMessageInfo
+
+func (m *ClusterRole) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
 }
 
 type Application struct {
@@ -214,6 +323,7 @@ type Application struct {
 	Replicas             uint32            `protobuf:"varint,5,opt,name=replicas,proto3" json:"replicas,omitempty"`
 	Domains              []string          `protobuf:"bytes,6,rep,name=domains,proto3" json:"domains,omitempty"`
 	Environment          map[string]string `protobuf:"bytes,7,rep,name=environment,proto3" json:"environment,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Roles                []string          `protobuf:"bytes,8,rep,name=roles,proto3" json:"roles,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -223,7 +333,7 @@ func (m *Application) Reset()         { *m = Application{} }
 func (m *Application) String() string { return proto.CompactTextString(m) }
 func (*Application) ProtoMessage()    {}
 func (*Application) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{4}
+	return fileDescriptor_48eceea7e2abc593, []int{7}
 }
 
 func (m *Application) XXX_Unmarshal(b []byte) error {
@@ -293,6 +403,13 @@ func (m *Application) GetEnvironment() map[string]string {
 	return nil
 }
 
+func (m *Application) GetRoles() []string {
+	if m != nil {
+		return m.Roles
+	}
+	return nil
+}
+
 type DeployApplicationRequest struct {
 	Application          *Application `protobuf:"bytes,1,opt,name=application,proto3" json:"application,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
@@ -304,7 +421,7 @@ func (m *DeployApplicationRequest) Reset()         { *m = DeployApplicationReque
 func (m *DeployApplicationRequest) String() string { return proto.CompactTextString(m) }
 func (*DeployApplicationRequest) ProtoMessage()    {}
 func (*DeployApplicationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{5}
+	return fileDescriptor_48eceea7e2abc593, []int{8}
 }
 
 func (m *DeployApplicationRequest) XXX_Unmarshal(b []byte) error {
@@ -332,36 +449,36 @@ func (m *DeployApplicationRequest) GetApplication() *Application {
 	return nil
 }
 
-type DeployApplicationResponse struct {
+type DeployApplicationReply struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DeployApplicationResponse) Reset()         { *m = DeployApplicationResponse{} }
-func (m *DeployApplicationResponse) String() string { return proto.CompactTextString(m) }
-func (*DeployApplicationResponse) ProtoMessage()    {}
-func (*DeployApplicationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{6}
+func (m *DeployApplicationReply) Reset()         { *m = DeployApplicationReply{} }
+func (m *DeployApplicationReply) String() string { return proto.CompactTextString(m) }
+func (*DeployApplicationReply) ProtoMessage()    {}
+func (*DeployApplicationReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_48eceea7e2abc593, []int{9}
 }
 
-func (m *DeployApplicationResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeployApplicationResponse.Unmarshal(m, b)
+func (m *DeployApplicationReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeployApplicationReply.Unmarshal(m, b)
 }
-func (m *DeployApplicationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeployApplicationResponse.Marshal(b, m, deterministic)
+func (m *DeployApplicationReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeployApplicationReply.Marshal(b, m, deterministic)
 }
-func (m *DeployApplicationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeployApplicationResponse.Merge(m, src)
+func (m *DeployApplicationReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeployApplicationReply.Merge(m, src)
 }
-func (m *DeployApplicationResponse) XXX_Size() int {
-	return xxx_messageInfo_DeployApplicationResponse.Size(m)
+func (m *DeployApplicationReply) XXX_Size() int {
+	return xxx_messageInfo_DeployApplicationReply.Size(m)
 }
-func (m *DeployApplicationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeployApplicationResponse.DiscardUnknown(m)
+func (m *DeployApplicationReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeployApplicationReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DeployApplicationResponse proto.InternalMessageInfo
+var xxx_messageInfo_DeployApplicationReply proto.InternalMessageInfo
 
 type DeleteApplicationRequest struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -375,7 +492,7 @@ func (m *DeleteApplicationRequest) Reset()         { *m = DeleteApplicationReque
 func (m *DeleteApplicationRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteApplicationRequest) ProtoMessage()    {}
 func (*DeleteApplicationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{7}
+	return fileDescriptor_48eceea7e2abc593, []int{10}
 }
 
 func (m *DeleteApplicationRequest) XXX_Unmarshal(b []byte) error {
@@ -410,36 +527,36 @@ func (m *DeleteApplicationRequest) GetName() string {
 	return ""
 }
 
-type DeleteApplicationResponse struct {
+type DeleteApplicationReply struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DeleteApplicationResponse) Reset()         { *m = DeleteApplicationResponse{} }
-func (m *DeleteApplicationResponse) String() string { return proto.CompactTextString(m) }
-func (*DeleteApplicationResponse) ProtoMessage()    {}
-func (*DeleteApplicationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{8}
+func (m *DeleteApplicationReply) Reset()         { *m = DeleteApplicationReply{} }
+func (m *DeleteApplicationReply) String() string { return proto.CompactTextString(m) }
+func (*DeleteApplicationReply) ProtoMessage()    {}
+func (*DeleteApplicationReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_48eceea7e2abc593, []int{11}
 }
 
-func (m *DeleteApplicationResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteApplicationResponse.Unmarshal(m, b)
+func (m *DeleteApplicationReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteApplicationReply.Unmarshal(m, b)
 }
-func (m *DeleteApplicationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteApplicationResponse.Marshal(b, m, deterministic)
+func (m *DeleteApplicationReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteApplicationReply.Marshal(b, m, deterministic)
 }
-func (m *DeleteApplicationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteApplicationResponse.Merge(m, src)
+func (m *DeleteApplicationReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteApplicationReply.Merge(m, src)
 }
-func (m *DeleteApplicationResponse) XXX_Size() int {
-	return xxx_messageInfo_DeleteApplicationResponse.Size(m)
+func (m *DeleteApplicationReply) XXX_Size() int {
+	return xxx_messageInfo_DeleteApplicationReply.Size(m)
 }
-func (m *DeleteApplicationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteApplicationResponse.DiscardUnknown(m)
+func (m *DeleteApplicationReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteApplicationReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DeleteApplicationResponse proto.InternalMessageInfo
+var xxx_messageInfo_DeleteApplicationReply proto.InternalMessageInfo
 
 type GetApplicationLogsRequest struct {
 	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -453,7 +570,7 @@ func (m *GetApplicationLogsRequest) Reset()         { *m = GetApplicationLogsReq
 func (m *GetApplicationLogsRequest) String() string { return proto.CompactTextString(m) }
 func (*GetApplicationLogsRequest) ProtoMessage()    {}
 func (*GetApplicationLogsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{9}
+	return fileDescriptor_48eceea7e2abc593, []int{12}
 }
 
 func (m *GetApplicationLogsRequest) XXX_Unmarshal(b []byte) error {
@@ -488,7 +605,7 @@ func (m *GetApplicationLogsRequest) GetName() string {
 	return ""
 }
 
-type GetApplicationLogsResponse struct {
+type GetApplicationLogsReply struct {
 	Time                 string   `protobuf:"bytes,1,opt,name=time,proto3" json:"time,omitempty"`
 	Pod                  string   `protobuf:"bytes,2,opt,name=pod,proto3" json:"pod,omitempty"`
 	Message              string   `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
@@ -497,46 +614,46 @@ type GetApplicationLogsResponse struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetApplicationLogsResponse) Reset()         { *m = GetApplicationLogsResponse{} }
-func (m *GetApplicationLogsResponse) String() string { return proto.CompactTextString(m) }
-func (*GetApplicationLogsResponse) ProtoMessage()    {}
-func (*GetApplicationLogsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{10}
+func (m *GetApplicationLogsReply) Reset()         { *m = GetApplicationLogsReply{} }
+func (m *GetApplicationLogsReply) String() string { return proto.CompactTextString(m) }
+func (*GetApplicationLogsReply) ProtoMessage()    {}
+func (*GetApplicationLogsReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_48eceea7e2abc593, []int{13}
 }
 
-func (m *GetApplicationLogsResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetApplicationLogsResponse.Unmarshal(m, b)
+func (m *GetApplicationLogsReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetApplicationLogsReply.Unmarshal(m, b)
 }
-func (m *GetApplicationLogsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetApplicationLogsResponse.Marshal(b, m, deterministic)
+func (m *GetApplicationLogsReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetApplicationLogsReply.Marshal(b, m, deterministic)
 }
-func (m *GetApplicationLogsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetApplicationLogsResponse.Merge(m, src)
+func (m *GetApplicationLogsReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetApplicationLogsReply.Merge(m, src)
 }
-func (m *GetApplicationLogsResponse) XXX_Size() int {
-	return xxx_messageInfo_GetApplicationLogsResponse.Size(m)
+func (m *GetApplicationLogsReply) XXX_Size() int {
+	return xxx_messageInfo_GetApplicationLogsReply.Size(m)
 }
-func (m *GetApplicationLogsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetApplicationLogsResponse.DiscardUnknown(m)
+func (m *GetApplicationLogsReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetApplicationLogsReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetApplicationLogsResponse proto.InternalMessageInfo
+var xxx_messageInfo_GetApplicationLogsReply proto.InternalMessageInfo
 
-func (m *GetApplicationLogsResponse) GetTime() string {
+func (m *GetApplicationLogsReply) GetTime() string {
 	if m != nil {
 		return m.Time
 	}
 	return ""
 }
 
-func (m *GetApplicationLogsResponse) GetPod() string {
+func (m *GetApplicationLogsReply) GetPod() string {
 	if m != nil {
 		return m.Pod
 	}
 	return ""
 }
 
-func (m *GetApplicationLogsResponse) GetMessage() string {
+func (m *GetApplicationLogsReply) GetMessage() string {
 	if m != nil {
 		return m.Message
 	}
@@ -556,7 +673,7 @@ func (m *GetApplicationStatusRequest) Reset()         { *m = GetApplicationStatu
 func (m *GetApplicationStatusRequest) String() string { return proto.CompactTextString(m) }
 func (*GetApplicationStatusRequest) ProtoMessage()    {}
 func (*GetApplicationStatusRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{11}
+	return fileDescriptor_48eceea7e2abc593, []int{14}
 }
 
 func (m *GetApplicationStatusRequest) XXX_Unmarshal(b []byte) error {
@@ -598,39 +715,39 @@ func (m *GetApplicationStatusRequest) GetName() string {
 	return ""
 }
 
-type GetApplicationStatusResponse struct {
+type GetApplicationStatusReply struct {
 	Status               ApplicationStatus `protobuf:"varint,1,opt,name=status,proto3,enum=runnerpb.ApplicationStatus" json:"status,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
 }
 
-func (m *GetApplicationStatusResponse) Reset()         { *m = GetApplicationStatusResponse{} }
-func (m *GetApplicationStatusResponse) String() string { return proto.CompactTextString(m) }
-func (*GetApplicationStatusResponse) ProtoMessage()    {}
-func (*GetApplicationStatusResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48eceea7e2abc593, []int{12}
+func (m *GetApplicationStatusReply) Reset()         { *m = GetApplicationStatusReply{} }
+func (m *GetApplicationStatusReply) String() string { return proto.CompactTextString(m) }
+func (*GetApplicationStatusReply) ProtoMessage()    {}
+func (*GetApplicationStatusReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_48eceea7e2abc593, []int{15}
 }
 
-func (m *GetApplicationStatusResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetApplicationStatusResponse.Unmarshal(m, b)
+func (m *GetApplicationStatusReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetApplicationStatusReply.Unmarshal(m, b)
 }
-func (m *GetApplicationStatusResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetApplicationStatusResponse.Marshal(b, m, deterministic)
+func (m *GetApplicationStatusReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetApplicationStatusReply.Marshal(b, m, deterministic)
 }
-func (m *GetApplicationStatusResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetApplicationStatusResponse.Merge(m, src)
+func (m *GetApplicationStatusReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetApplicationStatusReply.Merge(m, src)
 }
-func (m *GetApplicationStatusResponse) XXX_Size() int {
-	return xxx_messageInfo_GetApplicationStatusResponse.Size(m)
+func (m *GetApplicationStatusReply) XXX_Size() int {
+	return xxx_messageInfo_GetApplicationStatusReply.Size(m)
 }
-func (m *GetApplicationStatusResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetApplicationStatusResponse.DiscardUnknown(m)
+func (m *GetApplicationStatusReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetApplicationStatusReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetApplicationStatusResponse proto.InternalMessageInfo
+var xxx_messageInfo_GetApplicationStatusReply proto.InternalMessageInfo
 
-func (m *GetApplicationStatusResponse) GetStatus() ApplicationStatus {
+func (m *GetApplicationStatusReply) GetStatus() ApplicationStatus {
 	if m != nil {
 		return m.Status
 	}
@@ -640,64 +757,71 @@ func (m *GetApplicationStatusResponse) GetStatus() ApplicationStatus {
 func init() {
 	proto.RegisterEnum("runnerpb.ApplicationStatus", ApplicationStatus_name, ApplicationStatus_value)
 	proto.RegisterType((*PingRequest)(nil), "runnerpb.PingRequest")
-	proto.RegisterType((*PingResponse)(nil), "runnerpb.PingResponse")
+	proto.RegisterType((*PingReply)(nil), "runnerpb.PingReply")
 	proto.RegisterType((*GetConfigurationRequest)(nil), "runnerpb.GetConfigurationRequest")
-	proto.RegisterType((*GetConfigurationResponse)(nil), "runnerpb.GetConfigurationResponse")
+	proto.RegisterType((*GetConfigurationReply)(nil), "runnerpb.GetConfigurationReply")
+	proto.RegisterType((*GetClusterRolesRequest)(nil), "runnerpb.GetClusterRolesRequest")
+	proto.RegisterType((*GetClusterRolesReply)(nil), "runnerpb.GetClusterRolesReply")
+	proto.RegisterType((*ClusterRole)(nil), "runnerpb.ClusterRole")
 	proto.RegisterType((*Application)(nil), "runnerpb.Application")
 	proto.RegisterMapType((map[string]string)(nil), "runnerpb.Application.EnvironmentEntry")
 	proto.RegisterType((*DeployApplicationRequest)(nil), "runnerpb.DeployApplicationRequest")
-	proto.RegisterType((*DeployApplicationResponse)(nil), "runnerpb.DeployApplicationResponse")
+	proto.RegisterType((*DeployApplicationReply)(nil), "runnerpb.DeployApplicationReply")
 	proto.RegisterType((*DeleteApplicationRequest)(nil), "runnerpb.DeleteApplicationRequest")
-	proto.RegisterType((*DeleteApplicationResponse)(nil), "runnerpb.DeleteApplicationResponse")
+	proto.RegisterType((*DeleteApplicationReply)(nil), "runnerpb.DeleteApplicationReply")
 	proto.RegisterType((*GetApplicationLogsRequest)(nil), "runnerpb.GetApplicationLogsRequest")
-	proto.RegisterType((*GetApplicationLogsResponse)(nil), "runnerpb.GetApplicationLogsResponse")
+	proto.RegisterType((*GetApplicationLogsReply)(nil), "runnerpb.GetApplicationLogsReply")
 	proto.RegisterType((*GetApplicationStatusRequest)(nil), "runnerpb.GetApplicationStatusRequest")
-	proto.RegisterType((*GetApplicationStatusResponse)(nil), "runnerpb.GetApplicationStatusResponse")
+	proto.RegisterType((*GetApplicationStatusReply)(nil), "runnerpb.GetApplicationStatusReply")
 }
 
 func init() { proto.RegisterFile("runner.proto", fileDescriptor_48eceea7e2abc593) }
 
 var fileDescriptor_48eceea7e2abc593 = []byte{
-	// 623 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0x51, 0x6f, 0xda, 0x3c,
-	0x14, 0x6d, 0x12, 0x0a, 0xe5, 0x86, 0x56, 0xa9, 0xd5, 0xef, 0x5b, 0x08, 0x7b, 0xa0, 0xee, 0x56,
-	0xa1, 0x3d, 0xa0, 0x89, 0x3e, 0x74, 0x9a, 0xa6, 0x4e, 0xa8, 0x30, 0x8a, 0x86, 0xd2, 0x2a, 0x08,
-	0x4d, 0xd3, 0xa6, 0x49, 0x69, 0xf1, 0x50, 0x34, 0xe2, 0x64, 0x89, 0xa9, 0xc6, 0x6f, 0xda, 0x7e,
-	0xe4, 0x64, 0x27, 0x81, 0x04, 0x12, 0xa6, 0xed, 0xcd, 0xd7, 0xf7, 0xdc, 0x73, 0xae, 0x73, 0x8f,
-	0x1d, 0xa8, 0x05, 0x0b, 0x4a, 0x49, 0xd0, 0xf6, 0x03, 0x8f, 0x79, 0xe8, 0x20, 0x8a, 0xfc, 0x7b,
-	0x7c, 0x0a, 0xea, 0x9d, 0x43, 0x67, 0x16, 0xf9, 0xbe, 0x20, 0x21, 0x43, 0x08, 0x4a, 0xcc, 0x71,
-	0x89, 0x2e, 0x35, 0xa5, 0x96, 0x62, 0x89, 0x35, 0xc6, 0x50, 0x8b, 0x20, 0xa1, 0xef, 0xd1, 0x90,
-	0xe4, 0x62, 0xea, 0xf0, 0x64, 0x40, 0xd8, 0xb5, 0x47, 0xbf, 0x3a, 0xb3, 0x45, 0x60, 0x33, 0xc7,
-	0xa3, 0x31, 0x25, 0x7e, 0x03, 0xfa, 0x76, 0x2a, 0xa6, 0x6a, 0x82, 0x4a, 0x7e, 0x30, 0x12, 0x50,
-	0x7b, 0x3e, 0xf4, 0x43, 0x5d, 0x6e, 0x2a, 0xad, 0xaa, 0x95, 0xde, 0xc2, 0x3f, 0x65, 0x50, 0xbb,
-	0xbe, 0x3f, 0x77, 0x1e, 0x44, 0x25, 0x3a, 0x02, 0xd9, 0x99, 0x0a, 0xe9, 0xaa, 0x25, 0x3b, 0x53,
-	0x84, 0xa1, 0x36, 0x25, 0xfe, 0xdc, 0x5b, 0xba, 0x84, 0xb2, 0xe1, 0x54, 0x97, 0x45, 0x26, 0xb3,
-	0xc7, 0x1b, 0xa6, 0xb6, 0x4b, 0x74, 0x45, 0xe4, 0xc4, 0x1a, 0x9d, 0xc0, 0xbe, 0xe3, 0xda, 0x33,
-	0xa2, 0x97, 0xc4, 0x66, 0x14, 0x20, 0x03, 0x0e, 0x02, 0x22, 0xc4, 0x42, 0x7d, 0xbf, 0x29, 0xb5,
-	0x0e, 0xad, 0x55, 0x8c, 0x74, 0xa8, 0x4c, 0x3d, 0xd7, 0x76, 0x68, 0xa8, 0x97, 0x45, 0x9f, 0x49,
-	0x88, 0x6e, 0x40, 0x25, 0xf4, 0xd1, 0x09, 0x3c, 0xca, 0x05, 0xf5, 0x4a, 0x53, 0x69, 0xa9, 0x9d,
-	0xf3, 0x76, 0xf2, 0x8d, 0xdb, 0xa9, 0xfe, 0xdb, 0xfd, 0x35, 0xb0, 0x4f, 0x59, 0xb0, 0xb4, 0xd2,
-	0xa5, 0xc6, 0x15, 0x68, 0x9b, 0x00, 0xa4, 0x81, 0xf2, 0x8d, 0x2c, 0xe3, 0x23, 0xf3, 0x25, 0xef,
-	0xfd, 0xd1, 0x9e, 0x2f, 0x48, 0x7c, 0xd8, 0x28, 0x78, 0x2d, 0xbf, 0x92, 0xf0, 0x18, 0xf4, 0x9e,
-	0x38, 0x79, 0x4a, 0x32, 0x19, 0xed, 0x25, 0xa8, 0xf6, 0x7a, 0x57, 0xf0, 0xa9, 0x9d, 0xff, 0x72,
-	0xbb, 0xb4, 0xd2, 0x48, 0xdc, 0x80, 0x7a, 0x0e, 0x69, 0x34, 0x41, 0x7c, 0xc5, 0x15, 0xe7, 0x84,
-	0x91, 0x1c, 0xc5, 0xcd, 0x59, 0x25, 0x73, 0x90, 0xd7, 0x73, 0x88, 0xc8, 0xb7, 0xea, 0x63, 0xf2,
-	0xb7, 0x50, 0x1f, 0x10, 0x96, 0xca, 0x8c, 0xbc, 0x59, 0xf8, 0x37, 0xec, 0x9f, 0xc1, 0xc8, 0x23,
-	0xc8, 0x31, 0x72, 0x35, 0x32, 0x32, 0xff, 0xda, 0xbe, 0x97, 0xd8, 0x88, 0x2f, 0xf9, 0xdc, 0x5d,
-	0x12, 0x86, 0xdc, 0x2b, 0x91, 0x81, 0x92, 0x10, 0x13, 0x68, 0x64, 0xd9, 0xc7, 0xcc, 0x66, 0x8b,
-	0xc2, 0x06, 0xff, 0xd1, 0xaa, 0x78, 0x0c, 0x4f, 0xf3, 0x65, 0xe2, 0x63, 0x5c, 0x40, 0x39, 0x14,
-	0x3b, 0x42, 0xeb, 0xa8, 0xd3, 0xc8, 0x9d, 0x69, 0x5c, 0x14, 0x43, 0x5f, 0x4c, 0xe0, 0x78, 0x2b,
-	0x89, 0x54, 0xa8, 0x4c, 0xcc, 0xf7, 0xe6, 0xed, 0x07, 0x53, 0xdb, 0x43, 0x87, 0x50, 0xed, 0xf5,
-	0xef, 0x46, 0xb7, 0x1f, 0x87, 0xe6, 0x40, 0x93, 0x78, 0xce, 0x9a, 0x98, 0x26, 0x0f, 0x64, 0x1e,
-	0x5c, 0x5b, 0xdd, 0xf1, 0x4d, 0xbf, 0xa7, 0x29, 0x08, 0xa0, 0xfc, 0xae, 0x3b, 0x1c, 0xf5, 0x7b,
-	0x5a, 0xa9, 0xf3, 0xab, 0x04, 0x65, 0x4b, 0xa8, 0xa3, 0x4b, 0x28, 0xf1, 0x67, 0x03, 0xa5, 0x2c,
-	0x96, 0x7a, 0x69, 0x8c, 0xff, 0x37, 0xb7, 0xe3, 0x99, 0xef, 0xa1, 0x4f, 0xa0, 0x6d, 0x3e, 0x18,
-	0xe8, 0x74, 0x8d, 0x2e, 0x78, 0x67, 0x0c, 0xbc, 0x0b, 0xb2, 0x22, 0xff, 0x02, 0xc7, 0x5b, 0x66,
-	0x46, 0xa9, 0xd2, 0xa2, 0xeb, 0x63, 0x9c, 0xed, 0xc4, 0x64, 0xf9, 0x37, 0xfc, 0x9c, 0xe5, 0xcf,
-	0xbf, 0x2c, 0x59, 0xfe, 0xa2, 0x0b, 0xb1, 0x87, 0x66, 0x70, 0x92, 0x67, 0x06, 0xf4, 0x3c, 0x73,
-	0xfa, 0x22, 0x4f, 0x1a, 0xe7, 0x7f, 0x82, 0xad, 0x84, 0x1e, 0x00, 0x6d, 0x5f, 0x1d, 0x74, 0x56,
-	0x54, 0x9f, 0xba, 0x99, 0xc6, 0xb3, 0xdd, 0xa0, 0x44, 0xe2, 0xa5, 0x74, 0x5f, 0x16, 0xbf, 0xa3,
-	0x8b, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xe0, 0x64, 0xac, 0x37, 0x9e, 0x06, 0x00, 0x00,
+	// 687 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0x6d, 0x4f, 0xd4, 0x40,
+	0x10, 0xa6, 0xbd, 0xe3, 0xe0, 0xa6, 0x80, 0x65, 0x05, 0x2d, 0x25, 0x91, 0x52, 0xa3, 0xb9, 0x68,
+	0x72, 0x31, 0x60, 0xe2, 0xcb, 0x07, 0x0c, 0xe1, 0x4e, 0xb8, 0x48, 0x0e, 0x52, 0x72, 0x51, 0xe2,
+	0x17, 0x8b, 0xb7, 0x5e, 0x1a, 0x7b, 0xdb, 0xda, 0x6e, 0x89, 0xf7, 0xf3, 0xfc, 0x49, 0xfe, 0x03,
+	0xb3, 0xbb, 0x2d, 0xdd, 0xbe, 0xdc, 0x19, 0xfd, 0xd6, 0x67, 0xf6, 0x99, 0x67, 0x76, 0x66, 0x67,
+	0xa6, 0xb0, 0x16, 0x25, 0x84, 0xe0, 0xa8, 0x1b, 0x46, 0x01, 0x0d, 0xd0, 0xaa, 0x40, 0xe1, 0x8d,
+	0xbd, 0x0f, 0xda, 0xa5, 0x47, 0x26, 0x0e, 0xfe, 0x91, 0xe0, 0x98, 0x22, 0x04, 0x4d, 0xea, 0x4d,
+	0xb1, 0xa1, 0x58, 0x4a, 0xa7, 0xe1, 0xf0, 0x6f, 0x7b, 0x0f, 0xda, 0x82, 0x12, 0xfa, 0xb3, 0x5a,
+	0xc2, 0x0e, 0x3c, 0x3c, 0xc5, 0xf4, 0x24, 0x20, 0xdf, 0xbc, 0x49, 0x12, 0xb9, 0xd4, 0x0b, 0x48,
+	0xaa, 0x67, 0xbf, 0x81, 0xed, 0xea, 0x11, 0xd3, 0xb1, 0x40, 0xc3, 0x3f, 0x29, 0x8e, 0x88, 0xeb,
+	0x0f, 0xc2, 0xd8, 0x50, 0xad, 0x46, 0xa7, 0xed, 0xc8, 0x26, 0xdb, 0x80, 0x07, 0xcc, 0xd5, 0x4f,
+	0x62, 0x8a, 0x23, 0x27, 0xf0, 0x71, 0x9c, 0x89, 0x9e, 0xc0, 0x56, 0xe5, 0x84, 0x69, 0x3e, 0x87,
+	0xe5, 0x88, 0x21, 0x43, 0xb1, 0x1a, 0x1d, 0xed, 0x60, 0xbb, 0x9b, 0x65, 0xd9, 0x95, 0xb8, 0x8e,
+	0xe0, 0xb0, 0xc4, 0x25, 0x2b, 0xcb, 0x8b, 0xb8, 0x69, 0x5e, 0x6d, 0x87, 0x7f, 0xdb, 0xbf, 0x54,
+	0xd0, 0x8e, 0xc3, 0xd0, 0xf7, 0xbe, 0xf2, 0x8b, 0xa3, 0x0d, 0x50, 0xbd, 0x71, 0xca, 0x50, 0xbd,
+	0x31, 0xb2, 0x61, 0x6d, 0x8c, 0x43, 0x3f, 0x98, 0x4d, 0x31, 0xa1, 0x83, 0xb1, 0xa1, 0xf2, 0x93,
+	0x82, 0xed, 0x4e, 0xb7, 0x91, 0xeb, 0xa2, 0x2d, 0x58, 0xf6, 0xa6, 0xee, 0x04, 0x1b, 0x4d, 0x6e,
+	0x14, 0x00, 0x99, 0xb0, 0x1a, 0x61, 0x1e, 0x2c, 0x36, 0x96, 0x2d, 0xa5, 0xb3, 0xee, 0xdc, 0x61,
+	0x64, 0xc0, 0xca, 0x38, 0x98, 0xba, 0x1e, 0x89, 0x8d, 0x16, 0xaf, 0x54, 0x06, 0xd1, 0x19, 0x68,
+	0x98, 0xdc, 0x7a, 0x51, 0x40, 0x58, 0x40, 0x63, 0x85, 0x67, 0xfe, 0x34, 0xcf, 0x5c, 0xba, 0x7f,
+	0xb7, 0x9f, 0x13, 0xfb, 0x84, 0x46, 0x33, 0x47, 0x76, 0x65, 0xb7, 0x12, 0xd5, 0x5b, 0xe5, 0x11,
+	0x04, 0x30, 0x8f, 0x40, 0x2f, 0xbb, 0x21, 0x1d, 0x1a, 0xdf, 0xf1, 0x2c, 0x2d, 0x04, 0xfb, 0x64,
+	0xbe, 0xb7, 0xae, 0x9f, 0xe0, 0xb4, 0x04, 0x02, 0xbc, 0x55, 0x5f, 0x2b, 0xf6, 0x15, 0x18, 0x3d,
+	0x5e, 0x0f, 0xe9, 0x22, 0x59, 0xb3, 0xbd, 0x02, 0xcd, 0xcd, 0xad, 0x5c, 0xaf, 0xf0, 0x6a, 0xb2,
+	0x8b, 0xcc, 0x64, 0xad, 0x51, 0x23, 0x1a, 0xfa, 0x33, 0xfb, 0x88, 0x85, 0xf3, 0x31, 0xc5, 0x35,
+	0xe1, 0xca, 0xcf, 0x97, 0x3d, 0x8d, 0x2a, 0x3d, 0x39, 0x57, 0xae, 0xf8, 0x33, 0xe5, 0x77, 0xb0,
+	0x73, 0x8a, 0xa9, 0x64, 0x3e, 0x0f, 0x26, 0xf1, 0xbf, 0x48, 0x5f, 0xf3, 0x29, 0xa9, 0x08, 0x94,
+	0x87, 0xaa, 0x2d, 0x86, 0x8a, 0x15, 0x39, 0x0c, 0xb2, 0x9e, 0x62, 0x9f, 0xac, 0x09, 0xa6, 0x38,
+	0x8e, 0x59, 0xe3, 0x88, 0x6e, 0xca, 0xa0, 0x8d, 0x61, 0xb7, 0x28, 0x7d, 0x45, 0x5d, 0x9a, 0xcc,
+	0xbd, 0xdd, 0x7f, 0xf6, 0xad, 0x7d, 0x59, 0x2e, 0x41, 0x16, 0x86, 0xe5, 0x70, 0x08, 0xad, 0x98,
+	0x43, 0x1e, 0x68, 0xe3, 0x60, 0xb7, 0xf6, 0x1d, 0x53, 0x8f, 0x94, 0xfa, 0x6c, 0x04, 0x9b, 0x95,
+	0x43, 0xa4, 0xc1, 0xca, 0x68, 0xf8, 0x61, 0x78, 0xf1, 0x71, 0xa8, 0x2f, 0xa1, 0x75, 0x68, 0xf7,
+	0xfa, 0x97, 0xe7, 0x17, 0xd7, 0x83, 0xe1, 0xa9, 0xae, 0xb0, 0x33, 0x67, 0x34, 0x1c, 0x32, 0xa0,
+	0x32, 0x70, 0xe2, 0x1c, 0x5f, 0x9d, 0xf5, 0x7b, 0x7a, 0x03, 0x01, 0xb4, 0xde, 0x1f, 0x0f, 0xce,
+	0xfb, 0x3d, 0xbd, 0x79, 0xf0, 0xbb, 0x09, 0x2d, 0x87, 0x47, 0x47, 0x2f, 0xa1, 0xc9, 0x96, 0x17,
+	0x92, 0xda, 0x4a, 0xda, 0x77, 0xe6, 0xfd, 0xb2, 0x99, 0x3d, 0xf5, 0x12, 0xfa, 0x04, 0x7a, 0x79,
+	0x6d, 0xa1, 0xfd, 0x9c, 0x3a, 0x67, 0xdb, 0x99, 0x7b, 0x8b, 0x28, 0x42, 0x79, 0x04, 0xf7, 0x4a,
+	0xbb, 0x0b, 0x59, 0x45, 0xaf, 0xea, 0xc2, 0x33, 0x1f, 0x2d, 0x60, 0x08, 0xd9, 0xcf, 0xb0, 0x59,
+	0x99, 0x08, 0x64, 0xe7, 0x6e, 0xf3, 0x66, 0xd0, 0xb4, 0x16, 0x72, 0x24, 0xf1, 0xd2, 0x50, 0x14,
+	0xc5, 0xeb, 0x27, 0xae, 0x28, 0x5e, 0x3b, 0x55, 0x4b, 0x68, 0xcc, 0x97, 0x79, 0xb5, 0x0b, 0x9e,
+	0x14, 0x72, 0x9e, 0xd7, 0xdb, 0xe6, 0xe3, 0xbf, 0xd1, 0x44, 0x94, 0x2f, 0x80, 0xaa, 0xc3, 0x87,
+	0xe6, 0x3a, 0x4b, 0xb3, 0x6d, 0xee, 0x2f, 0x26, 0x71, 0xfd, 0x17, 0xca, 0x4d, 0x8b, 0xff, 0x59,
+	0x0f, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0xd3, 0x87, 0x04, 0x3a, 0x69, 0x07, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -712,11 +836,12 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type RunnerClient interface {
-	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
-	GetConfiguration(ctx context.Context, in *GetConfigurationRequest, opts ...grpc.CallOption) (*GetConfigurationResponse, error)
-	DeployApplication(ctx context.Context, in *DeployApplicationRequest, opts ...grpc.CallOption) (*DeployApplicationResponse, error)
-	DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*DeleteApplicationResponse, error)
-	GetApplicationStatus(ctx context.Context, in *GetApplicationStatusRequest, opts ...grpc.CallOption) (*GetApplicationStatusResponse, error)
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error)
+	GetConfiguration(ctx context.Context, in *GetConfigurationRequest, opts ...grpc.CallOption) (*GetConfigurationReply, error)
+	GetClusterRoles(ctx context.Context, in *GetClusterRolesRequest, opts ...grpc.CallOption) (*GetClusterRolesReply, error)
+	DeployApplication(ctx context.Context, in *DeployApplicationRequest, opts ...grpc.CallOption) (*DeployApplicationReply, error)
+	DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*DeleteApplicationReply, error)
+	GetApplicationStatus(ctx context.Context, in *GetApplicationStatusRequest, opts ...grpc.CallOption) (*GetApplicationStatusReply, error)
 	GetApplicationLogs(ctx context.Context, in *GetApplicationLogsRequest, opts ...grpc.CallOption) (Runner_GetApplicationLogsClient, error)
 }
 
@@ -728,8 +853,8 @@ func NewRunnerClient(cc *grpc.ClientConn) RunnerClient {
 	return &runnerClient{cc}
 }
 
-func (c *runnerClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
-	out := new(PingResponse)
+func (c *runnerClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error) {
+	out := new(PingReply)
 	err := c.cc.Invoke(ctx, "/runnerpb.Runner/Ping", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -737,8 +862,8 @@ func (c *runnerClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.C
 	return out, nil
 }
 
-func (c *runnerClient) GetConfiguration(ctx context.Context, in *GetConfigurationRequest, opts ...grpc.CallOption) (*GetConfigurationResponse, error) {
-	out := new(GetConfigurationResponse)
+func (c *runnerClient) GetConfiguration(ctx context.Context, in *GetConfigurationRequest, opts ...grpc.CallOption) (*GetConfigurationReply, error) {
+	out := new(GetConfigurationReply)
 	err := c.cc.Invoke(ctx, "/runnerpb.Runner/GetConfiguration", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -746,8 +871,17 @@ func (c *runnerClient) GetConfiguration(ctx context.Context, in *GetConfiguratio
 	return out, nil
 }
 
-func (c *runnerClient) DeployApplication(ctx context.Context, in *DeployApplicationRequest, opts ...grpc.CallOption) (*DeployApplicationResponse, error) {
-	out := new(DeployApplicationResponse)
+func (c *runnerClient) GetClusterRoles(ctx context.Context, in *GetClusterRolesRequest, opts ...grpc.CallOption) (*GetClusterRolesReply, error) {
+	out := new(GetClusterRolesReply)
+	err := c.cc.Invoke(ctx, "/runnerpb.Runner/GetClusterRoles", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *runnerClient) DeployApplication(ctx context.Context, in *DeployApplicationRequest, opts ...grpc.CallOption) (*DeployApplicationReply, error) {
+	out := new(DeployApplicationReply)
 	err := c.cc.Invoke(ctx, "/runnerpb.Runner/DeployApplication", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -755,8 +889,8 @@ func (c *runnerClient) DeployApplication(ctx context.Context, in *DeployApplicat
 	return out, nil
 }
 
-func (c *runnerClient) DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*DeleteApplicationResponse, error) {
-	out := new(DeleteApplicationResponse)
+func (c *runnerClient) DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*DeleteApplicationReply, error) {
+	out := new(DeleteApplicationReply)
 	err := c.cc.Invoke(ctx, "/runnerpb.Runner/DeleteApplication", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -764,8 +898,8 @@ func (c *runnerClient) DeleteApplication(ctx context.Context, in *DeleteApplicat
 	return out, nil
 }
 
-func (c *runnerClient) GetApplicationStatus(ctx context.Context, in *GetApplicationStatusRequest, opts ...grpc.CallOption) (*GetApplicationStatusResponse, error) {
-	out := new(GetApplicationStatusResponse)
+func (c *runnerClient) GetApplicationStatus(ctx context.Context, in *GetApplicationStatusRequest, opts ...grpc.CallOption) (*GetApplicationStatusReply, error) {
+	out := new(GetApplicationStatusReply)
 	err := c.cc.Invoke(ctx, "/runnerpb.Runner/GetApplicationStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -789,7 +923,7 @@ func (c *runnerClient) GetApplicationLogs(ctx context.Context, in *GetApplicatio
 }
 
 type Runner_GetApplicationLogsClient interface {
-	Recv() (*GetApplicationLogsResponse, error)
+	Recv() (*GetApplicationLogsReply, error)
 	grpc.ClientStream
 }
 
@@ -797,8 +931,8 @@ type runnerGetApplicationLogsClient struct {
 	grpc.ClientStream
 }
 
-func (x *runnerGetApplicationLogsClient) Recv() (*GetApplicationLogsResponse, error) {
-	m := new(GetApplicationLogsResponse)
+func (x *runnerGetApplicationLogsClient) Recv() (*GetApplicationLogsReply, error) {
+	m := new(GetApplicationLogsReply)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -807,11 +941,12 @@ func (x *runnerGetApplicationLogsClient) Recv() (*GetApplicationLogsResponse, er
 
 // RunnerServer is the server API for Runner service.
 type RunnerServer interface {
-	Ping(context.Context, *PingRequest) (*PingResponse, error)
-	GetConfiguration(context.Context, *GetConfigurationRequest) (*GetConfigurationResponse, error)
-	DeployApplication(context.Context, *DeployApplicationRequest) (*DeployApplicationResponse, error)
-	DeleteApplication(context.Context, *DeleteApplicationRequest) (*DeleteApplicationResponse, error)
-	GetApplicationStatus(context.Context, *GetApplicationStatusRequest) (*GetApplicationStatusResponse, error)
+	Ping(context.Context, *PingRequest) (*PingReply, error)
+	GetConfiguration(context.Context, *GetConfigurationRequest) (*GetConfigurationReply, error)
+	GetClusterRoles(context.Context, *GetClusterRolesRequest) (*GetClusterRolesReply, error)
+	DeployApplication(context.Context, *DeployApplicationRequest) (*DeployApplicationReply, error)
+	DeleteApplication(context.Context, *DeleteApplicationRequest) (*DeleteApplicationReply, error)
+	GetApplicationStatus(context.Context, *GetApplicationStatusRequest) (*GetApplicationStatusReply, error)
 	GetApplicationLogs(*GetApplicationLogsRequest, Runner_GetApplicationLogsServer) error
 }
 
@@ -819,19 +954,22 @@ type RunnerServer interface {
 type UnimplementedRunnerServer struct {
 }
 
-func (*UnimplementedRunnerServer) Ping(ctx context.Context, req *PingRequest) (*PingResponse, error) {
+func (*UnimplementedRunnerServer) Ping(ctx context.Context, req *PingRequest) (*PingReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (*UnimplementedRunnerServer) GetConfiguration(ctx context.Context, req *GetConfigurationRequest) (*GetConfigurationResponse, error) {
+func (*UnimplementedRunnerServer) GetConfiguration(ctx context.Context, req *GetConfigurationRequest) (*GetConfigurationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfiguration not implemented")
 }
-func (*UnimplementedRunnerServer) DeployApplication(ctx context.Context, req *DeployApplicationRequest) (*DeployApplicationResponse, error) {
+func (*UnimplementedRunnerServer) GetClusterRoles(ctx context.Context, req *GetClusterRolesRequest) (*GetClusterRolesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetClusterRoles not implemented")
+}
+func (*UnimplementedRunnerServer) DeployApplication(ctx context.Context, req *DeployApplicationRequest) (*DeployApplicationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeployApplication not implemented")
 }
-func (*UnimplementedRunnerServer) DeleteApplication(ctx context.Context, req *DeleteApplicationRequest) (*DeleteApplicationResponse, error) {
+func (*UnimplementedRunnerServer) DeleteApplication(ctx context.Context, req *DeleteApplicationRequest) (*DeleteApplicationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteApplication not implemented")
 }
-func (*UnimplementedRunnerServer) GetApplicationStatus(ctx context.Context, req *GetApplicationStatusRequest) (*GetApplicationStatusResponse, error) {
+func (*UnimplementedRunnerServer) GetApplicationStatus(ctx context.Context, req *GetApplicationStatusRequest) (*GetApplicationStatusReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetApplicationStatus not implemented")
 }
 func (*UnimplementedRunnerServer) GetApplicationLogs(req *GetApplicationLogsRequest, srv Runner_GetApplicationLogsServer) error {
@@ -874,6 +1012,24 @@ func _Runner_GetConfiguration_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RunnerServer).GetConfiguration(ctx, req.(*GetConfigurationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Runner_GetClusterRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetClusterRolesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RunnerServer).GetClusterRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/runnerpb.Runner/GetClusterRoles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RunnerServer).GetClusterRoles(ctx, req.(*GetClusterRolesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -941,7 +1097,7 @@ func _Runner_GetApplicationLogs_Handler(srv interface{}, stream grpc.ServerStrea
 }
 
 type Runner_GetApplicationLogsServer interface {
-	Send(*GetApplicationLogsResponse) error
+	Send(*GetApplicationLogsReply) error
 	grpc.ServerStream
 }
 
@@ -949,7 +1105,7 @@ type runnerGetApplicationLogsServer struct {
 	grpc.ServerStream
 }
 
-func (x *runnerGetApplicationLogsServer) Send(m *GetApplicationLogsResponse) error {
+func (x *runnerGetApplicationLogsServer) Send(m *GetApplicationLogsReply) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -964,6 +1120,10 @@ var _Runner_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetConfiguration",
 			Handler:    _Runner_GetConfiguration_Handler,
+		},
+		{
+			MethodName: "GetClusterRoles",
+			Handler:    _Runner_GetClusterRoles_Handler,
 		},
 		{
 			MethodName: "DeployApplication",

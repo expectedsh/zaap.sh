@@ -26,7 +26,7 @@ type (
 	}
 )
 
-func (c *Client) Logs(ctx context.Context, applicationId string) (<-chan LogEntry, error) {
+func (c *Client) DeploymentLogs(ctx context.Context, applicationId string) (<-chan LogEntry, error) {
 	log := logWatcher{
 		parent: ctx,
 		client: c,

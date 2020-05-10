@@ -9,13 +9,13 @@ func (r *Runner) GetApplicationLogs(req *runnerpb.GetApplicationLogsRequest, srv
 	log := logrus.WithField("application", req.Id)
 	log.Info("getting logs application")
 
-	logs, err := r.client.Logs(srv.Context(), req.Id)
+	logs, err := r.client.DeploymentLogs(srv.Context(), req.Id)
 	if err != nil {
 		return err
 	}
 
 	for log := range logs {
-		err = srv.Send(&runnerpb.GetApplicationLogsResponse{
+		err = srv.Send(&runnerpb.GetApplicationLogsReply{
 			Time:    log.Time.String(),
 			Pod:     log.Pod,
 			Message: log.Message,
