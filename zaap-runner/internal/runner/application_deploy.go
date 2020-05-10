@@ -15,6 +15,11 @@ func (r *Runner) DeployApplication(_ context.Context, req *runnerpb.DeployApplic
 		return nil, err
 	}
 
+	if err := r.client.ClusterRoleBindingSync(req.Application); err != nil {
+		log.WithError(err).Error("failed to sync cluster role binding")
+		return nil, err
+	}
+
 	if err := r.client.DeploymentCreateOrUpdate(req.Application); err != nil {
 		log.WithError(err).Error("failed to create/update deployment")
 		return nil, err

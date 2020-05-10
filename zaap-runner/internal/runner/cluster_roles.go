@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (r *Runner) GetClusterRoles(ctx context.Context, req *runnerpb.GetClusterRolesRequest) (*runnerpb.GetClusterRolesReply, error) {
+func (r *Runner) GetClusterRoles(_ context.Context, _ *runnerpb.GetClusterRolesRequest) (*runnerpb.GetClusterRolesReply, error) {
 	logrus.Info("cluster roles requested")
 
 	roles, err := r.client.ClusterRoleList()

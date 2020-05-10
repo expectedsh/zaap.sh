@@ -22,5 +22,13 @@ func (r *Runner) DeleteApplication(_ context.Context, req *runnerpb.DeleteApplic
 		log.WithError(err).Error("failed to delete ingress")
 	}
 
+	if err := r.client.ClusterRoleBindingDeleteAll(req.Id, req.Name); err != nil {
+		log.WithError(err).Error("failed to delete cluster role binding")
+	}
+
+	if err := r.client.ServiceAccountDelete(req.Name); err != nil {
+		log.WithError(err).Error("failed to delete service account")
+	}
+
 	return &runnerpb.DeleteApplicationReply{}, nil
 }

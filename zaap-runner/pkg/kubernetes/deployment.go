@@ -36,7 +36,12 @@ func (c *Client) DeploymentDelete(name string) error {
 }
 
 func toDeployment(application *runnerpb.Application) *appsv1.Deployment {
+	serviceAccount := ""
 	port := 80
+
+	if application.Roles != nil && len(application.Roles) > 0 {
+		serviceAccount = application.Name
+	}
 
 	if value, ok := application.Environment["PORT"]; ok {
 		i, err := strconv.Atoi(value)
@@ -70,6 +75,7 @@ func toDeployment(application *runnerpb.Application) *appsv1.Deployment {
 					Labels: toLabels(application),
 				},
 				Spec: corev1.PodSpec{
+					ServiceAccountName: serviceAccount,
 					Containers: []corev1.Container{
 						{
 							Name:  application.Name,

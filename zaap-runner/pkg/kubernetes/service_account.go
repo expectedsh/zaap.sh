@@ -36,7 +36,11 @@ func (c *Client) ServiceAccountUpdate(application *runnerpb.Application) error {
 }
 
 func (c *Client) ServiceAccountDelete(name string) error {
-	return c.client.CoreV1().ServiceAccounts(c.namespace).Delete(name, &metav1.DeleteOptions{})
+	err := c.client.CoreV1().ServiceAccounts(c.namespace).Delete(name, &metav1.DeleteOptions{})
+	if err != nil && errors.IsNotFound(err) {
+		return nil
+	}
+	return err
 }
 
 func toServiceAccount(application *runnerpb.Application) *corev1.ServiceAccount {

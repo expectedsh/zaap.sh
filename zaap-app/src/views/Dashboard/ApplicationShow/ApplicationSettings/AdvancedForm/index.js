@@ -55,7 +55,7 @@ function AdvancedForm() {
       initialValues={initialValues}
       render={({ handleSubmit, pristine }) => (
         <form onSubmit={handleSubmit}>
-          <Field component={SelectField} name="roles" label="Roles" required isMulti
+          <Field component={SelectField} name="roles" label="Roles" isMulti
                  isLoading={clusterRolesPending} options={clusterRoleOptions}/>
           <Button className="btn btn-success" type="submit" disabled={pristine}>
             Update
