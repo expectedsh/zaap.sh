@@ -1,6 +1,7 @@
 package messaging
 
 import (
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/golang/protobuf/proto"
 	"github.com/streadway/amqp"
 	"reflect"
@@ -8,7 +9,7 @@ import (
 
 type (
 	Publisher struct {
-		conn           *amqp.Connection
+		conn           *rabbitmq.Connection
 		exchangeConfig ExchangeConfig
 	}
 
@@ -20,7 +21,7 @@ const (
 	DeliveryModePersistent              = 2
 )
 
-func NewPublisher(conn *amqp.Connection, exchangeConfig ExchangeConfig) *Publisher {
+func NewPublisher(conn *rabbitmq.Connection, exchangeConfig ExchangeConfig) *Publisher {
 	return &Publisher{
 		conn:           conn,
 		exchangeConfig: exchangeConfig,

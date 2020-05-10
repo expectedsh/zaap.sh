@@ -7,15 +7,15 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler/me"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler/runners"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler/users"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/service"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/store"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/jinzhu/gorm"
-	"github.com/streadway/amqp"
 )
 
-func New(config *config.Config, db *gorm.DB, amqpConn *amqp.Connection) chi.Router {
+func New(config *config.Config, db *gorm.DB, amqpConn *rabbitmq.Connection) chi.Router {
 	r := chi.NewRouter()
 
 	r.Use(cors.New(cors.Options{

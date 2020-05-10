@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 )
 
 type userService struct {

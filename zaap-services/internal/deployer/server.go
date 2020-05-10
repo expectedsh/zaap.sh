@@ -11,13 +11,12 @@ import (
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/service"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/store"
 	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
 )
 
 type Server struct {
 	config             *config.Config
 	context            context.Context
-	amqpConn           *amqp.Connection
+	amqpConn           *rabbitmq.Connection
 	cloudflareClient   *cloudflare.API
 	applicationStore   core.ApplicationStore
 	applicationService core.ApplicationService

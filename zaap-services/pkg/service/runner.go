@@ -2,18 +2,18 @@ package service
 
 import (
 	"context"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
-	"github.com/streadway/amqp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
 
 type runnerService struct {
-	amqpConn *amqp.Connection
+	amqpConn *rabbitmq.Connection
 }
 
-func NewRunnerService(amqpConn *amqp.Connection) core.RunnerService {
+func NewRunnerService(amqpConn *rabbitmq.Connection) core.RunnerService {
 	return &runnerService{
 		amqpConn: amqpConn,
 	}

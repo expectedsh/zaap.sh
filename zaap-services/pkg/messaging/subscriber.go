@@ -2,13 +2,13 @@ package messaging
 
 import (
 	"context"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/golang/protobuf/proto"
-	"github.com/streadway/amqp"
 	"reflect"
 )
 
 type Subscriber struct {
-	conn            *amqp.Connection
+	conn            *rabbitmq.Connection
 	exchangeConfig  ExchangeConfig
 	queueConfig     QueueConfig
 	messageTypes    map[string]reflect.Type
@@ -21,7 +21,7 @@ var (
 	errorType   = reflect.TypeOf((*error)(nil)).Elem()
 )
 
-func NewSubscriber(conn *amqp.Connection, exchangeConfig ExchangeConfig, queueConfig QueueConfig) *Subscriber {
+func NewSubscriber(conn *rabbitmq.Connection, exchangeConfig ExchangeConfig, queueConfig QueueConfig) *Subscriber {
 	return &Subscriber{
 		conn:            conn,
 		exchangeConfig:  exchangeConfig,

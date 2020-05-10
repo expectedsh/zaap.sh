@@ -1,12 +1,15 @@
 package messaging
 
-import "github.com/streadway/amqp"
+import (
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
+	"github.com/streadway/amqp"
+)
 
 type (
 	ExchangeConfig interface {
 		Name() string
 
-		Declare(*amqp.Channel) error
+		Declare(*rabbitmq.Channel) error
 	}
 
 	durableExchangeTopic struct {
@@ -24,6 +27,6 @@ func (d durableExchangeTopic) Name() string {
 	return d.exchangeName
 }
 
-func (d durableExchangeTopic) Declare(ch *amqp.Channel) error {
+func (d durableExchangeTopic) Declare(ch *rabbitmq.Channel) error {
 	return ch.ExchangeDeclare(d.exchangeName, amqp.ExchangeTopic, true, false, false, false, nil)
 }

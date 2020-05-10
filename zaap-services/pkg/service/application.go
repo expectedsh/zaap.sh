@@ -1,20 +1,20 @@
 package service
 
 import (
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/messaging"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/protocol"
-	"github.com/streadway/amqp"
 )
 
 var ApplicationEventsExchange = messaging.NewDurableExchangeTopic("application_events")
 
 type applicationService struct {
-	amqpConn  *amqp.Connection
+	amqpConn  *rabbitmq.Connection
 	publisher *messaging.Publisher
 }
 
-func NewApplicationService(amqpConn *amqp.Connection) core.ApplicationService {
+func NewApplicationService(amqpConn *rabbitmq.Connection) core.ApplicationService {
 	return &applicationService{
 		amqpConn:  amqpConn,
 		publisher: messaging.NewPublisher(amqpConn, ApplicationEventsExchange),
