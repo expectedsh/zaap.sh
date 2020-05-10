@@ -2,18 +2,15 @@ package watcher
 
 import (
 	"context"
-	"github.com/expected.sh/zaap.sh/zaap-services/internal/watcher/config"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/postgres"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/service"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/store"
-	"github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
-	"github.com/streadway/amqp"
 	"time"
 )
 
 type Server struct {
-	config             *config.Config
 	context            context.Context
 	done               bool
 	runnerStore        core.RunnerStore
@@ -22,22 +19,21 @@ type Server struct {
 	applicationService core.ApplicationService
 }
 
-func New(config *config.Config) *Server {
+func New() *Server {
 	return &Server{
-		config:  config,
 		done:    false,
 		context: context.TODO(),
 	}
 }
 
 func (s *Server) Start() error {
-	db, err := gorm.Open("postgres", s.config.PostgresURL)
+	db, err := postgres.Connect(nil)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	amqpConn, err := amqp.Dial(s.config.RabbitURL)
+	amqpConn, err := rabbitmq.Connect(nil)
 	if err != nil {
 		return err
 	}

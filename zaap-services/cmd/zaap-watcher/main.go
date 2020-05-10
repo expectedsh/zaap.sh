@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/watcher"
-	"github.com/expected.sh/zaap.sh/zaap-services/internal/watcher/config"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -13,12 +12,7 @@ import (
 func main() {
 	logrus.Info("starting watcher")
 
-	cfg, err := config.FromEnv()
-	if err != nil {
-		logrus.WithError(err).Fatal("could not parse configuration")
-	}
-
-	server := watcher.New(cfg)
+	server := watcher.New()
 
 	go func() {
 		if err := server.Start(); err != nil {

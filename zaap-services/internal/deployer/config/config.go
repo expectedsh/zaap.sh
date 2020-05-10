@@ -3,8 +3,6 @@ package config
 import "github.com/kelseyhightower/envconfig"
 
 type Config struct {
-	PostgresURL      string `envconfig:"POSTGRES_URL" default:"postgres://zaap:zaap@localhost/zaap?sslmode=disable"`
-	RabbitURL        string `envconfig:"RABBIT_URL" default:"amqp://localhost/"`
 	CloudflareToken  string `envconfig:"CLOUDFLARE_TOKEN"`
 	CloudflareZoneId string `envconfig:"CLOUDFLARE_ZONE_ID"`
 }

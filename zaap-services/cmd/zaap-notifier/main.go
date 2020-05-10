@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/notifier"
-	"github.com/expected.sh/zaap.sh/zaap-services/internal/notifier/config"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -13,12 +12,7 @@ import (
 func main() {
 	logrus.Info("starting notifier")
 
-	cfg, err := config.FromEnv()
-	if err != nil {
-		logrus.WithError(err).Fatal("could not parse configuration")
-	}
-
-	server := notifier.New(cfg)
+	server := notifier.New()
 
 	go func() {
 		if err := server.Start(); err != nil {

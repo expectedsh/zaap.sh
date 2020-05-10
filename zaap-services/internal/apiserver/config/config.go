@@ -4,8 +4,6 @@ import "github.com/kelseyhightower/envconfig"
 
 type Config struct {
 	Addr        string `envconfig:"ADDR" default:":3000"`
-	PostgresURL string `envconfig:"POSTGRES_URL" default:"postgres://zaap:zaap@localhost/zaap?sslmode=disable"`
-	RabbitURL   string `envconfig:"RABBIT_URL" default:"amqp://localhost/"`
 	SecretKey   string `envconfig:"SECRET_KEY" default:"changeme"`
 }
 

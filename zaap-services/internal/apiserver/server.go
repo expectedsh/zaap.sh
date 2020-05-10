@@ -4,10 +4,9 @@ import (
 	"context"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/config"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/apiserver/handler"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/postgres"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
-	"github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
-	"github.com/streadway/amqp"
 	"net/http"
 )
 
@@ -23,7 +22,7 @@ func New(config *config.Config) *Server {
 }
 
 func (s *Server) Start() error {
-	db, err := gorm.Open("postgres", s.config.PostgresURL)
+	db, err := postgres.Connect(nil)
 	if err != nil {
 		return err
 	}
@@ -39,7 +38,7 @@ func (s *Server) Start() error {
 		return err
 	}
 
-	amqpConn, err := amqp.Dial(s.config.RabbitURL)
+	amqpConn, err := rabbitmq.Connect(nil)
 	if err != nil {
 		return err
 	}

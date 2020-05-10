@@ -4,12 +4,12 @@ import (
 	"context"
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/expected.sh/zaap.sh/zaap-services/internal/deployer/config"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/postgres"
+	"github.com/expected.sh/zaap.sh/zaap-services/pkg/connector/rabbitmq"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/core"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/messaging"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/service"
 	"github.com/expected.sh/zaap.sh/zaap-services/pkg/store"
-	"github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 )
@@ -34,13 +34,13 @@ func New(config *config.Config) *Server {
 }
 
 func (s *Server) Start() error {
-	db, err := gorm.Open("postgres", s.config.PostgresURL)
+	db, err := postgres.Connect(nil)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	amqpConn, err := amqp.Dial(s.config.RabbitURL)
+	amqpConn, err := rabbitmq.Connect(nil)
 	if err != nil {
 		return err
 	}
