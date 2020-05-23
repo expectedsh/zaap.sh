@@ -29,7 +29,7 @@ function getLoaderSize(size) {
   }
 }
 
-export const StyledButton = styled.button((props) => {
+const StyledButton = styled.button((props) => {
   const color = props.theme.color[props.color]
 
   return css`

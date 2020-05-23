@@ -3,7 +3,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 
-export const StyledText = styled.p((props) => {
+const StyledText = styled.p((props) => {
   const typo = props.theme.typography.text[props.size]
 
   return css`

@@ -17,6 +17,7 @@ export const base = () => (
     size={select('Size', sizes, sizes[0])}
     as={select('Element', elements, elements[0])}
     noMargin={boolean('No margin', false)}
+    bold={boolean('Bold', false)}
   >
     {content}
   </Heading>
@@ -27,3 +28,9 @@ export const size = () => sizes.map((s) => (
     {content}
   </Heading>
 ))
+
+export const bold = () => (
+  <Heading bold>
+    {content}
+  </Heading>
+)

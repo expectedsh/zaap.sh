@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import Heading from '~/components/atoms/Heading'
 
-const CalloutStyled = styled.div((props) => css`
+const StyledCallout = styled.div((props) => css`
   position: relative;
   display: block;
   border-radius: 4px;
@@ -28,14 +28,14 @@ const StyledHeading = styled(Heading)`
 
 function Callout({ title, children, ...props }) {
   return (
-    <CalloutStyled {...props}>
+    <StyledCallout {...props}>
       {title && (
         <StyledHeading as="h4" size="medium" color={props.color}>
           {title}
         </StyledHeading>
       )}
       {children}
-    </CalloutStyled>
+    </StyledCallout>
   )
 }
 

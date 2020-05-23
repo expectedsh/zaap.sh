@@ -5,7 +5,7 @@ import { css } from '@emotion/core'
 import Text from '~/components/atoms/Text'
 import Label from '~/components/atoms/Label'
 
-export const StyledInput = styled.div((props) => css`
+const StyledInput = styled.div((props) => css`
   margin-bottom: 24px;
 
   input {

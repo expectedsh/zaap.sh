@@ -3,7 +3,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 
-export const StyledLabel = styled.div((props) => css`
+const StyledLabel = styled.div((props) => css`
   display: block;
   font-weight: ${props.theme.fontWeight.bold};
   margin-bottom: 8px;
@@ -12,7 +12,7 @@ export const StyledLabel = styled.div((props) => css`
   line-height: ${props.theme.typography.text.small.lineHeight};
 `)
 
-export const StyledRequired = styled.span((props) => css`
+const StyledRequired = styled.span((props) => css`
   color: ${props.theme.color.red['300']};
   font-weight: ${props.theme.fontWeight.regular};
   margin-left: 4px;

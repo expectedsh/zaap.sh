@@ -3,7 +3,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 
-export const StyledHeading = styled.h1((props) => {
+const StyledHeading = styled.h1((props) => {
   const typo = props.theme.typography.heading[props.size]
 
   return css`
@@ -11,6 +11,7 @@ export const StyledHeading = styled.h1((props) => {
     font-size: ${typo.fontSize};
     line-height: ${typo.lineHeight};
     margin: ${props.noMargin ? '0' : '0 0 24px'};
+    font-weight: ${props.bold ? props.theme.fontWeight.bold : props.theme.fontWeight.regular};
   `
 })
 
@@ -26,6 +27,7 @@ Heading.propTypes = {
   size: PropTypes.oneOf(['extraSmall', 'small', 'medium', 'large', 'extraLarge']),
   as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
   noMargin: PropTypes.bool,
+  bold: PropTypes.bool,
   children: PropTypes.node.isRequired,
 }
 
