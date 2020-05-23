@@ -1,7 +1,7 @@
-const { EnvironmentPlugin } = require("webpack")
-const HtmlWebPackPlugin = require("html-webpack-plugin")
+const { EnvironmentPlugin } = require('webpack')
+const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const {join} = require('path')
+const { join } = require('path')
 
 const cssLoader = (customLoaders = [], cssLoaderOptions = {}) => [
   process.env.NODE_ENV === 'production'
@@ -23,17 +23,17 @@ const cssLoader = (customLoaders = [], cssLoaderOptions = {}) => [
         require('autoprefixer')(),
       ],
     },
-  }
+  },
 ]
 
 module.exports = {
-  entry: ['core-js', join(__dirname, 'src', 'index.js')],
+  entry: ['core-js', join(__dirname, 'src', 'index.jsx')],
   context: join(__dirname, 'src'),
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
       '~': join(__dirname, 'src'),
-      'stylesheets': join(__dirname, 'src', 'assets', 'stylesheets'),
+      stylesheets: join(__dirname, 'src', 'assets', 'stylesheets'),
     },
   },
   devServer: {
@@ -41,7 +41,7 @@ module.exports = {
     inline: true,
     open: true,
     historyApiFallback: {
-      disableDotRule: true
+      disableDotRule: true,
     },
   },
   output: {
@@ -54,25 +54,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: [
-              "@babel/preset-env",
-              "@babel/preset-react"
-            ],
-            plugins: [
-              "@babel/plugin-proposal-nullish-coalescing-operator",
-              "@babel/plugin-proposal-optional-chaining",
-              [
-                "@babel/plugin-transform-runtime",
-                {
-                  "regenerator": true
-                }
-              ],
-            ],
-          },
-        }
+        use: 'babel-loader',
       },
       {
         test: /\.s[ac]ss$/i,
@@ -97,17 +79,17 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: "url-loader",
+        loader: 'url-loader',
         options: {
           limit: process.env.NODE_ENV === 'production' ? false : 10000,
           name: 'assets/[hash:8].[ext]',
           fallback: 'file-loader',
-        }
+        },
       },
-    ]
+    ],
   },
   plugins: [
-    new EnvironmentPlugin(["NODE_ENV", "API_ENDPOINT"]),
+    new EnvironmentPlugin(['NODE_ENV', 'API_ENDPOINT']),
     new HtmlWebPackPlugin({
       template: join(__dirname, 'public', 'index.html'),
     }),
@@ -115,5 +97,5 @@ module.exports = {
       filename: '[hash:8].css',
       chunkFilename: '[hash:8].css',
     }),
-  ]
+  ],
 }
