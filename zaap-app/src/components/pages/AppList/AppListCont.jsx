@@ -1,5 +1,5 @@
 import React from 'react'
-import AppList from '~/components/pages/app/AppList'
+import AppList from './AppList'
 
 function AppListCont() {
   return <AppList loading={false} error={undefined} applications={[]} />

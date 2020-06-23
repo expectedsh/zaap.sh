@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { Link as RouterLink } from 'react-router-dom'
 
-const StyledLink = styled(RouterLink)((props) => {
+function style(props) {
   const typo = props.theme.typography.text[props.size]
 
   return css`
@@ -16,19 +16,26 @@ const StyledLink = styled(RouterLink)((props) => {
       outline: none;
     }
   `
-})
+}
+
+const StyledRouterLink = styled(RouterLink)(style)
+
+const StyledLink = styled.a(style)
 
 function Link({ children, ...props }) {
+  const Comp = props.to ? StyledRouterLink : StyledLink
   return (
-    <StyledLink {...props}>
+    <Comp {...props}>
       {children}
-    </StyledLink>
+    </Comp>
   )
 }
 
 Link.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']),
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
+  href: PropTypes.string,
+  target: PropTypes.string,
   children: PropTypes.node.isRequired,
 }
 

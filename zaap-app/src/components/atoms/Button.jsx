@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
+import Link from './Link'
 
 function getPadding(size) {
   switch (size) {
@@ -29,9 +30,8 @@ function getLoaderSize(size) {
   }
 }
 
-const StyledButton = styled.button((props) => {
+function style(props) {
   const color = props.theme.color[props.color]
-
   return css`
     position: relative;
     display: block;
@@ -39,6 +39,7 @@ const StyledButton = styled.button((props) => {
     font-family: ${props.theme.fontFamily.default};
     font-size: ${props.theme.typography.text[props.size].fontSize};
     font-weight: ${props.theme.typography.text[props.size].fontWeight};
+    line-height: normal;
     cursor: pointer;
     padding: ${getPadding(props.size)};
     width: ${props.block ? '100%' : 'fit-content'};
@@ -87,7 +88,11 @@ const StyledButton = styled.button((props) => {
       margin-bottom: 16px;
     `}
   `
-})
+}
+
+const StyledButton = styled.button(style)
+
+const StyledLink = styled(Link)(style)
 
 const StyledLoaderContainer = styled.div((props) => css`
   position: absolute;
@@ -135,9 +140,10 @@ const StyledLoader = styled.div((props) => css`
   }
 `)
 
-function Button({ children, ...props }) {
+function Button({ children, as, ...props }) {
+  const Comp = as === 'link' ? StyledLink : StyledButton
   return (
-    <StyledButton {...props}>
+    <Comp {...props}>
       {props.loading && (
         <StyledLoaderContainer {...props} as="div">
           <StyledLoader {...props} as="div">
@@ -148,12 +154,13 @@ function Button({ children, ...props }) {
         </StyledLoaderContainer>
       )}
       {children}
-    </StyledButton>
+    </Comp>
   )
 }
 
 Button.propTypes = {
-  as: PropTypes.oneOf(['button', 'a']),
+  ...Link.propTypes,
+  as: PropTypes.oneOf(['button', 'link']),
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   color: PropTypes.oneOf(['primary', 'success', 'danger', 'warning', 'blue', 'green', 'red', 'orange']),
   outline: PropTypes.bool,
@@ -161,8 +168,6 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
   noMargin: PropTypes.bool,
-  target: PropTypes.string,
-  href: PropTypes.string,
   children: PropTypes.node.isRequired,
 }
 

@@ -1,9 +1,9 @@
 import React, { Suspense, lazy } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import Auth from '~/components/pages/auth/Auth'
+import Auth from '~/components/pages/Auth/Auth'
 
-const SignInRoute = lazy(() => import('./AuthSignInCont'))
-const SignUpRoute = lazy(() => import('./AuthSignUpCont'))
+const SignInRoute = lazy(() => import('~/components/pages/AuthSignIn/AuthSignInCont'))
+const SignUpRoute = lazy(() => import('~/components/pages/AuthSignUp/AuthSignUpCont'))
 
 function AuthCont() {
   return (

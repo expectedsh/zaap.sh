@@ -8,7 +8,7 @@ import { createBrowserHistory } from 'history'
 import { Provider } from 'react-redux'
 import ThemeProvider from '~/style/themeProvider'
 import store from '~/store'
-import AppCont from '~/containers/AppCont'
+import RootCont from '~/components/pages/Root/RootCont'
 
 const history = createBrowserHistory()
 
@@ -16,7 +16,7 @@ ReactDOM.render((
   <Provider store={store}>
     <ThemeProvider>
       <Router history={history}>
-        <AppCont />
+        <RootCont />
       </Router>
     </ThemeProvider>
     <ToastContainer autoClose={2000} position={toast.POSITION.TOP_RIGHT} />

@@ -9,7 +9,7 @@ export default {
 
 const sizes = ['small', 'medium', 'large']
 const colors = ['primary', 'success', 'danger', 'warning']
-const elements = ['button', 'a']
+const elements = ['button', 'link']
 
 export const base = () => (
   <Button

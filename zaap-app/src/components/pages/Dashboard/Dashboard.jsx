@@ -4,9 +4,8 @@ import styled from '@emotion/styled'
 import Navigation from '~/components/atoms/Navigation'
 import Container from '~/components/atoms/Container'
 import NavItems from '~/components/atoms/NavItems'
-
-import logo from '~/assets/images/logo.svg'
 import NavLink from '~/components/atoms/NavLink'
+import logo from '~/assets/images/logo.svg'
 
 const StyledRoot = styled.div`
   padding-top: 64px;

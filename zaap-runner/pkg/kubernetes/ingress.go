@@ -56,7 +56,7 @@ func toIngress(application *runnerpb.Application) *networkv1.Ingress {
 
 	meta := toObjectMeta(application)
 	meta.Annotations = map[string]string{
-		"traefik.ingress.kubernetes.io/router.entrypoints": "web",
+		"traefik.ingress.kubernetes.io/router.entrypoints": "web,websecure",
 	}
 
 	return &networkv1.Ingress{

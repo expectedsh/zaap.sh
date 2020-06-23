@@ -3,7 +3,7 @@ import { FORM_ERROR } from 'final-form'
 import { useHistory } from 'react-router'
 import { login } from '~/client/auth'
 import { setToken } from '~/store/authentication'
-import AuthSignIn from '~/components/pages/auth/AuthSignIn'
+import AuthSignIn from './AuthSignIn'
 
 function AuthSignInCont() {
   const history = useHistory()
