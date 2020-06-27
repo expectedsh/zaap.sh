@@ -1,17 +1,19 @@
 import React from 'react'
 import { FORM_ERROR } from 'final-form'
 import { useHistory } from 'react-router'
+import { useDispatch } from 'react-redux'
 import { login } from '~/client/auth'
 import { setToken } from '~/store/authentication'
 import AuthSignIn from './AuthSignIn'
 
 function AuthSignInCont() {
   const history = useHistory()
+  const dispatch = useDispatch()
 
   function onSubmit(values) {
     return login(values)
       .then((token) => {
-        setToken(token)
+        dispatch(setToken(token))
         history.push('/')
       })
       .catch((error) => {

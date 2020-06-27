@@ -7,7 +7,13 @@ const authenticationSlice = createSlice({
   },
   reducers: {
     setToken(state, action) {
-      state.token = action.payload.token
+      const token = action.payload
+      if (token) {
+        localStorage.setItem('token', token)
+      } else {
+        localStorage.removeItem('token')
+      }
+      state.token = token
     },
   },
 })
