@@ -8,6 +8,7 @@ import Callout from '~/components/molecules/Callout'
 import SimpleTable from '~/components/molecules/SimpleTable'
 import Container from '~/components/atoms/Container'
 import EmptyState from '~/components/molecules/EmptyState'
+import ApplicationStatusBadge from '~/components/utils/ApplicationStatusBadge'
 
 const tableConfig = (apps) => [
   {
@@ -17,7 +18,7 @@ const tableConfig = (apps) => [
   },
   {
     renderHeader: () => 'Status',
-    renderCell: (app) => app.status,
+    renderCell: (app) => <ApplicationStatusBadge status={app.status} />,
     css: css`width: 160px;`,
   },
   {
