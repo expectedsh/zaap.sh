@@ -10,7 +10,7 @@ const StyledLink = styled(Link)((props) => css`
   align-items: center;
   cursor: pointer;
   outline: none;
-  color: ${props.theme.color.white};
+  color: ${props.theme.color.white} !important;
   text-decoration: none;
   padding: 0 16px;
   height: 100%;

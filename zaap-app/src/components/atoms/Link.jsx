@@ -11,6 +11,11 @@ function style(props) {
     font-family: ${props.theme.fontFamily.default};
     font-size: ${typo.fontSize};
     line-height: ${typo.lineHeight};
+    text-decoration: none;
+    
+    &, &:active, &:visited {
+      color: ${props.theme.color.primary['300']}
+    }
     
     :focus {
       outline: none;

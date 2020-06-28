@@ -69,7 +69,7 @@ SimpleTable.propTypes = {
       css: PropTypes.object,
     }),
   ).isRequired,
-  dataSource: PropTypes.array.isRequired,
+  dataSource: PropTypes.array,
   onRowClick: PropTypes.func,
   noData: PropTypes.node,
 }

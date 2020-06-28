@@ -1,36 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchApplications } from '~/client/application'
 import { fetchRunners } from '~/client/runner'
-import { setApplications } from '~/store/applications'
 import { setRunners } from '~/store/runners'
-import AppList from './AppList'
+import RunnerList from './RunnerList'
 
-function AppListCont() {
+function RunnerListCont() {
   const dispatch = useDispatch()
-  const applications = useSelector((s) => s.applications.applications)
   const runners = useSelector((s) => s.runners.runners)
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(undefined)
 
   useEffect(() => {
-    Promise.all([fetchRunners(), fetchApplications()])
-      .then(([fetchedRunners, fetchedApps]) => {
-        dispatch(setRunners(fetchedRunners))
-        dispatch(setApplications(fetchedApps))
-      })
+    fetchRunners()
+      .then((fetchedRunners) => dispatch(setRunners(fetchedRunners)))
       .catch((err) => setError(err))
       .finally(() => setLoading(false))
   }, [])
 
   return (
-    <AppList
+    <RunnerList
       loading={isLoading}
-      applications={applications}
       runners={runners}
       error={error}
     />
   )
 }
 
-export default AppListCont
+export default RunnerListCont

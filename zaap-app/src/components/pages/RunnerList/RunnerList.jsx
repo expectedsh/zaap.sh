@@ -8,36 +8,28 @@ import Callout from '~/components/molecules/Callout'
 import SimpleTable from '~/components/molecules/SimpleTable'
 import Container from '~/components/atoms/Container'
 import EmptyState from '~/components/molecules/EmptyState'
-import ApplicationStatusBadge from '~/components/utils/ApplicationStatusBadge'
-import Link from '~/components/atoms/Link'
+import RunnerStatusBadge from '~/components/utils/RunnerStatusBadge'
 
-function AppList({
-  loading, error, applications, runners,
-}) {
+function RunnerList({ loading, error, runners }) {
   const tableConfig = useMemo(() => [
     {
       renderHeader: () => 'Name',
-      renderCell: (app) => app.name,
+      renderCell: (runner) => runner.name,
       css: css`flex: 1 1 0;`,
     },
     {
       renderHeader: () => 'Status',
-      renderCell: (app) => <ApplicationStatusBadge status={app.status} />,
+      renderCell: (runner) => <RunnerStatusBadge status={runner.status} />,
       css: css`width: 160px;`,
     },
     {
-      renderHeader: () => 'Runner',
-      renderCell: (app) => {
-        const runner = runners?.find((r) => r.id === app.runnerId)
-        return runner
-          ? <Link to="/runners">{runner.name}</Link>
-          : 'Not found'
-      },
+      renderHeader: () => 'Endpoint',
+      renderCell: (runner) => runner.url,
       css: css`width: 260px;`,
     },
     {
       renderHeader: () => 'Last update',
-      renderCell: (app) => moment(app.updatedAt).fromNow(),
+      renderCell: (runner) => moment(runner.updatedAt).fromNow(),
       css: css`width: 160px;`,
     },
   ], [runners])
@@ -56,12 +48,11 @@ function AppList({
     return (
       <SimpleTable
         config={tableConfig}
-        dataSource={applications}
-        // onRowClick={app => history.push(`/apps/${app.id}`)}
+        dataSource={runners}
         noData={(
           <EmptyState
-            title="You don't have application"
-            description="Create an application and it will show up here."
+            title="You don't have runner"
+            description="Register a runner and it will show up here."
           />
         )}
       />
@@ -70,9 +61,9 @@ function AppList({
 
   return (
     <>
-      <Header preTitle="Overview" title="Applications">
-        <Button outline as="link" to="/apps/new" noMargin>
-          New application
+      <Header preTitle="Overview" title="Runners">
+        <Button outline as="link" to="/runners/new" noMargin>
+          Register runner
         </Button>
       </Header>
 
@@ -83,11 +74,11 @@ function AppList({
   )
 }
 
-AppList.propTypes = {
+RunnerList.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.object,
   applications: PropTypes.array,
   runners: PropTypes.array,
 }
 
-export default AppList
+export default RunnerList
