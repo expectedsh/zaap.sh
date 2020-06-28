@@ -4,11 +4,11 @@ import moment from 'moment'
 import { css } from '@emotion/core'
 import Header from '~/components/molecules/Header'
 import Button from '~/components/atoms/Button'
-import Callout from '~/components/molecules/Callout'
 import SimpleTable from '~/components/molecules/SimpleTable'
 import Container from '~/components/atoms/Container'
 import EmptyState from '~/components/molecules/EmptyState'
 import RunnerStatusBadge from '~/components/utils/RunnerStatusBadge'
+import SimpleStateHandler from '~/components/molecules/SimpleStateHandler'
 
 function RunnerList({ loading, error, runners }) {
   const tableConfig = useMemo(() => [
@@ -34,31 +34,6 @@ function RunnerList({ loading, error, runners }) {
     },
   ], [runners])
 
-  function renderBody() {
-    if (loading) {
-      return 'Loading...'
-    }
-    if (error) {
-      return (
-        <Callout color="danger" block>
-          {error.message}
-        </Callout>
-      )
-    }
-    return (
-      <SimpleTable
-        config={tableConfig}
-        dataSource={runners}
-        noData={(
-          <EmptyState
-            title="You don't have runner"
-            description="Register a runner and it will show up here."
-          />
-        )}
-      />
-    )
-  }
-
   return (
     <>
       <Header preTitle="Overview" title="Runners">
@@ -68,7 +43,22 @@ function RunnerList({ loading, error, runners }) {
       </Header>
 
       <Container>
-        {renderBody()}
+        <SimpleStateHandler
+          loading={loading}
+          error={error}
+          onSuccess={(
+            <SimpleTable
+              config={tableConfig}
+              dataSource={runners}
+              noData={(
+                <EmptyState
+                  title="You don't have runner"
+                  description="Register a runner and it will show up here."
+                />
+              )}
+            />
+          )}
+        />
       </Container>
     </>
   )
@@ -77,7 +67,6 @@ function RunnerList({ loading, error, runners }) {
 RunnerList.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.object,
-  applications: PropTypes.array,
   runners: PropTypes.array,
 }
 

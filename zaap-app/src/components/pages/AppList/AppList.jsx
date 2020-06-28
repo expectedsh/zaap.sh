@@ -4,12 +4,12 @@ import moment from 'moment'
 import { css } from '@emotion/core'
 import Header from '~/components/molecules/Header'
 import Button from '~/components/atoms/Button'
-import Callout from '~/components/molecules/Callout'
 import SimpleTable from '~/components/molecules/SimpleTable'
 import Container from '~/components/atoms/Container'
 import EmptyState from '~/components/molecules/EmptyState'
 import ApplicationStatusBadge from '~/components/utils/ApplicationStatusBadge'
 import Link from '~/components/atoms/Link'
+import SimpleStateHandler from '~/components/molecules/SimpleStateHandler'
 
 function AppList({
   loading, error, applications, runners,
@@ -42,32 +42,6 @@ function AppList({
     },
   ], [runners])
 
-  function renderBody() {
-    if (loading) {
-      return 'Loading...'
-    }
-    if (error) {
-      return (
-        <Callout color="danger" block>
-          {error.message}
-        </Callout>
-      )
-    }
-    return (
-      <SimpleTable
-        config={tableConfig}
-        dataSource={applications}
-        // onRowClick={app => history.push(`/apps/${app.id}`)}
-        noData={(
-          <EmptyState
-            title="You don't have application"
-            description="Create an application and it will show up here."
-          />
-        )}
-      />
-    )
-  }
-
   return (
     <>
       <Header preTitle="Overview" title="Applications">
@@ -77,7 +51,23 @@ function AppList({
       </Header>
 
       <Container>
-        {renderBody()}
+        <SimpleStateHandler
+          loading={loading}
+          error={error}
+          onSuccess={(
+            <SimpleTable
+              config={tableConfig}
+              dataSource={applications}
+              // onRowClick={app => history.push(`/apps/${app.id}`)}
+              noData={(
+                <EmptyState
+                  title="You don't have application"
+                  description="Create an application and it will show up here."
+                />
+              )}
+            />
+          )}
+        />
       </Container>
     </>
   )
