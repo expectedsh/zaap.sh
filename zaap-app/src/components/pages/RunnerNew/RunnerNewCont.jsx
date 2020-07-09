@@ -1,14 +1,14 @@
 import React from 'react'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router'
-import { createRunner } from '~/client/runner'
+import { runnerService } from '~/services'
 import RunnerNew from './RunnerNew'
 
 function RunnerNewCont() {
   const history = useHistory()
 
   function onSubmit(values) {
-    return createRunner(values)
+    return runnerService.create(values)
       .then(() => {
         toast.success('Runner registered.')
         history.push('/runners')

@@ -31,8 +31,9 @@ module.exports = {
     'react/require-default-props': 'off',
     'react/destructuring-assignment': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'import/prefer-default-export': 'off',
     'react/jsx-one-expression-per-line': 'off',
     'no-param-reassign': 'off',
-    'react/forbid-prop-types': 'off',
+    'react/forbid-prop-types': 'off'
   },
 };

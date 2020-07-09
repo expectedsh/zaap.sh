@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import Header from '~/components/molecules/Header'
 import Container from '~/components/atoms/Container'
 import SimpleStateHandler from '~/components/molecules/SimpleStateHandler'
-import FormSection from '~/components/molecules/FormSection'
+import ProfileSection from './ProfileSection'
 
-function Settings({ loading, error, user }) {
+function Settings({
+  loading, error, user, updateProfile,
+}) {
   return (
     <>
       <Header preTitle="Account" title="Settings" />
@@ -15,12 +17,7 @@ function Settings({ loading, error, user }) {
           error={error}
           onSuccess={(
             <>
-              <FormSection
-                name="Profile"
-                description="Your email address is your identity on Zaap and is used to log in."
-              >
-                hello
-              </FormSection>
+              <ProfileSection user={user} onSubmit={updateProfile} />
             </>
           )}
         />
@@ -33,6 +30,7 @@ Settings.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.object,
   user: PropTypes.object,
+  updateProfile: PropTypes.func.isRequired,
 }
 
 export default Settings

@@ -12,7 +12,7 @@ type (
 	User struct {
 		ID        uuid.UUID `gorm:"primary_key" json:"id"`
 		Email     string    `gorm:"type:varchar;unique_index;not null" json:"email"`
-		Password  string    `gorm:"type:varchar;not null" json:"password"`
+		Password  string    `gorm:"type:varchar;not null" json:"-"`
 		FirstName string    `gorm:"type:varchar;not null" json:"first_name"`
 		CreatedAt time.Time `json:"created_at"`
 		UpdatedAt time.Time `json:"updated_at"`

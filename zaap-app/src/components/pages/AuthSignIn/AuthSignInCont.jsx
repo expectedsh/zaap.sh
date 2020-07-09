@@ -2,8 +2,8 @@ import React from 'react'
 import { FORM_ERROR } from 'final-form'
 import { useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { login } from '~/client/auth'
 import { setToken } from '~/store/authentication'
+import { authService } from '~/services'
 import AuthSignIn from './AuthSignIn'
 
 function AuthSignInCont() {
@@ -11,7 +11,7 @@ function AuthSignInCont() {
   const dispatch = useDispatch()
 
   function onSubmit(values) {
-    return login(values)
+    return authService.login(values)
       .then((token) => {
         dispatch(setToken(token))
         history.push('/')

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchRunners } from '~/client/runner'
 import { setRunners } from '~/store/runners'
+import { runnerService } from '~/services'
 import RunnerList from './RunnerList'
 
 function RunnerListCont() {
@@ -11,7 +11,7 @@ function RunnerListCont() {
   const [error, setError] = useState(undefined)
 
   useEffect(() => {
-    fetchRunners()
+    runnerService.list()
       .then((fetchedRunners) => dispatch(setRunners(fetchedRunners)))
       .catch((err) => setError(err))
       .finally(() => setLoading(false))

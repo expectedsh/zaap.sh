@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchApplications } from '~/client/application'
-import { fetchRunners } from '~/client/runner'
 import { setApplications } from '~/store/applications'
 import { setRunners } from '~/store/runners'
+import { applicationService, runnerService } from '~/services'
 import AppList from './AppList'
 
 function AppListCont() {
@@ -14,7 +13,10 @@ function AppListCont() {
   const [error, setError] = useState(undefined)
 
   useEffect(() => {
-    Promise.all([fetchRunners(), fetchApplications()])
+    Promise.all([
+      runnerService.list(),
+      applicationService.list(),
+    ])
       .then(([fetchedRunners, fetchedApps]) => {
         dispatch(setRunners(fetchedRunners))
         dispatch(setApplications(fetchedApps))

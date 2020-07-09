@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router'
-import { fetchRunners } from '~/client/runner'
-import { createApplication } from '~/client/application'
+import { applicationService, runnerService } from '~/services'
 import AppNew from './AppNew'
 
 function AppNewCont() {
   const history = useHistory()
 
   useEffect(() => {
-    fetchRunners()
+    runnerService.list()
       .catch(() => toast.error('Could not fetch runners.'))
   }, [])
 
   function onSubmit(values) {
-    return createApplication({
+    return applicationService.create({
       ...values,
       runnerId: values.runnerId,
     })

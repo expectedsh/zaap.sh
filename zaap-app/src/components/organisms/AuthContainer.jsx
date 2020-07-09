@@ -24,7 +24,8 @@ const StyledAlternative = styled(Text)((props) => css`
   color: ${props.theme.color.white};
 
   a {
-    color: ${props.theme.color.white};
+    color: ${props.theme.color.white} !important;
+    text-decoration: underline;
   }
 `)
 
